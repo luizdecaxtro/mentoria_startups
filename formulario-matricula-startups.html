@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrícula — Mentoria das Startups</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0900; --surface: #150f07; --surface2: #1e1508;
+    --border: #3a2a14; --accent: #c8821a; --accent2: #a0522d;
+    --accent3: #d4a843; --accent4: #8b4513;
+    --text: #f0e8d8; --muted: #9a7a50;
+    --success: #4caf82; --error: #e05c5c;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif; font-weight: 300;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 16px; position: relative; overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(200,130,26,0.12) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .page-wrap {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 560px;
+    animation: fadeUp 0.6s ease both;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+  .page-header { text-align: center; margin-bottom: 36px; }
+  .logo-ring {
+    width: 72px; height: 72px; border-radius: 50%;
+    border: 2px solid var(--accent);
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 18px; font-size: 2rem;
+    background: rgba(200,130,26,0.08);
+    box-shadow: 0 0 32px rgba(200,130,26,0.2);
+  }
+  .page-header h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem;
+    line-height: 1.15; color: var(--text);
+  }
+  .page-header h1 span {
+    background: linear-gradient(135deg, var(--accent3), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .page-header p { margin-top: 10px; color: var(--muted); font-size: 0.88rem; letter-spacing: 0.04em; }
+  .page-header .author { margin-top: 6px; color: var(--accent3); font-size: 0.82rem; font-style: italic; }
+  .divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 14px auto 0;
+  }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 40px 44px;
+    box-shadow: 0 0 60px rgba(200,130,26,0.10);
+  }
+
+  .form-group { margin-bottom: 22px; }
+  .form-group label {
+    display: block; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent3); margin-bottom: 8px;
+  }
+  .form-group label .req { color: var(--error); margin-left: 2px; }
+  .form-group input,
+  .form-group select {
+    width: 100%; background: var(--surface2);
+    border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 13px 16px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; color: var(--text);
+    transition: all 0.2s; appearance: none; -webkit-appearance: none;
+  }
+  .form-group input::placeholder { color: var(--muted); }
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none; border-color: var(--accent);
+    background: #1a1006;
+    box-shadow: 0 0 0 3px rgba(200,130,26,0.12);
+  }
+  .form-group select option { background: #1e1508; color: var(--text); }
+
+  .select-wrap { position: relative; }
+  .select-wrap::after {
+    content: '▾'; position: absolute;
+    right: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--accent3); pointer-events: none; font-size: 0.9rem;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .btn-submit {
+    width: 100%; margin-top: 8px; padding: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--accent4));
+    color: #fff; border: none; border-radius: 10px;
+    font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+    letter-spacing: 0.06em; cursor: pointer; transition: all 0.25s;
+    position: relative; overflow: hidden;
+    box-shadow: 0 6px 24px rgba(200,130,26,0.35);
+  }
+  .btn-submit:hover { opacity: 0.92; transform: translateY(-2px); box-shadow: 0 10px 32px rgba(200,130,26,0.45); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-submit span { position: relative; z-index: 1; }
+
+  .privacy-note {
+    text-align: center; margin-top: 18px;
+    font-size: 0.75rem; color: var(--muted); line-height: 1.5;
+  }
+
+  #toast {
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface); color: var(--text);
+    padding: 13px 24px; border-radius: 10px;
+    font-size: 0.87rem; border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+    opacity: 0; transition: all 0.3s; z-index: 200;
+    pointer-events: none; white-space: nowrap;
+  }
+  #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  #toast.error { border-left-color: var(--error); }
+  #toast.success { border-left-color: var(--success); }
+
+  #loading {
+    position: fixed; inset: 0;
+    background: rgba(13,9,0,0.88);
+    display: none; align-items: center; justify-content: center;
+    z-index: 300; flex-direction: column; gap: 16px;
+  }
+  #loading.active { display: flex; }
+  .spinner {
+    width: 42px; height: 42px;
+    border: 3px solid rgba(200,130,26,0.2);
+    border-top-color: var(--accent);
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  #loading p { color: var(--accent3); font-size: 0.88rem; letter-spacing: 0.06em; }
+
+  #success-screen { display: none; text-align: center; padding: 20px 0; animation: fadeUp 0.5s ease both; }
+  #success-screen.active { display: block; }
+  .success-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    border: 2px solid var(--success);
+    background: rgba(76,175,130,0.1);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 2rem; margin-bottom: 20px;
+    box-shadow: 0 0 30px rgba(76,175,130,0.2);
+  }
+  #success-screen h2 {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem;
+    color: var(--text); margin-bottom: 12px;
+  }
+  #success-screen p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+  .codigo-box {
+    margin: 18px 0; padding: 16px 24px;
+    background: rgba(200,130,26,0.08);
+    border: 1.5px solid var(--border); border-radius: 12px;
+  }
+  .codigo-label {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent3); margin-bottom: 6px;
+  }
+  .codigo-valor {
+    font-family: 'Courier New', monospace; font-size: 1.5rem;
+    font-weight: 700; color: var(--text); letter-spacing: 0.08em;
+  }
+  .codigo-hint { font-size: 0.78rem; color: var(--muted); margin-top: 6px; }
+  .redirect-bar {
+    margin-top: 24px; background: rgba(200,130,26,0.08);
+    border: 1px solid rgba(200,130,26,0.2); border-radius: 8px;
+    padding: 12px 20px; font-size: 0.82rem; color: var(--accent3);
+  }
+
+  @media(max-width: 520px) {
+    .card { padding: 28px 22px; }
+    .form-row { grid-template-columns: 1fr; }
+    .page-header h1 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="logo-ring">🚀</div>
+    <h1>Mentoria das<br><span>Startups</span></h1>
+    <p>Preencha seus dados para iniciar a matrícula</p>
+    <p class="author">Luiz de Castro — Mestre em Gestão</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="card">
+
+    <div id="form-section">
+      <div class="form-group">
+        <label>Nome Completo <span class="req">*</span></label>
+        <input type="text" id="f-nome" placeholder="Seu nome completo"
+               autocomplete="new-password" onfocus="this.removeAttribute('readonly')" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>E-mail <span class="req">*</span></label>
+        <input type="email" id="f-email" placeholder="seu@email.com"
+               autocomplete="new-password" onfocus="this.removeAttribute('readonly')" readonly>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Celular / WhatsApp <span class="req">*</span></label>
+          <input type="tel" id="f-celular" placeholder="(00) 00000-0000"
+                 oninput="maskPhone(this)" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Sexo</label>
+          <div class="select-wrap">
+            <select id="f-sexo">
+              <option value="">Selecione</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+              <option value="O">Prefiro não dizer</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Grau de Instrução</label>
+        <div class="select-wrap">
+          <select id="f-instrucao">
+            <option value="">Selecione</option>
+            <option value="Ensino Fundamental">Ensino Fundamental</option>
+            <option value="Ensino Médio">Ensino Médio</option>
+            <option value="Técnico">Técnico</option>
+            <option value="Superior Incompleto">Superior Incompleto</option>
+            <option value="Superior Completo">Superior Completo</option>
+            <option value="Pós-Graduação">Pós-Graduação / MBA</option>
+            <option value="Mestrado">Mestrado</option>
+            <option value="Doutorado">Doutorado</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn-submit" id="btn-enviar" onclick="enviarCadastro()">
+        <span>Confirmar Matrícula →</span>
+      </button>
+
+      <p class="privacy-note">
+        Seus dados são armazenados com segurança e usados apenas<br>
+        para gestão da sua matrícula na mentoria.
+      </p>
+    </div>
+
+    <div id="success-screen">
+      <div class="success-icon">✓</div>
+      <h2>Matrícula realizada!</h2>
+      <p>Seus dados foram registrados com sucesso.</p>
+      <div class="codigo-box" id="codigo-box" style="display:none">
+        <div class="codigo-label">Seu Código de Inscrição</div>
+        <div class="codigo-valor" id="codigo-gerado">—</div>
+        <div class="codigo-hint">📧 Guarde este código — será necessário para acompanhamento da mentoria.</div>
+      </div>
+      <div class="redirect-bar" id="redirect-msg">Redirecionando para o pagamento em 5 segundos…</div>
+    </div>
+
+  </div>
+</div>
+
+<div id="loading"><div class="spinner"></div><p>Salvando matrícula…</p></div>
+<div id="toast"></div>
+
+<script>
+'use strict';
+
+const CONFIG = {
+  repo:        'luizdecaxtro/mentoria_startups',
+  file:        'cadalunos.json',
+  mentoria:    'Mentoria das Startups',
+  redirectUrl: 'https://loja.infinitepay.io/decastro247/rdj8078-mentoria-das-startups',
+  emailjs_public_key:  'Yx_qgE1YjaUyqSALl',
+  emailjs_service_id:  'service_vy9kv3d',
+  emailjs_template_id: 'template_g9guk7e',
+};
+
+function getToken() { return localStorage.getItem('_mtoken') || ''; }
+
+let fileSha = null;
+
+function gerarCodigo(alunos) {
+  const ano = new Date().getFullYear();
+  const prefixo = 'MST-' + ano + '-';
+  let maxSeq = 0;
+  alunos.forEach(a => {
+    if (a.codigo && a.codigo.startsWith(prefixo)) {
+      const seq = parseInt(a.codigo.replace(prefixo, '')) || 0;
+      if (seq > maxSeq) maxSeq = seq;
+    }
+  });
+  return prefixo + String(maxSeq + 1).padStart(4, '0');
+}
+
+function buildHeaders() {
+  return {
+    'Authorization': 'Bearer ' + getToken(),
+    'Accept': 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+
+async function getFileSha() {
+  const res = await fetch(
+    `https://api.github.com/repos/${CONFIG.repo}/contents/${CONFIG.file}`,
+    { headers: buildHeaders() }
+  );
+  if (res.ok) {
+    const data = await res.json();
+    fileSha = data.sha;
+    const decoded = decodeURIComponent(
+      atob(data.content.replace(/\n/g,''))
+        .split('').map(c => '%' + c.charCodeAt(0).toString(16).padStart(2,'0')).join('')
+    );
+    return JSON.parse(decoded);
+  }
+  if (res.status === 404) { fileSha = null; return []; }
+  throw new Error('HTTP ' + res.status);
+}
+
+async function enviarEmailBoasVindas(aluno) {
+  if (!CONFIG.emailjs_public_key) return false;
+  try {
+    if (!window.emailjs) {
+      await new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+        s.onload = res; s.onerror = rej;
+        document.head.appendChild(s);
+      });
+      emailjs.init(CONFIG.emailjs_public_key);
+    }
+    await emailjs.send(CONFIG.emailjs_service_id, CONFIG.emailjs_template_id, {
+      to_email: aluno.email,
+      to_name:  aluno.nome,
+      codigo:   aluno.codigo,
+      curso:    CONFIG.mentoria,
+      responsavel: 'Luiz de Castro — Mestre em Gestão',
+    });
+    return true;
+  } catch(e) { console.error('Erro EmailJS:', e); return false; }
+}
+
+async function enviarCadastro() {
+  const nome    = document.getElementById('f-nome').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const celular = document.getElementById('f-celular').value.trim();
+
+  if (!nome)    { toast('Por favor, informe seu nome completo.', 'error'); return; }
+  if (!email || !email.includes('@')) { toast('Por favor, informe um e-mail válido.', 'error'); return; }
+  if (!celular) { toast('Por favor, informe seu celular/WhatsApp.', 'error'); return; }
+  if (!getToken()) { toast('Sistema em configuração. Tente mais tarde.', 'error'); return; }
+
+  document.getElementById('btn-enviar').disabled = true;
+  showLoading();
+
+  try {
+    const alunos = await getFileSha();
+
+    if (alunos.find(a => a.email.toLowerCase() === email.toLowerCase() && a.mentoria === CONFIG.mentoria)) {
+      hideLoading();
+      document.getElementById('btn-enviar').disabled = false;
+      toast('Este e-mail já está matriculado nesta mentoria!', 'error');
+      return;
+    }
+
+    const codigo = gerarCodigo(alunos);
+    const novoAluno = {
+      id:        'id_' + Date.now(),
+      codigo,
+      mentoria:  CONFIG.mentoria,
+      nome, email, celular,
+      sexo:      document.getElementById('f-sexo').value,
+      instrucao: document.getElementById('f-instrucao').value,
+      criadoEm:  new Date().toISOString()
+    };
+    alunos.push(novoAluno);
+
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(alunos, null, 2))));
+    const res = await fetch(
+      `https://api.github.com/repos/${CONFIG.repo}/contents/${CONFIG.file}`,
+      {
+        method: 'PUT',
+        headers: buildHeaders(),
+        body: JSON.stringify({
+          message: 'Nova matrícula Startups: ' + nome,
+          content,
+          ...(fileSha ? { sha: fileSha } : {})
+        })
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || 'HTTP ' + res.status);
+    }
+
+    hideLoading();
+    enviarEmailBoasVindas(novoAluno);
+    mostrarSucesso(codigo);
+
+  } catch(e) {
+    hideLoading();
+    document.getElementById('btn-enviar').disabled = false;
+    toast('Erro ao salvar: ' + e.message, 'error');
+  }
+}
+
+function mostrarSucesso(codigo) {
+  document.getElementById('form-section').style.display = 'none';
+  document.getElementById('success-screen').classList.add('active');
+  if (codigo) {
+    document.getElementById('codigo-gerado').textContent = codigo;
+    document.getElementById('codigo-box').style.display = 'block';
+  }
+  let count = 5;
+  const msg = document.getElementById('redirect-msg');
+  const iv = setInterval(() => {
+    count--;
+    msg.textContent = 'Redirecionando para o pagamento em ' + count + ' segundo' + (count !== 1 ? 's' : '') + '…';
+    if (count <= 0) { clearInterval(iv); window.location.href = CONFIG.redirectUrl; }
+  }, 1000);
+}
+
+function maskPhone(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,11);
+  if (v.length > 6) v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+  else if (v.length > 2) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+  el.value = v;
+}
+
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'show ' + type;
+  clearTimeout(el._t); el._t = setTimeout(() => el.className = '', 4000);
+}
+function showLoading() { document.getElementById('loading').classList.add('active'); }
+function hideLoading() { document.getElementById('loading').classList.remove('active'); }
+
+// Painel secreto de configuração — acesse com #config na URL
+function checkSecretPanel() {
+  if (window.location.hash === '#config') {
+    document.getElementById('secret-panel').style.display = 'flex';
+    const saved = getToken();
+    if (saved) document.getElementById('sp-token').value = saved;
+  }
+}
+function saveSecretToken() {
+  const t = document.getElementById('sp-token').value.trim();
+  if (!t) { alert('Cole o token antes de salvar.'); return; }
+  localStorage.setItem('_mtoken', t);
+  document.getElementById('secret-panel').style.display = 'none';
+  window.location.hash = '';
+  alert('✅ Token salvo! O formulário está pronto para uso.');
+}
+window.addEventListener('hashchange', checkSecretPanel);
+document.addEventListener('DOMContentLoaded', checkSecretPanel);
+checkSecretPanel();
+</script>
+
+<!-- PAINEL SECRETO -->
+<div id="secret-panel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px;max-width:460px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+    <h3 style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:8px;color:var(--text);">⚙️ Configuração</h3>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:20px;">Cole o token do GitHub. Esta tela só aparece com <code style="color:var(--accent3)">#config</code> na URL.</p>
+    <label style="font-size:0.75rem;font-weight:600;color:var(--accent3);letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:6px;">Token GitHub (PAT)</label>
+    <input type="password" id="sp-token" placeholder="github_pat_..."
+           style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:0.9rem;margin-bottom:16px;font-family:'DM Sans',sans-serif;background:var(--surface2);color:var(--text);">
+    <button onclick="saveSecretToken()"
+            style="width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),var(--accent4));color:#fff;border:none;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;">
+      💾 Salvar Token
+    </button>
+  </div>
+</div>
+</body>
+</html>
