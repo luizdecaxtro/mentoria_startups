@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MITE — Módulo 5: Biblioteca de Materiais Didáticos</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:#06101d;min-height:100vh;color:#c8d8ee;}
+
+/* TOPBAR */
+.topbar{background:#0a1628;border-bottom:1px solid #152236;padding:13px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.t-logo{display:flex;align-items:center;gap:9px;}
+.t-icon{width:32px;height:32px;background:#1a3a6a;border-radius:9px;display:flex;align-items:center;justify-content:center;}
+.t-brand{font-family:'Playfair Display',serif;font-size:16px;color:#fff;}
+.t-sub{font-size:11px;color:#4d6a8a;margin-top:1px;}
+.t-search-wrap{flex:1;max-width:340px;margin-left:auto;position:relative;}
+.t-search{width:100%;background:#0d1b2e;border:1px solid #1e3255;border-radius:9px;padding:8px 14px 8px 36px;font-size:13px;color:#c8d8ee;font-family:'DM Sans',sans-serif;outline:none;}
+.t-search:focus{border-color:#3884ff;}
+.t-search::placeholder{color:#2a3f5a;}
+.s-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#4d6a8a;text-decoration:none;padding:6px 12px;border:1px solid #1e3255;border-radius:8px;transition:all .18s;margin-left:auto;}
+.back-btn:hover{border-color:#3884ff;color:#5ba3ff;}
+
+/* HERO */
+.hero{background:#0a1628;border-bottom:1px solid #152236;padding:24px;}
+.hero-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.hero-text{flex:1;min-width:200px;}
+.htag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.06em;color:#a855f7;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);border-radius:20px;padding:3px 12px;margin-bottom:10px;}
+.hero-text h1{font-family:'Playfair Display',serif;font-size:clamp(18px,3vw,26px);color:#fff;margin-bottom:6px;line-height:1.25;}
+.hero-text p{font-size:13px;color:#4d6a8a;line-height:1.6;}
+.counters{display:flex;gap:10px;flex-wrap:wrap;}
+.counter{background:#0f1e35;border:1px solid #1a2d50;border-radius:10px;padding:11px 16px;text-align:center;min-width:76px;}
+.cval{font-size:20px;font-weight:600;color:#fff;}
+.clbl{font-size:10px;color:#4d6a8a;margin-top:2px;}
+
+/* FILTROS */
+.cats{max-width:960px;margin:24px auto 0;padding:0 24px;}
+.cat-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.cat-btn{background:#0d1b2e;border:1px solid #1a2d50;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:500;color:#4d6a8a;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;display:flex;align-items:center;gap:6px;}
+.cat-btn:hover,.cat-btn.active{background:#152236;border-color:#3884ff;color:#82aaff;}
+.cat-dot{width:7px;height:7px;border-radius:50%;}
+
+/* MAIN */
+.main{max-width:960px;margin:0 auto;padding:0 24px 60px;}
+.sec-lbl{font-size:11px;font-weight:600;color:#2a3f5a;letter-spacing:.07em;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.sec-lbl span{font-weight:400;color:#1e3255;}
+
+/* GRID */
+.mat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:32px;}
+
+/* CARD */
+.mat-card{background:#0d1b2e;border:1px solid #1a2d50;border-radius:14px;overflow:hidden;transition:border-color .2s,transform .15s;}
+.mat-card:hover{border-color:#3884ff;transform:translateY(-2px);}
+.card-top{padding:16px 16px 12px;display:flex;gap:12px;align-items:flex-start;}
+.ficon{width:40px;height:48px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;}
+.fi-pdf{background:#3a0f0f;} .fi-ebook{background:#0f2a3a;} .fi-guide{background:#0f2a1a;} .fi-exercise{background:#2a1a0a;}
+.fext{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:700;letter-spacing:.05em;border-radius:3px;padding:1px 5px;white-space:nowrap;}
+.ext-pdf{background:#e24b4a;color:#fff;} .ext-epub{background:#378add;color:#fff;}
+.minfo{flex:1;min-width:0;}
+.mtitle{font-size:13px;font-weight:600;color:#c8d8ee;margin-bottom:4px;line-height:1.35;}
+.mdesc{font-size:11px;color:#4d6a8a;line-height:1.5;margin-bottom:8px;}
+.mmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.mtag{font-size:10px;border-radius:20px;padding:2px 9px;font-weight:500;}
+.t-pdf{background:rgba(226,75,74,.1);color:#e24b4a;border:1px solid rgba(226,75,74,.15);}
+.t-ebook{background:rgba(56,132,255,.1);color:#5ba3ff;border:1px solid rgba(56,132,255,.15);}
+.t-guide{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.15);}
+.t-exercise{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.15);}
+.msize{font-size:10px;color:#2a3f5a;margin-left:auto;}
+.card-foot{padding:10px 16px;border-top:1px solid #111e33;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.mpages{font-size:11px;color:#2a3f5a;}
+.card-actions{display:flex;gap:6px;}
+.btn-ver{background:none;border:1px solid #1e3255;border-radius:7px;padding:5px 11px;font-size:11px;color:#4d6a8a;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;}
+.btn-ver:hover{border-color:#5ba3ff;color:#5ba3ff;}
+.btn-dl{background:#152236;border:1px solid #1e3255;border-radius:7px;padding:5px 13px;font-size:11px;font-weight:600;color:#5ba3ff;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;transition:all .18s;}
+.btn-dl:hover{background:#1a3a6a;border-color:#3884ff;}
+
+/* GLOSSÁRIO */
+.gloss-wrap{background:#0d1b2e;border:1px solid #1a2d50;border-radius:14px;overflow:hidden;margin-bottom:32px;}
+.gh{padding:16px 20px;border-bottom:1px solid #111e33;display:flex;align-items:center;gap:12px;}
+.gh-icon{width:34px;height:34px;background:#1a1a3a;border-radius:9px;display:flex;align-items:center;justify-content:center;}
+.gh-title{font-size:14px;font-weight:600;color:#d0e0ff;}
+.gh-sub{font-size:11px;color:#4d6a8a;margin-top:1px;}
+.g-alpha{display:flex;gap:4px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid #111e33;}
+.ab{width:28px;height:28px;border-radius:6px;border:1px solid #1a2d50;background:none;font-size:12px;font-weight:500;color:#4d6a8a;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.ab:hover,.ab.active{background:#1a3a6a;border-color:#3884ff;color:#82aaff;}
+.g-body{padding:16px 20px;}
+.gi{padding:12px 0;border-bottom:1px solid #0f1a2e;}
+.gi:last-child{border-bottom:none;}
+.gt{font-size:13px;font-weight:600;color:#82aaff;margin-bottom:3px;}
+.gd{font-size:12px;color:#6080a0;line-height:1.6;}
+.g-empty{font-size:13px;color:#2a3f5a;padding:12px 0;}
+
+/* MODAL VISUALIZAÇÃO */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);align-items:center;justify-content:center;padding:16px;z-index:1000;}
+.modal-ov.show{display:flex;}
+.modal-box{background:#0d1b2e;border:1px solid #1e3255;border-radius:18px;width:100%;max-width:580px;max-height:90vh;display:flex;flex-direction:column;}
+.modal-hd{padding:20px 24px 16px;border-bottom:1px solid #111e33;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-shrink:0;}
+.modal-ttl{font-size:15px;font-weight:600;color:#d0e0ff;line-height:1.3;}
+.modal-cls{background:none;border:none;color:#4d6a8a;font-size:24px;cursor:pointer;padding:0;line-height:1;flex-shrink:0;}
+.modal-cls:hover{color:#e24b4a;}
+.modal-bd{padding:20px 24px;overflow-y:auto;flex:1;}
+.modal-tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.modal-desc{font-size:13px;color:#6080a0;line-height:1.7;margin-bottom:18px;}
+.toc-lbl{font-size:11px;color:#2a3f5a;letter-spacing:.06em;margin-bottom:10px;text-transform:uppercase;}
+.toc-list{display:flex;flex-direction:column;gap:2px;margin-bottom:20px;}
+.toc-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;background:#060e1a;border:1px solid #111e33;font-size:12px;color:#8ba3c4;}
+.toc-num{font-size:10px;color:#2a3f5a;width:22px;flex-shrink:0;font-weight:600;}
+.info-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+.info-chip{background:#060e1a;border:1px solid #152236;border-radius:8px;padding:6px 12px;font-size:11px;color:#4d6a8a;}
+.info-chip strong{color:#82aaff;display:block;font-size:10px;margin-bottom:2px;}
+.modal-ft{padding:16px 24px;border-top:1px solid #111e33;display:flex;gap:10px;flex-shrink:0;}
+.btn-dl-main{flex:1;background:#1f6feb;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .2s;}
+.btn-dl-main:hover{background:#2d7df5;}
+.btn-close-modal{background:none;border:1px solid #1e3255;border-radius:10px;padding:12px 18px;font-size:13px;color:#4d6a8a;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.btn-close-modal:hover{border-color:#5ba3ff;color:#5ba3ff;}
+
+/* TOAST */
+.toast-wrap{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:8px;z-index:2000;pointer-events:none;}
+.toast{background:#0a2a14;border:1px solid #22c55e;border-radius:10px;padding:11px 18px;font-size:13px;color:#22c55e;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.warn{background:#2a1a0a;border-color:#f59e0b;color:#f59e0b;}
+
+@media(max-width:600px){.mat-grid{grid-template-columns:1fr;}.counters{gap:7px;}.hero-inner{flex-direction:column;align-items:flex-start;}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="t-logo">
+    <div class="t-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5ba3ff" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </div>
+    <div><div class="t-brand">Biblioteca MITE</div><div class="t-sub">Módulo 5 — Materiais Didáticos</div></div>
+  </div>
+  <div class="t-search-wrap">
+    <svg class="s-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a3f5a" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input class="t-search" id="searchInput" type="text" placeholder="Buscar materiais, termos..." oninput="filterAll()">
+  </div>
+  <a href="mite_modulo3_aprendizagem.html" class="back-btn">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    Voltar
+  </a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="htag">Biblioteca Digital</div>
+      <h1>Materiais Didáticos do Curso</h1>
+      <p>Manual do aluno, glossário de termos técnicos, guias de estudo, exercícios práticos e biblioteca de e-books.</p>
+    </div>
+    <div class="counters">
+      <div class="counter"><div class="cval">12</div><div class="clbl">materiais</div></div>
+      <div class="counter"><div class="cval">4</div><div class="clbl">categorias</div></div>
+      <div class="counter"><div class="cval">42</div><div class="clbl">termos</div></div>
+      <div class="counter"><div class="cval">100%</div><div class="clbl">gratuito</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FILTROS -->
+<div class="cats">
+  <div class="cat-row">
+    <button class="cat-btn active" onclick="setFilter('todos',this)"><div class="cat-dot" style="background:#5ba3ff"></div>Todos</button>
+    <button class="cat-btn" onclick="setFilter('pdf',this)"><div class="cat-dot" style="background:#e24b4a"></div>Manuais PDF</button>
+    <button class="cat-btn" onclick="setFilter('ebook',this)"><div class="cat-dot" style="background:#5ba3ff"></div>E-books</button>
+    <button class="cat-btn" onclick="setFilter('guide',this)"><div class="cat-dot" style="background:#22c55e"></div>Guias de estudo</button>
+    <button class="cat-btn" onclick="setFilter('exercise',this)"><div class="cat-dot" style="background:#f59e0b"></div>Exercícios</button>
+    <button class="cat-btn" onclick="setFilter('gloss',this)"><div class="cat-dot" style="background:#a855f7"></div>Glossário</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="sec-lbl" id="matLabel">Todos os materiais <span id="matCount"></span></div>
+  <div class="mat-grid" id="matGrid"></div>
+  <div id="glossSection">
+    <div class="sec-lbl">Glossário de termos técnicos <span>42 termos · A–Z</span></div>
+    <div class="gloss-wrap">
+      <div class="gh">
+        <div class="gh-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div><div class="gh-title">Glossário MITE</div><div class="gh-sub">Inovação Tecnológica em Educação</div></div>
+      </div>
+      <div class="g-alpha" id="glossAlpha"></div>
+      <div class="g-body" id="glossBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="modalOv">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div class="modal-ttl" id="modalTtl"></div>
+      <button class="modal-cls" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-bd">
+      <div class="modal-tag-row" id="modalTags"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="info-row" id="modalInfo"></div>
+      <div class="toc-lbl">Sumário do conteúdo</div>
+      <div class="toc-list" id="modalToc"></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-close-modal" onclick="closeModal()">Fechar</button>
+      <button class="btn-dl-main" id="modalDlBtn" onclick="doDownload()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Baixar material
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+// ══════════════════════════════════════
+// DADOS DOS MATERIAIS
+// Coluna "url": substitua pelos links reais dos seus PDFs/EPUBs
+// hospedados no GitHub, Google Drive, Dropbox etc.
+// ══════════════════════════════════════
+const MATS = [
+  {
+    id:1, cat:'pdf',
+    title:'Manual do Aluno MITE',
+    desc:'Guia completo com regras, fluxo do curso, avaliações, processo de certificação e canais de suporte. Documento oficial do programa.',
+    ext:'PDF', size:'2,4 MB', pages:'48 págs.',
+    fi:'fi-pdf', fe:'ext-pdf', tag:'t-pdf', tl:'Manual PDF',
+    // ← Substitua pela URL real do seu PDF no GitHub ou Google Drive
+    url:'manual_aluno_mite.html',
+    isHtml: true, // abre como página HTML
+    toc:['Apresentação do programa','Fluxo completo do sistema (8 etapas)','Descrição dos 5 módulos','Regras de avaliação e certificação','Segurança e proteção de dados','Suporte e contato','Glossário rápido']
+  },
+  {
+    id:2, cat:'pdf',
+    title:'Guia de Certificação Digital',
+    desc:'Passo a passo para emissão do certificado "Gestão da Inovação em Tecnologias da Educação" ao concluir o curso com nota mínima 7,0.',
+    ext:'PDF', size:'1,1 MB', pages:'16 págs.',
+    fi:'fi-pdf', fe:'ext-pdf', tag:'t-pdf', tl:'Manual PDF',
+    url:'#',
+    toc:['Critérios de aprovação','Tentativas e prazo de 120 dias','Como verificar seu certificado online','FAQ — certificação']
+  },
+  {
+    id:3, cat:'ebook',
+    title:'EdTech: Tendências e Práticas',
+    desc:'E-book exclusivo sobre as principais tendências em tecnologia educacional no Brasil e no mundo, com casos reais de escolas inovadoras.',
+    ext:'EPUB', size:'3,8 MB', pages:'112 págs.',
+    fi:'fi-ebook', fe:'ext-epub', tag:'t-ebook', tl:'E-book',
+    url:'#',
+    toc:['Panorama EdTech Brasil 2024','Plataformas LMS em ascensão','Mobile learning e microlearning','IA e personalização na aprendizagem','Estudos de caso: escolas inovadoras']
+  },
+  {
+    id:4, cat:'ebook',
+    title:'Metodologias Ativas: Guia Prático',
+    desc:'Da teoria à prática: sala de aula invertida, aprendizagem baseada em projetos, rotação por estações e muito mais.',
+    ext:'EPUB', size:'2,9 MB', pages:'88 págs.',
+    fi:'fi-ebook', fe:'ext-epub', tag:'t-ebook', tl:'E-book',
+    url:'#',
+    toc:['O que são metodologias ativas?','Sala de aula invertida (Flipped Classroom)','Aprendizagem Baseada em Projetos (ABP)','Rotação por estações','Como implementar na prática']
+  },
+  {
+    id:5, cat:'ebook',
+    title:'Gamificação na Educação',
+    desc:'Como projetar experiências gamificadas que engajam alunos de todas as idades e promovem aprendizagem significativa.',
+    ext:'EPUB', size:'2,2 MB', pages:'74 págs.',
+    fi:'fi-ebook', fe:'ext-epub', tag:'t-ebook', tl:'E-book',
+    url:'#',
+    toc:['Princípios da gamificação','Mecânicas de jogo para educação','Badges, pontos e rankings','Ferramentas gratuitas','Exemplos práticos e templates']
+  },
+  {
+    id:6, cat:'ebook',
+    title:'IA na Educação: Conceitos e Aplicações',
+    desc:'Inteligência artificial, machine learning e chatbots aplicados ao processo educativo, com linguagem acessível a educadores.',
+    ext:'EPUB', size:'3,1 MB', pages:'96 págs.',
+    fi:'fi-ebook', fe:'ext-epub', tag:'t-ebook', tl:'E-book',
+    url:'#',
+    toc:['O que é IA na prática?','Algoritmos de recomendação de conteúdo','Chatbots educacionais','Privacidade e ética na IA','Ferramentas disponíveis agora para educadores']
+  },
+  {
+    id:7, cat:'guide',
+    title:'Guia de Estudo — Módulo 1',
+    desc:'Roteiro de estudos, objetivos de aprendizagem, dicas e mapa mental do Módulo 1: Fundamentos da Inovação.',
+    ext:'PDF', size:'0,8 MB', pages:'12 págs.',
+    fi:'fi-guide', fe:'ext-pdf', tag:'t-guide', tl:'Guia de estudo',
+    url:'#',
+    toc:['Objetivos de aprendizagem','Conceitos-chave do módulo','Mapa mental da inovação','Leituras recomendadas','Autoavaliação (5 questões)']
+  },
+  {
+    id:8, cat:'guide',
+    title:'Guia de Estudo — Módulo 2',
+    desc:'Roteiro completo com objetivos, referências e mapa mental do Módulo 2: Tecnologias Digitais na Sala de Aula.',
+    ext:'PDF', size:'0,9 MB', pages:'14 págs.',
+    fi:'fi-guide', fe:'ext-pdf', tag:'t-guide', tl:'Guia de estudo',
+    url:'#',
+    toc:['Ferramentas digitais essenciais por categoria','Como integrar tecnologia sem perder o foco pedagógico','Dicas práticas por nível de ensino','Mapa mental','Autoavaliação']
+  },
+  {
+    id:9, cat:'guide',
+    title:'Guia de Estudo — Módulo 3',
+    desc:'Roteiro de estudos do Módulo 3: Gamificação na Educação, com referências, dicas e exercícios dirigidos.',
+    ext:'PDF', size:'0,8 MB', pages:'13 págs.',
+    fi:'fi-guide', fe:'ext-pdf', tag:'t-guide', tl:'Guia de estudo',
+    url:'#',
+    toc:['Mecânicas de gamificação aplicadas à educação','Como planejar sua primeira aula gamificada','Ferramentas recomendadas (gratuitas e pagas)','Autoavaliação']
+  },
+  {
+    id:10, cat:'exercise',
+    title:'Caderno de Exercícios — Vol. 1',
+    desc:'30 atividades práticas e reflexivas cobrindo os módulos 1 e 2, com gabarito comentado e espaço para anotações.',
+    ext:'PDF', size:'1,6 MB', pages:'36 págs.',
+    fi:'fi-exercise', fe:'ext-pdf', tag:'t-exercise', tl:'Exercícios',
+    url:'#',
+    toc:['Parte 1 — Fundamentos da Inovação (15 exercícios)','Parte 2 — Tecnologias Digitais (15 exercícios)','Gabarito comentado com referências']
+  },
+  {
+    id:11, cat:'exercise',
+    title:'Caderno de Exercícios — Vol. 2',
+    desc:'30 atividades cobrindo os módulos 3, 4 e 5 do curso, com foco em aplicação prática em sala de aula.',
+    ext:'PDF', size:'1,7 MB', pages:'38 págs.',
+    fi:'fi-exercise', fe:'ext-pdf', tag:'t-exercise', tl:'Exercícios',
+    url:'#',
+    toc:['Parte 1 — Gamificação (10 exercícios)','Parte 2 — IA na Educação (10 exercícios)','Parte 3 — Gestão da Inovação (10 exercícios)','Gabarito comentado']
+  },
+  {
+    id:12, cat:'exercise',
+    title:'Simulado — Avaliação Final',
+    desc:'Simulado com 30 questões objetivas no formato exato da prova final, com feedback detalhado por questão.',
+    ext:'PDF', size:'1,2 MB', pages:'24 págs.',
+    fi:'fi-exercise', fe:'ext-pdf', tag:'t-exercise', tl:'Exercícios',
+    url:'#',
+    toc:['Instruções e regras da avaliação','30 questões objetivas (formato real da prova)','Gabarito comentado com justificativas','Dicas e estratégias para a prova final']
+  },
+];
+
+const GL = {
+  A:[{t:'ADDIE',d:'Modelo instrucional com 5 etapas: Análise, Design, Desenvolvimento, Implementação e Avaliação.'},{t:'Aprendizagem adaptativa',d:'Sistemas que ajustam o conteúdo com base no desempenho e ritmo de cada aluno, usando algoritmos de IA.'},{t:'Aprendizagem Baseada em Projetos (ABP)',d:'Metodologia ativa em que alunos constroem conhecimento resolvendo problemas reais e complexos.'}],
+  B:[{t:'Blended learning',d:'Modalidade híbrida que combina ensino presencial e online de forma integrada e intencional.'},{t:'BYOD (Bring Your Own Device)',d:'Política que permite alunos utilizarem seus próprios dispositivos móveis em sala de aula.'}],
+  C:[{t:'Chatbot educacional',d:'Agente conversacional automatizado que responde dúvidas e apoia o processo de aprendizagem 24 horas por dia.'},{t:'Conteúdo sob demanda',d:'Modelo onde o aluno acessa materiais no seu próprio ritmo, sem horário fixo — inspirado no modelo Netflix.'},{t:'Curadoria de conteúdo',d:'Processo de selecionar, organizar e apresentar conteúdos relevantes para determinado público.'}],
+  D:[{t:'Design instrucional',d:'Processo de planejar e criar experiências de aprendizagem eficazes, baseadas em evidências pedagógicas.'},{t:'Duolingo effect',d:'Fenômeno de engajamento elevado produzido por elementos de gamificação em aplicativos educacionais.'}],
+  E:[{t:'EdTech',d:'Setor que aplica tecnologia para melhorar ou viabilizar a educação — plataformas, apps, hardware e metodologias.'},{t:'E-learning',d:'Aprendizagem realizada por meios eletrônicos, especialmente via internet, de forma assíncrona ou síncrona.'}],
+  F:[{t:'Feedback formativo',d:'Retorno dado ao aluno durante o processo de aprendizagem, orientando a melhoria antes da avaliação final.'},{t:'Flipped classroom',d:'Sala de aula invertida: o aluno estuda o conteúdo teórico em casa e pratica na sala com o professor.'}],
+  G:[{t:'Gamificação',d:'Uso de elementos de jogos (pontos, medalhas, rankings, desafios progressivos) em contextos educativos.'},{t:'Growth mindset',d:'Mentalidade de crescimento: crença de que habilidades podem ser desenvolvidas com esforço, prática e aprendizado.'}],
+  I:[{t:'Inteligência Artificial (IA)',d:'Tecnologia que simula capacidades cognitivas humanas, como aprendizagem, raciocínio e percepção, para resolver problemas.'},{t:'Inovação pedagógica',d:'Transformação intencional de práticas educativas visando alcançar melhores resultados de aprendizagem.'}],
+  L:[{t:'LMS (Learning Management System)',d:'Plataforma de gestão de aprendizagem que organiza cursos, alunos, conteúdos e avaliações em um ambiente digital.'},{t:'Learning analytics',d:'Análise de dados sobre o comportamento e desempenho de alunos para melhorar o processo de ensino.'}],
+  M:[{t:'Metodologia ativa',d:'Abordagem pedagógica em que o aluno é protagonista do processo de aprendizagem, não receptor passivo de informações.'},{t:'Microlearning',d:'Aprendizagem em pequenas doses: vídeos curtos, flashcards e pílulas de conhecimento de 2 a 10 minutos.'},{t:'Mobile learning (m-learning)',d:'Aprendizagem mediada por dispositivos móveis como smartphones e tablets, a qualquer hora e lugar.'}],
+  P:[{t:'PBL (Problem-Based Learning)',d:'Aprendizagem baseada em problemas: o aluno aprende investigando e propondo soluções para problemas reais.'},{t:'Personalização do ensino',d:'Adaptação do conteúdo, ritmo e metodologia às necessidades, interesses e perfil de cada aluno individualmente.'}],
+  R:[{t:'Realidade aumentada (RA)',d:'Tecnologia que sobrepõe elementos digitais ao mundo real, ampliando experiências de aprendizagem.'},{t:'Rotação por estações',d:'Estratégia em que os alunos circulam por diferentes estações de atividades durante a mesma aula.'}],
+  S:[{t:'STEM / STEAM',d:'Abordagem integrada de Ciências, Tecnologia, Engenharia, Artes e Matemática na educação, promovendo pensamento crítico.'}],
+  T:[{t:'Trilha de aprendizagem',d:'Sequência estruturada de conteúdos e atividades que guia o aluno progressivamente em direção a um objetivo de aprendizagem.'}],
+  U:[{t:'UX educacional',d:'Aplicação dos princípios de experiência do usuário ao design de plataformas, materiais e ambientes pedagógicos.'}],
+};
+
+let activeFilter = 'todos';
+let activeGL = 'A';
+let selMat = null;
+
+// ── Render materiais ──────────────────
+function renderMats() {
+  const q = (document.getElementById('searchInput').value || '').toLowerCase();
+  const grid = document.getElementById('matGrid');
+  const f = MATS.filter(m =>
+    (activeFilter === 'todos' || m.cat === activeFilter) &&
+    (!q || m.title.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q))
+  );
+  document.getElementById('matCount').textContent = f.length + ' materiais';
+  if (!f.length) {
+    grid.innerHTML = '<div style="font-size:13px;color:#2a3f5a;padding:24px 0;grid-column:1/-1;">Nenhum material encontrado para "' + q + '".</div>';
+    return;
+  }
+  grid.innerHTML = f.map(m => `
+    <div class="mat-card">
+      <div class="card-top">
+        <div class="ficon ${m.fi}">
+          <svg width="18" height="22" viewBox="0 0 24 28" fill="none">
+            <rect x="2" y="0" width="16" height="20" rx="2" fill="rgba(255,255,255,0.08)"/>
+            <path d="M14 0 L20 6 L14 6 Z" fill="rgba(255,255,255,0.14)"/>
+          </svg>
+          <div class="fext ${m.fe}">${m.ext}</div>
+        </div>
+        <div class="minfo">
+          <div class="mtitle">${m.title}</div>
+          <div class="mdesc">${m.desc}</div>
+          <div class="mmeta">
+            <span class="mtag ${m.tag}">${m.tl}</span>
+            <span class="msize">${m.size}</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-foot">
+        <span class="mpages">${m.pages}</span>
+        <div class="card-actions">
+          <button class="btn-ver" onclick="openModal(${m.id})">Ver detalhes</button>
+          <button class="btn-dl" onclick="quickDownload(${m.id})">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Baixar
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Glossário ─────────────────────────
+function renderGL() {
+  const letters = Object.keys(GL).sort();
+  document.getElementById('glossAlpha').innerHTML = letters.map(l =>
+    `<button class="ab${l === activeGL ? ' active' : ''}" onclick="setGL('${l}')">${l}</button>`
+  ).join('');
+  const q = (document.getElementById('searchInput').value || '').toLowerCase();
+  const items = (GL[activeGL] || []).filter(i =>
+    !q || i.t.toLowerCase().includes(q) || i.d.toLowerCase().includes(q)
+  );
+  document.getElementById('glossBody').innerHTML = items.length
+    ? items.map(i => `<div class="gi"><div class="gt">${i.t}</div><div class="gd">${i.d}</div></div>`).join('')
+    : '<div class="g-empty">Nenhum termo encontrado.</div>';
+}
+
+function setGL(l) { activeGL = l; renderGL(); }
+
+// ── Filtros ───────────────────────────
+function setFilter(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const gs = document.getElementById('glossSection');
+  const ml = document.getElementById('matLabel');
+  if (cat === 'gloss') {
+    document.getElementById('matGrid').innerHTML = '';
+    ml.style.display = 'none';
+    gs.style.display = 'block';
+  } else {
+    ml.style.display = 'flex';
+    gs.style.display = (cat === 'todos') ? 'block' : 'none';
+    renderMats();
+  }
+}
+
+function filterAll() {
+  if (activeFilter === 'gloss') renderGL();
+  else renderMats();
+}
+
+// ── Modal ─────────────────────────────
+function openModal(id) {
+  const m = MATS.find(x => x.id === id);
+  if (!m) return;
+  selMat = m;
+
+  document.getElementById('modalTtl').textContent = m.title;
+  document.getElementById('modalDesc').textContent = m.desc;
+  document.getElementById('modalTags').innerHTML = `
+    <span class="mtag ${m.tag}">${m.tl}</span>
+    <span class="mtag" style="background:rgba(255,255,255,.05);color:#4d6a8a;border:1px solid #152236;">${m.ext}</span>
+  `;
+  document.getElementById('modalInfo').innerHTML = `
+    <div class="info-chip"><strong>Páginas</strong>${m.pages}</div>
+    <div class="info-chip"><strong>Tamanho</strong>${m.size}</div>
+    <div class="info-chip"><strong>Formato</strong>${m.ext}</div>
+  `;
+  document.getElementById('modalToc').innerHTML = m.toc.map((t, i) =>
+    `<div class="toc-item"><span class="toc-num">${String(i + 1).padStart(2, '0')}</span><span>${t}</span></div>`
+  ).join('');
+
+  // Texto do botão de download
+  const dlBtn = document.getElementById('modalDlBtn');
+  if (m.isHtml) {
+    dlBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Abrir material`;
+  } else {
+    dlBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Baixar material`;
+  }
+
+  document.getElementById('modalOv').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modalOv').classList.remove('show');
+  selMat = null;
+}
+
+// Fechar modal clicando fora
+document.getElementById('modalOv').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ── Download / abertura ───────────────
+function doDownload() {
+  if (!selMat) return;
+  executeDownload(selMat);
+  closeModal();
+}
+
+function quickDownload(id) {
+  const m = MATS.find(x => x.id === id);
+  if (m) executeDownload(m);
+}
+
+function executeDownload(m) {
+  if (!m.url || m.url === '#') {
+    showToast('⚠ Este material estará disponível em breve.', 'warn');
+    return;
+  }
+  if (m.isHtml) {
+    // Abre página HTML
+    window.open(m.url, '_blank');
+    showToast('✓ Abrindo "' + m.title + '"...');
+  } else {
+    // Download real de arquivo
+    const a = document.createElement('a');
+    a.href = m.url;
+    a.download = m.title.replace(/[^a-z0-9]/gi, '_') + '.' + m.ext.toLowerCase();
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('✓ Download iniciado: ' + m.title);
+  }
+}
+
+// ── Toast ─────────────────────────────
+function showToast(msg, type = '') {
+  const wrap = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = 'toast' + (type === 'warn' ? ' warn' : '');
+  t.textContent = msg;
+  wrap.appendChild(t);
+  requestAnimationFrame(() => { requestAnimationFrame(() => { t.classList.add('show'); }); });
+  setTimeout(() => {
+    t.classList.remove('show');
+    setTimeout(() => t.remove(), 400);
+  }, 3500);
+}
+
+// ── Init ──────────────────────────────
+renderMats();
+renderGL();
+</script>
+</body>
+</html>
