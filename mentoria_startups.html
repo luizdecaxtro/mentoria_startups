@@ -162,10 +162,6 @@
   .resource-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 4px; }
   .resource-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
   .resource-type { display: inline-block; margin-top: 10px; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 8px; background: rgba(200,130,26,0.15); color: var(--accent3); border: 1px solid rgba(200,130,26,0.2); }
-  .pdf-path-notice { background: var(--surface2); border: 1px solid rgba(212,168,67,0.3); border-left: 3px solid var(--accent3); border-radius: 0 12px 12px 0; padding: 18px 22px; margin-bottom: 24px; }
-  .pdf-path-notice p { font-size: 13px; color: var(--muted); margin: 0 0 6px 0; line-height: 1.7; }
-  .pdf-path-notice p:last-child { margin-bottom: 0; }
-  .pdf-path-notice code { font-family: 'Courier New', monospace; font-size: 13px; color: var(--accent3); background: rgba(212,168,67,0.08); padding: 3px 8px; border-radius: 5px; }
 
   /* QUIZ */
   .quiz-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 16px; }
@@ -311,11 +307,6 @@
     <div class="section-header">
       <h2>📚 Recursos &amp; Materiais em PDF</h2>
       <p>Clique em qualquer PDF para abrir — os arquivos devem estar na mesma pasta que este programa</p>
-    </div>
-    <div class="pdf-path-notice">
-      <p>📁 <strong>Onde colocar os PDFs:</strong> Os arquivos PDF devem estar na pasta <code>mentoria_startups</code>, no mesmo diretório onde está salvo este programa (<code>mentoria_startups.html</code>).</p>
-      <p>Exemplo: se o programa está em <code>C:\Documentos\mentoria_startups.html</code>, crie a pasta <code>C:\Documentos\mentoria_startups\</code> e coloque todos os PDFs dentro dela.</p>
-      <p>Os nomes dos arquivos devem ser exatamente: <code>glossario_startups.pdf</code>, <code>manual_do_aluno.pdf</code>, <code>canvas_template.pdf</code>, <code>planilha_financeira.pdf</code>, <code>guia_registro_legal.pdf</code>, <code>pitch_deck_template.pdf</code>, <code>metricas_startups.pdf</code>, <code>checklist_empreendedor.pdf</code></p>
     </div>
     <div class="resources-grid" id="resources-grid"></div>
   </div>
@@ -636,11 +627,10 @@ function showModule(idx) {
 }
 
 function openPDF(filePath) {
-  // Tenta abrir o PDF relativo ao local do arquivo HTML
   try {
     window.open(filePath, '_blank');
   } catch(e) {
-    alert('Não foi possível abrir o PDF automaticamente.\n\nCertifique-se de que o arquivo está em:\n' + filePath + '\n\nOs PDFs devem estar na pasta "mentoria_startups" no mesmo diretório deste programa HTML.');
+    alert('Não foi possível abrir o PDF automaticamente.\n\nCertifique-se de que o arquivo está em:\n' + filePath);
   }
 }
 
@@ -808,3 +798,4 @@ renderHome();
 </script>
 </body>
 </html>
+
