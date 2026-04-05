@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentoria das Startups — Luiz de Castro</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0900;
+    --surface: #150f07;
+    --surface2: #1e1508;
+    --border: #3a2a14;
+    --accent: #c8821a;
+    --accent2: #a0522d;
+    --accent3: #d4a843;
+    --accent4: #8b4513;
+    --text: #f0e8d8;
+    --muted: #9a7a50;
+    --card-glow: rgba(200,130,26,0.10);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; }
+
+  /* LOGIN */
+  #login-overlay { position: fixed; inset: 0; z-index: 9999; background: radial-gradient(ellipse at center, #1e1508 0%, #0d0900 100%); display: flex; align-items: center; justify-content: center; }
+  .login-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 48px 56px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 0 60px rgba(200,130,26,0.12); }
+  .login-icon { font-size: 52px; margin-bottom: 14px; }
+  .login-box h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: var(--text); margin-bottom: 4px; }
+  .login-sub { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .login-author { font-size: 12px; color: var(--accent3); margin-bottom: 28px; font-style: italic; }
+  .login-box label { display: block; font-size: 12px; color: var(--muted); text-align: left; margin-bottom: 6px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .login-box input[type="password"] { width: 100%; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 15px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; margin-bottom: 16px; }
+  .login-box input[type="password"]:focus { border-color: var(--accent); }
+  .login-err { font-size: 12px; color: #e05c5c; margin-bottom: 12px; display: none; }
+  .login-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--accent), var(--accent4)); color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; letter-spacing: 0.04em; transition: opacity 0.2s, transform 0.2s; }
+  .login-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* SIDEBAR */
+  .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 270px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 100; transition: transform 0.3s ease; }
+  .sidebar-logo { padding: 28px 24px 20px; border-bottom: 1px solid var(--border); }
+  .logo-badge { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--accent), var(--accent4)); padding: 6px 12px; border-radius: 20px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; margin-bottom: 10px; }
+  .sidebar-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; line-height: 1.25; color: var(--text); }
+  .sidebar-subtitle { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .sidebar-author { font-size: 11px; color: var(--accent3); margin-top: 5px; font-style: italic; }
+  .sidebar-nav { flex: 1; overflow-y: auto; padding: 16px 0; }
+  .sidebar-nav::-webkit-scrollbar { width: 4px; }
+  .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .nav-section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 12px 24px 6px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 24px; cursor: pointer; font-size: 13px; color: var(--muted); transition: all 0.2s; border-left: 2px solid transparent; text-decoration: none; }
+  .nav-item:hover { color: var(--text); background: var(--surface2); }
+  .nav-item.active { color: var(--accent); background: rgba(200,130,26,0.10); border-left-color: var(--accent); }
+  .nav-item .icon { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; background: var(--surface2); }
+  .nav-item.active .icon { background: rgba(200,130,26,0.18); }
+  .nav-progress { margin-left: auto; font-size: 10px; background: var(--surface2); padding: 2px 6px; border-radius: 10px; color: var(--muted); }
+  .nav-item.active .nav-progress { background: rgba(200,130,26,0.15); color: var(--accent); }
+  .sidebar-footer { padding: 16px 24px; border-top: 1px solid var(--border); }
+  .overall-progress { margin-bottom: 8px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent3)); border-radius: 2px; transition: width 0.5s ease; }
+
+  /* MAIN */
+  .main { margin-left: 270px; min-height: 100vh; position: relative; z-index: 1; }
+  .topbar { position: sticky; top: 0; z-index: 50; background: rgba(13,9,0,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .topbar-breadcrumb { font-size: 13px; color: var(--muted); }
+  .topbar-breadcrumb span { color: var(--text); }
+  .topbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: all 0.2s; }
+  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+  .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent4)); color: #fff; }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* SECTIONS */
+  .section { display: none; padding: 40px; }
+  .section.active { display: block; }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, rgba(200,130,26,0.14) 0%, rgba(139,69,19,0.08) 50%, transparent 100%); border: 1px solid var(--border); border-radius: 20px; padding: 48px; margin-bottom: 32px; position: relative; overflow: hidden; }
+  .hero::after { content: '🚀'; position: absolute; right: 48px; top: 50%; transform: translateY(-50%); font-size: 80px; opacity: 0.12; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(200,130,26,0.3); background: rgba(200,130,26,0.1); color: var(--accent3); font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 42px; line-height: 1.1; background: linear-gradient(135deg, #f5e6c8 0%, var(--accent3) 60%, var(--accent2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+  .hero-author { font-size: 13px; color: var(--accent3); margin-bottom: 10px; font-style: italic; }
+  .hero p { font-size: 15px; color: var(--muted); max-width: 520px; line-height: 1.7; }
+  .hero-stats { display: flex; gap: 32px; margin-top: 28px; }
+  .stat { display: flex; flex-direction: column; }
+  .stat-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; background: linear-gradient(135deg, var(--accent), var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .stat-label { font-size: 12px; color: var(--muted); }
+
+  /* MODULES GRID */
+  .modules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .module-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden; }
+  .module-card::before { content: ''; position: absolute; inset: 0; background: var(--card-glow); opacity: 0; transition: opacity 0.25s; }
+  .module-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .module-card:hover::before { opacity: 1; }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .card-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .card-badge { font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.05em; }
+  .badge-iniciante { background: rgba(212,168,67,0.15); color: var(--accent3); border: 1px solid rgba(212,168,67,0.2); }
+  .badge-intermediario { background: rgba(200,130,26,0.15); color: var(--accent); border: 1px solid rgba(200,130,26,0.2); }
+  .badge-avancado { background: rgba(160,82,45,0.15); color: var(--accent2); border: 1px solid rgba(160,82,45,0.2); }
+  .card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: var(--text); margin-bottom: 6px; }
+  .card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+  .card-meta { display: flex; align-items: center; gap: 12px; font-size: 11px; color: var(--muted); }
+  .card-meta-item { display: flex; align-items: center; gap: 4px; }
+  .card-progress-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 12px; }
+  .card-progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent3)); }
+
+  /* SECTION HEADER */
+  .section-header { margin-bottom: 28px; }
+  .section-header h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; color: var(--text); margin-bottom: 6px; }
+  .section-header p { font-size: 14px; color: var(--muted); }
+
+  /* MODULE HERO */
+  .module-hero { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px; margin-bottom: 28px; position: relative; overflow: hidden; }
+  .module-hero-icon { font-size: 48px; margin-bottom: 16px; display: block; }
+  .module-hero h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 30px; color: var(--text); margin-bottom: 8px; }
+  .module-hero p { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 600px; }
+  .module-meta-bar { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+  .meta-chip { display: flex; align-items: center; gap: 6px; background: var(--surface2); border: 1px solid var(--border); padding: 6px 12px; border-radius: 8px; font-size: 12px; color: var(--muted); }
+
+  /* LESSONS */
+  .lessons-list { display: flex; flex-direction: column; gap: 8px; }
+  .lesson-item { display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; cursor: pointer; transition: all 0.2s; }
+  .lesson-item:hover { border-color: var(--accent); background: var(--surface2); }
+  .lesson-item.done { border-color: rgba(212,168,67,0.2); }
+  .lesson-num { width: 32px; height: 32px; border-radius: 8px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--muted); flex-shrink: 0; border: 1px solid var(--border); }
+  .lesson-item.done .lesson-num { background: rgba(212,168,67,0.15); color: var(--accent3); border-color: rgba(212,168,67,0.3); }
+  .lesson-info { flex: 1; }
+  .lesson-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .lesson-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .lesson-duration { font-size: 11px; color: var(--muted); }
+
+  /* PDF BUTTON */
+  .pdf-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: linear-gradient(135deg, var(--accent), var(--accent4)); color: #fff; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; text-decoration: none; transition: opacity 0.2s, transform 0.2s; }
+  .pdf-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* CONTENT VIEWER */
+  .content-viewer { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; margin-top: 24px; display: none; line-height: 1.8; }
+  .content-viewer.visible { display: block; }
+  .content-viewer h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; color: var(--text); margin-bottom: 16px; }
+  .content-viewer h4 { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 16px; color: var(--text); margin: 24px 0 10px; }
+  .content-viewer p { font-size: 14px; color: #c8b090; margin-bottom: 14px; }
+  .content-viewer ul { margin: 0 0 14px 20px; }
+  .content-viewer li { font-size: 14px; color: #c8b090; margin-bottom: 8px; line-height: 1.7; }
+  .callout { background: rgba(200,130,26,0.08); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; }
+  .callout p { margin: 0; color: #e0c080; }
+  .tip { background: rgba(212,168,67,0.08); border-left: 3px solid var(--accent3); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; }
+  .tip p { margin: 0; color: #e0d090; }
+  .checklist { list-style: none; margin: 0 0 14px 0; }
+  .checklist li { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; font-size: 14px; color: #c8b090; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .checklist li::before { content: '☐'; color: var(--accent); flex-shrink: 0; }
+  .content-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+
+  /* RESOURCES */
+  .resources-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .resource-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; transition: all 0.2s; cursor: pointer; text-decoration: none; }
+  .resource-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .resource-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .resource-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 4px; }
+  .resource-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .resource-type { display: inline-block; margin-top: 10px; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 8px; background: rgba(200,130,26,0.15); color: var(--accent3); border: 1px solid rgba(200,130,26,0.2); }
+  .pdf-path-notice { background: var(--surface2); border: 1px solid rgba(212,168,67,0.3); border-left: 3px solid var(--accent3); border-radius: 0 12px 12px 0; padding: 18px 22px; margin-bottom: 24px; }
+  .pdf-path-notice p { font-size: 13px; color: var(--muted); margin: 0 0 6px 0; line-height: 1.7; }
+  .pdf-path-notice p:last-child { margin-bottom: 0; }
+  .pdf-path-notice code { font-family: 'Courier New', monospace; font-size: 13px; color: var(--accent3); background: rgba(212,168,67,0.08); padding: 3px 8px; border-radius: 5px; }
+
+  /* QUIZ */
+  .quiz-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 16px; }
+  .quiz-question { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--text); margin-bottom: 18px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; font-size: 14px; color: var(--muted); }
+  .quiz-option:hover { border-color: var(--accent); color: var(--text); background: rgba(200,130,26,0.05); }
+  .quiz-option.selected { border-color: var(--accent); color: var(--text); background: rgba(200,130,26,0.10); }
+  .quiz-option.correct { border-color: var(--accent3); color: #e0d090; background: rgba(212,168,67,0.08); }
+  .quiz-option.wrong { border-color: var(--accent2); color: #e8b090; background: rgba(160,82,45,0.08); }
+  .option-dot { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 4px; }
+  .tab { padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--muted); transition: all 0.2s; }
+  .tab.active { background: var(--accent); color: #fff; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .section.active > * { animation: fadeUp 0.4s ease both; }
+  .section.active > *:nth-child(2) { animation-delay: 0.05s; }
+  .section.active > *:nth-child(3) { animation-delay: 0.1s; }
+  .section.active > *:nth-child(4) { animation-delay: 0.15s; }
+
+  .cert-card { background: linear-gradient(135deg, #1a1000 0%, #1e1508 50%, #0d0900 100%); border: 1px solid rgba(200,130,26,0.3); border-radius: 20px; padding: 48px; text-align: center; }
+  .cert-card h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 32px; background: linear-gradient(135deg, #f5e6c8, var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+
+  .mobile-toggle { display: none; position: fixed; top: 16px; left: 16px; z-index: 200; width: 42px; height: 42px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; align-items: center; justify-content: center; font-size: 18px; }
+  @media (max-width: 768px) { .sidebar { transform: translateX(-100%); } .sidebar.open { transform: translateX(0); } .main { margin-left: 0; } .section { padding: 20px; padding-top: 70px; } .hero { padding: 28px; } .hero h1 { font-size: 28px; } .hero::after { display: none; } .hero-stats { flex-wrap: wrap; gap: 16px; } .mobile-toggle { display: flex; } .topbar { padding: 14px 20px 14px 70px; } }
+</style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay">
+  <div class="login-box">
+    <div class="login-icon">🚀</div>
+    <h2>Mentoria das Startups</h2>
+    <div class="login-sub">Do Zero ao Sucesso Empreendedor</div>
+    <div class="login-author">Autor: Luiz de Castro — Mestre em Gestão</div>
+    <label for="login-input">Senha de Acesso</label>
+    <input type="password" id="login-input" placeholder="Digite a senha..." onkeydown="if(event.key==='Enter') doLogin()">
+    <div class="login-err" id="login-err">&#9888; Senha incorreta. Tente novamente.</div>
+    <button class="login-btn" onclick="doLogin()">🔐 Entrar no Programa</button>
+  </div>
+</div>
+
+<button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">🚀 Programa</div>
+    <div class="sidebar-title">Mentoria das Startups</div>
+    <div class="sidebar-subtitle">Do Zero ao Sucesso Empreendedor</div>
+    <div class="sidebar-author">Autor: Luiz de Castro — Mestre em Gestão</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section-label">Início</div>
+    <a class="nav-item active" onclick="showSection('home')">
+      <span class="icon">🏠</span> Visão Geral
+    </a>
+    <a class="nav-item" onclick="showSection('roadmap')">
+      <span class="icon">🗺️</span> Meu Roadmap
+    </a>
+
+    <div class="nav-section-label">Módulos</div>
+    <a class="nav-item" onclick="showModule(0)"><span class="icon">💡</span> Ideação &amp; Validação<span class="nav-progress">0%</span></a>
+    <a class="nav-item" onclick="showModule(1)"><span class="icon">🏗️</span> Modelagem de Negócio<span class="nav-progress">0%</span></a>
+    <a class="nav-item" onclick="showModule(2)"><span class="icon">⚖️</span> Registro Legal<span class="nav-progress">0%</span></a>
+    <a class="nav-item" onclick="showModule(3)"><span class="icon">💰</span> Gestão Financeira<span class="nav-progress">0%</span></a>
+    <a class="nav-item" onclick="showModule(4)"><span class="icon">📣</span> Marketing &amp; Vendas<span class="nav-progress">0%</span></a>
+    <a class="nav-item" onclick="showModule(5)"><span class="icon">📈</span> Captação &amp; Investimento<span class="nav-progress">0%</span></a>
+    <a class="nav-item" onclick="showModule(6)"><span class="icon">⚙️</span> Operações &amp; Escala<span class="nav-progress">0%</span></a>
+    <a class="nav-item" onclick="showModule(7)"><span class="icon">🌍</span> Expansão &amp; Crescimento<span class="nav-progress">0%</span></a>
+
+    <div class="nav-section-label">Materiais</div>
+    <a class="nav-item" onclick="showSection('recursos')"><span class="icon">📚</span> Recursos &amp; PDFs</a>
+    <a class="nav-item" onclick="showSection('quiz')"><span class="icon">🧠</span> Quiz &amp; Avaliação</a>
+    <a class="nav-item" onclick="showSection('certificado')"><span class="icon">🏆</span> Certificado</a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="overall-progress">
+      <div class="progress-label">
+        <span>Progresso Geral</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-breadcrumb" id="breadcrumb">🏠 <span>Visão Geral</span></div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="showSection('recursos')">📥 PDFs</button>
+      <button class="btn btn-primary" onclick="showSection('quiz')">🧠 Quiz</button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="section active" id="section-home">
+    <div class="hero">
+      <div class="hero-tag">✨ Bem-vindo ao Programa</div>
+      <h1>Mentoria das Startups:<br>do Zero ao...</h1>
+      <div class="hero-author">Autor: Luiz de Castro — Mestre em Gestão</div>
+      <p>Aprenda a criar, registrar e administrar sua startup do zero ao sucesso. Um programa completo, aprofundado e aplicado para todos os níveis de empreendedorismo.</p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">8</span><span class="stat-label">Módulos</span></div>
+        <div class="stat"><span class="stat-num">48</span><span class="stat-label">Aulas</span></div>
+        <div class="stat"><span class="stat-num">8</span><span class="stat-label">PDFs &amp; Materiais</span></div>
+        <div class="stat"><span class="stat-num">3</span><span class="stat-label">Níveis</span></div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h2>Trilha de Aprendizado</h2>
+      <p>8 módulos progressivos do zero ao crescimento exponencial</p>
+    </div>
+
+    <div class="modules-grid" id="modules-grid"></div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="section" id="section-roadmap">
+    <div class="section-header">
+      <h2>🗺️ Meu Roadmap</h2>
+      <p>Sua jornada empreendedora etapa a etapa</p>
+    </div>
+    <div id="roadmap-content"></div>
+  </div>
+
+  <!-- MODULE -->
+  <div class="section" id="section-module">
+    <div id="module-content"></div>
+  </div>
+
+  <!-- RECURSOS -->
+  <div class="section" id="section-recursos">
+    <div class="section-header">
+      <h2>📚 Recursos &amp; Materiais em PDF</h2>
+      <p>Clique em qualquer PDF para abrir — os arquivos devem estar na mesma pasta que este programa</p>
+    </div>
+  <!-- QUIZ -->
+  <div class="section" id="section-quiz">
+    <div class="section-header">
+      <h2>🧠 Quiz de Conhecimento</h2>
+      <p>Teste seu aprendizado com questões práticas sobre empreendedorismo e gestão de startups</p>
+    </div>
+    <div id="quiz-content"></div>
+  </div>
+
+  <!-- CERTIFICADO -->
+  <div class="section" id="section-certificado">
+    <div class="cert-card">
+      <div style="font-size:60px;margin-bottom:16px;">🏆</div>
+      <h2>Certificado de Conclusão</h2>
+      <p style="color:var(--muted);margin-top:8px;margin-bottom:28px;">Complete todos os módulos para desbloquear seu certificado</p>
+      <div id="cert-progress-display"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+// ===================== LOGIN =====================
+function doLogin() {
+  const pw = document.getElementById('login-input').value;
+  if (pw === 'mentorstartup') {
+    document.getElementById('login-overlay').style.display = 'none';
+  } else {
+    const err = document.getElementById('login-err');
+    err.style.display = 'block';
+    document.getElementById('login-input').value = '';
+    document.getElementById('login-input').focus();
+  }
+}
+
+// ===================== DATA =====================
+const modules = [
+  {
+    id: 0, icon: '💡', title: 'Ideação & Validação',
+    desc: 'Descubra como transformar uma ideia em oportunidade de negócio validada pelo mercado.',
+    level: 'Iniciante', color: '#c8821a',
+    duration: '3h 20min', lessons: 6,
+    lessons_list: [
+      { title: 'O que é uma Startup?', sub: 'Definição, tipos e ecossistema empreendedor', dur: '18min' },
+      { title: 'Design Thinking', sub: 'Pensamento centrado no usuário e resolução criativa', dur: '25min' },
+      { title: 'Identificando Dores do Mercado', sub: 'Pesquisa, etnografia e descoberta de problemas reais', dur: '30min' },
+      { title: 'MVP — Produto Mínimo Viável', sub: 'Construir para aprender: experimentos de baixo custo', dur: '28min' },
+      { title: 'Validação com Clientes Reais', sub: 'Entrevistas estruturadas e testes de hipótese', dur: '35min' },
+      { title: 'Pivotando ou Perseverando', sub: 'Como decidir quando mudar de direção', dur: '24min' },
+    ],
+    pdf: 'mentoria_startups/glossario_startups.pdf',
+    content: {
+      intro: 'Toda grande empresa começou com uma ideia. Mas nem toda ideia se torna um negócio de sucesso. Neste módulo você aprenderá o processo sistemático de validar se sua ideia tem potencial de mercado antes de investir tempo e dinheiro. Utilizaremos as metodologias mais consagradas do ecossistema global de startups: Lean Startup, Design Thinking, Customer Development e Jobs-to-be-Done.',
+      topics: [
+        { title: '🎯 O que diferencia uma Startup de um Negócio Tradicional', body: 'Uma startup é uma empresa jovem, com modelo de negócio repetível e escalável, focada em crescimento rápido. Diferente de um negócio tradicional (como uma padaria ou consultório), a startup busca resolver problemas de forma inovadora para um grande mercado potencial — tipicamente usando tecnologia como alavanca. O objetivo de uma startup não é apenas lucrar, mas encontrar um modelo que possa crescer dezenas ou centenas de vezes sem uma expansão proporcional de custos.' },
+        { title: '🔍 Encontrando o Problema Certo — Customer Discovery', body: 'O erro mais comum de empreendedores iniciantes é apaixonar-se pela solução antes de entender profundamente o problema. Steve Blank, criador do Customer Development, ensina que o primeiro trabalho do fundador é "sair do prédio" e conversar com potenciais clientes. Use entrevistas abertas, observação etnográfica e análise de dados para mapear as reais dores do seu público. A pergunta chave não é "você compraria meu produto?" (ninguém diz não), mas "me fale sobre a última vez que você enfrentou esse problema".' },
+        { title: '⚡ Construindo o Primeiro MVP', body: 'O MVP (Mínimo Produto Viável) não é a versão mais simples do seu produto — é o experimento mais barato que testa sua hipótese mais arriscada. Pode ser uma landing page (para testar demanda), um protótipo em papel (para testar usabilidade), um serviço manual (o "Wizard of Oz" usado pelo Zappos), ou uma peça de conteúdo. O ciclo do Lean Startup — Construir → Medir → Aprender — deve ser percorrido o mais rápido possível.' },
+        { title: '🔄 Pivotar ou Perseverar: a Decisão Mais Difícil', body: 'Um pivot é uma mudança estrutural na direção da startup — de segmento, canal, modelo de receita ou produto — com base em aprendizado validado. O Instagram começou como um jogo de check-in chamado Burbn. O YouTube era um site de namoro. Slack surgiu de uma empresa de games falida. Saber quando pivotar exige dados, não feeling. Os sinais de que é hora de pivotar: crescimento estagnado, baixa retenção, clientes que amam seu produto mas não são o público-alvo.' },
+      ]
+    }
+  },
+  {
+    id: 1, icon: '🏗️', title: 'Modelagem de Negócio',
+    desc: 'Estruture seu modelo de negócio com o Business Model Canvas e defina sua proposta de valor.',
+    level: 'Iniciante', color: '#d4a843',
+    duration: '4h 10min', lessons: 6,
+    lessons_list: [
+      { title: 'Business Model Canvas', sub: 'A ferramenta fundamental para modelar negócios', dur: '35min' },
+      { title: 'Proposta de Valor Irresistível', sub: 'Value Proposition Canvas na prática', dur: '30min' },
+      { title: 'Segmentos de Clientes', sub: 'Quem é seu cliente ideal? Personas e ICP', dur: '25min' },
+      { title: 'Canais de Distribuição', sub: 'Como chegar ao seu cliente de forma eficiente', dur: '22min' },
+      { title: 'Fontes de Receita', sub: 'Modelos e estratégias de monetização', dur: '28min' },
+      { title: 'Estrutura de Custos', sub: 'Controlando gastos e construindo eficiência', dur: '30min' },
+    ],
+    pdf: 'mentoria_startups/canvas_template.pdf',
+    content: {
+      intro: 'Ter uma boa ideia é o começo. Para construir um negócio sustentável, você precisa modelar como sua empresa cria, entrega e captura valor. O Business Model Canvas (BMC), criado por Alexander Osterwalder, é a ferramenta mais usada no mundo para isso — adotada por startups, grandes corporações e aceleradoras globais.',
+      topics: [
+        { title: '🗂️ Business Model Canvas (BMC): os 9 blocos', body: 'O BMC é uma ferramenta visual com 9 blocos interligados: (1) Segmentos de Clientes — quem você atende; (2) Proposta de Valor — o que você oferece; (3) Canais — como você entrega; (4) Relacionamento com Clientes — como você interage; (5) Fontes de Receita — como você ganha dinheiro; (6) Recursos-Chave — o que você precisa ter; (7) Atividades-Chave — o que você precisa fazer; (8) Parcerias Estratégicas — quem te ajuda; (9) Estrutura de Custos — quanto custa tudo.' },
+        { title: '💎 Proposta de Valor: por que me escolher?', body: 'Sua proposta de valor responde: "Por que um cliente deveria escolher você em vez de qualquer alternativa?" Ela deve resolver uma dor real (pain relief) ou criar um ganho significativo (gain creator). Use o Value Proposition Canvas para mapear os "jobs to be done" dos seus clientes — as tarefas funcionais, emocionais e sociais que eles tentam realizar.' },
+        { title: '💸 Modelos de Receita: escolhendo o certo', body: 'SaaS (assinatura recorrente), marketplace (comissão por transação), freemium (grátis + premium), transacional (pague por uso), licenciamento (IP), publicidade (audiência), hardware (venda direta)... Cada modelo tem implicações profundas no fluxo de caixa, na jornada de vendas e no valuation. Startups SaaS, por exemplo, têm receita previsível e são altamente valorizadas pelo mercado de capital.' },
+        { title: '🎯 Ideal Customer Profile (ICP) e Personas', body: 'O ICP define o perfil da empresa ou pessoa que mais se beneficia do seu produto e tem menor CAC e maior LTV. A Persona é a personificação humana desse perfil — com nome, comportamentos, dores e objetivos. Startups que não definem um ICP claro tendem a desperdiçar recursos tentando servir todo mundo e acabam não servindo ninguém muito bem.' },
+      ]
+    }
+  },
+  {
+    id: 2, icon: '⚖️', title: 'Registro Legal da Startup',
+    desc: 'Entenda todos os passos para formalizar sua empresa no Brasil com segurança jurídica.',
+    level: 'Iniciante', color: '#a0522d',
+    duration: '3h 45min', lessons: 6,
+    lessons_list: [
+      { title: 'Tipos de Empresa no Brasil', sub: 'MEI, EIRELI, LTDA, S.A., SCP — quando usar cada um', dur: '30min' },
+      { title: 'Escolhendo o CNAE Correto', sub: 'Classificação de atividades e impactos tributários', dur: '20min' },
+      { title: 'Abertura pelo Portal Gov.br', sub: 'Passo a passo completo 100% online', dur: '35min' },
+      { title: 'Contrato Social e Estatuto', sub: 'Documentos fundamentais e cláusulas essenciais', dur: '28min' },
+      { title: 'Regimes Tributários', sub: 'Simples Nacional, Lucro Presumido, Lucro Real', dur: '32min' },
+      { title: 'Propriedade Intelectual', sub: 'Marcas, patentes, direitos autorais — proteja sua inovação', dur: '20min' },
+    ],
+    pdf: 'mentoria_startups/guia_registro_legal.pdf',
+    content: {
+      intro: 'Formalizar sua startup é fundamental para operar com segurança jurídica, emitir notas fiscais, contratar funcionários e captar investimentos. Empresas informais não conseguem abrir conta PJ, assinar contratos com grandes clientes ou receber investimento de VCs. Este módulo cobre tudo que você precisa saber sobre o processo de registro no Brasil.',
+      topics: [
+        { title: '🏢 Qual tipo de empresa escolher?', body: 'MEI (Microempreendedor Individual): limite de R$81mil/ano, um funcionário — adequado para freelancers iniciantes. LTDA (Limitada): a mais comum para startups, flexível, responsabilidade limitada ao capital. S.A. (Sociedade Anônima): obrigatória quando se quer emitir ações, aceitar investidores institucionais ou distribuir stock options. A maioria das startups começa como LTDA e migra para S.A. quando capta investimento.' },
+        { title: '📋 Processo de Abertura — passo a passo', body: 'Hoje é possível abrir uma empresa 100% online pelo Portal de Empreendedor do Gov.br em poucos dias. O processo inclui: (1) Verificar viabilidade do nome e endereço; (2) Definir o CNAE (Classificação Nacional de Atividades Econômicas); (3) Elaborar o contrato social; (4) Registrar na Junta Comercial do estado; (5) Obter o CNPJ na Receita Federal; (6) Solicitar Alvará de Funcionamento na prefeitura.' },
+        { title: '💼 Simples Nacional e outros regimes', body: 'O Simples Nacional é o regime mais vantajoso para startups em fase inicial (faturamento até R$4,8mi/ano): unifica até 8 impostos em uma guia e tem alíquotas a partir de 4,5%. O Lucro Presumido é intermediário, útil quando margens são altas. O Lucro Real é obrigatório para empresas acima de R$78mi ou que querem aproveitar créditos de PIS/COFINS.' },
+        { title: '🔐 Protegendo sua Propriedade Intelectual', body: 'Registrar sua marca no INPI (Instituto Nacional da Propriedade Industrial) é essencial. O processo leva de 18 a 36 meses e custa em torno de R$250-400 por classe. Patentes protegem invenções por 20 anos. Software no Brasil é protegido automaticamente pelo direito autoral. Para startups de deep tech e biotech, a estratégia de IP pode ser determinante no valuation.' },
+      ]
+    }
+  },
+  {
+    id: 3, icon: '💰', title: 'Gestão Financeira',
+    desc: 'Domine o controle financeiro, planejamento de fluxo de caixa e indicadores essenciais para startups.',
+    level: 'Intermediário', color: '#c8821a',
+    duration: '4h 30min', lessons: 6,
+    lessons_list: [
+      { title: 'Fundamentos de Contabilidade', sub: 'DRE, Balanço Patrimonial, Fluxo de Caixa', dur: '35min' },
+      { title: 'Projeções Financeiras', sub: 'Como construir um forecast realista', dur: '40min' },
+      { title: 'Métricas Essenciais de Startup', sub: 'CAC, LTV, Churn, MRR, ARR, Burn Rate', dur: '30min' },
+      { title: 'Gestão de Capital de Giro', sub: 'Como não ficar sem dinheiro', dur: '28min' },
+      { title: 'Precificação Estratégica', sub: 'Como precificar para crescer e lucrar', dur: '25min' },
+      { title: 'Contabilidade e Obrigações Fiscais', sub: 'Impostos, declarações e compliance', dur: '32min' },
+    ],
+    pdf: 'mentoria_startups/planilha_financeira.pdf',
+    content: {
+      intro: 'Boa parte das startups quebra por má gestão financeira, não por falta de clientes ou de produto. "Running out of cash" é a causa de morte de 29% das startups (CB Insights). Neste módulo você aprenderá a controlar seu caixa, projetar cenários e monitorar as métricas que realmente importam para investidores.',
+      topics: [
+        { title: '📊 As 3 Demonstrações Financeiras Essenciais', body: 'A DRE (Demonstração do Resultado do Exercício) mostra se você é lucrativo — receitas menos despesas. O Balanço Patrimonial mostra sua posição financeira em um momento: ativos (o que você tem), passivos (o que deve) e patrimônio líquido. O Fluxo de Caixa é o mais crítico para startups — uma empresa pode ser lucrativa no papel e falir por falta de caixa (lucro ≠ caixa).' },
+        { title: '🎯 Métricas de Startup que Investidores Analisam', body: 'CAC (Custo de Aquisição de Cliente) = total gasto em marketing e vendas / novos clientes. LTV (Lifetime Value) = ticket médio × frequência × tempo de relacionamento. A relação LTV/CAC deve ser maior que 3. MRR (Receita Mensal Recorrente) e ARR (Anual) são as métricas centrais de SaaS. Churn Rate (taxa de cancelamento) ideal é abaixo de 2% ao mês.' },
+        { title: '🔥 Runway e Burn Rate: sua sobrevivência', body: 'Burn Rate é o quanto sua startup gasta por mês além do que recebe (burn líquido). Runway = caixa disponível ÷ burn mensal — quantos meses você tem antes de ficar sem dinheiro. A regra de ouro: sempre tenha pelo menos 12-18 meses de runway antes de levantar capital, e comece o processo de captação com 6+ meses de caixa.' },
+        { title: '💲 Precificação: a alavanca mais poderosa', body: 'Um aumento de 10% no preço tem impacto muito maior no lucro do que uma redução de 10% nos custos. Estratégias: precificação baseada em custo (custo + margem), baseada em valor (quanto o cliente economiza/ganha), baseada em concorrência, e freemium (grátis → pago). Para SaaS: experimente Freemium, trial de 14/30 dias, e múltiplos planos (Basic, Pro, Enterprise).' },
+      ]
+    }
+  },
+  {
+    id: 4, icon: '📣', title: 'Marketing & Vendas',
+    desc: 'Construa uma estratégia de go-to-market, aquisição de clientes e funil de vendas eficiente.',
+    level: 'Intermediário', color: '#d4a843',
+    duration: '4h 00min', lessons: 6,
+    lessons_list: [
+      { title: 'Go-to-Market Strategy', sub: 'Como entrar no mercado com impacto', dur: '30min' },
+      { title: 'Marketing Digital para Startups', sub: 'Canais, performance, SEO e conteúdo', dur: '35min' },
+      { title: 'Funil de Vendas', sub: 'Da consciência à conversão e retenção', dur: '28min' },
+      { title: 'Growth Hacking', sub: 'Crescimento acelerado com recursos limitados', dur: '32min' },
+      { title: 'CRM e Gestão de Clientes', sub: 'Ferramentas, processos e automação', dur: '24min' },
+      { title: 'Customer Success', sub: 'Retenção, expansão e NPS na prática', dur: '31min' },
+    ],
+    pdf: 'mentoria_startups/metricas_startups.pdf',
+    content: {
+      intro: 'Criar um produto excelente não é suficiente — você precisa que as pessoas o encontrem, o experimentem, se apaixonem por ele e o recomendem. Este módulo cobre as estratégias de marketing e vendas mais eficientes para startups com recursos limitados, do primeiro cliente ao crescimento acelerado.',
+      topics: [
+        { title: '🎯 Product-Market Fit: o Santo Graal', body: 'Product-Market Fit (PMF) é quando seu produto satisfaz uma forte demanda de mercado. Sean Ellis propõe o "40% test": se 40%+ dos seus usuários ativos ficariam "muito desapontados" sem o seu produto, você tem PMF. Outros indicadores: crescimento orgânico via word-of-mouth, NPS acima de 50, churn baixo e usuários ativos crescendo sem marketing pago intenso.' },
+        { title: '📈 Growth Hacking: crescimento engenheirado', body: 'Growth Hacking combina criatividade, dados e tecnologia para crescer rapidamente. Loops virais (convide um amigo, ganhe X), SEO técnico e de conteúdo, parcerias de co-marketing, automações de onboarding, e experimentos A/B constantes são táticas centrais. O Dropbox cresceu 3900% com um programa de referral. O Airbnb integrou com o Craigslist para acessar uma audiência enorme sem pagar por isso.' },
+        { title: '🤝 Inbound vs Outbound vs Product-Led Growth', body: 'Inbound atrai clientes com conteúdo relevante (blog, SEO, YouTube, podcasts). Outbound vai ativamente atrás dos clientes (cold email, LinkedIn outreach, SDRs). Product-Led Growth (PLG) usa o próprio produto como canal de aquisição — o cliente experimenta antes de pagar (Slack, Notion, Figma). Startups bem-sucedidas combinam essas estratégias conforme o estágio.' },
+        { title: '📊 Funil AARRR: Piratagem do Crescimento', body: 'O framework AARRR de Dave McClure mapeia a jornada: Aquisição (como o usuário te encontra), Ativação (primeira experiência positiva), Retenção (voltam?), Receita (pagam?), Referral (recomendam?). Identifique qual etapa é seu maior gargalo e concentre 80% do esforço nela. Geralmente, startups focam demais em aquisição e de menos em ativação e retenção.' },
+      ]
+    }
+  },
+  {
+    id: 5, icon: '📈', title: 'Captação & Investimento',
+    desc: 'Entenda o ecossistema de investimentos, prepare seu pitch e negocie com investidores.',
+    level: 'Avançado', color: '#c8821a',
+    duration: '5h 15min', lessons: 6,
+    lessons_list: [
+      { title: 'Ecossistema de Startups no Brasil', sub: 'VCs, Angels, Aceleradoras e o cenário atual', dur: '25min' },
+      { title: 'Estágios de Investimento', sub: 'Pre-seed, seed, Series A, B, C — o que esperar de cada um', dur: '28min' },
+      { title: 'Valuation de Startups', sub: 'Como calcular e defender o valor da sua empresa', dur: '40min' },
+      { title: 'Construindo o Pitch Deck', sub: '10 slides que convencem investidores', dur: '45min' },
+      { title: 'Due Diligence e Term Sheet', sub: 'Cap table, dilução, liquidation preferences', dur: '38min' },
+      { title: 'Fontes Alternativas de Capital', sub: 'BNDES, FAPESP, Crowdfunding, editais públicos', dur: '19min' },
+    ],
+    pdf: 'mentoria_startups/pitch_deck_template.pdf',
+    content: {
+      intro: 'Captar investimento é uma das habilidades mais importantes — e desafiadoras — de um founder. O Brasil tem um ecossistema vibrante: mais de 100 VCs ativos, aceleradoras renomadas (Y Combinator tem aceitado startups brasileiras) e fundos como Kaszek, Softbank e Monashees. Neste módulo, você aprenderá a navegar esse ecossistema e fechar sua primeira rodada.',
+      topics: [
+        { title: '💼 Tipos de Investidores: quem são e o que querem', body: 'Angels (investidores-anjo) são pessoas físicas que investem entre R$50mil e R$500mil na fase inicial, muitas vezes em troca de equity (2-10%). VCs (Venture Capital) são fundos que investem de R$500mil a dezenas de milhões, buscando retorno de 10-100x em 5-10 anos. Aceleradoras (como YC, 500 Startups, Wayra) oferecem capital + mentoria + rede em troca de 5-10% da empresa. Corporate VCs são braços de investimento de grandes empresas estratégicas.' },
+        { title: '📊 Valuation: quanto vale sua startup?', body: 'Em fases iniciais, o valuation é mais arte do que ciência. Métodos: Berkus Method (para pré-receita, atribui valor a 5 elementos como ideia, MVP, time, parceiros, rollout), Scorecard Method (compara com startups similares), DCF (Discounted Cash Flow — para empresas com receita previsível), e comparáveis de mercado (múltiplos de ARR, como 5-20x ARR para SaaS). Regra prática: pre-seed R$2-8mi, seed R$8-25mi, Series A R$25-80mi.' },
+        { title: '🎤 O Pitch Deck dos 10 Slides', body: 'O pitch deck clássico (baseado em Sequoia Capital) tem: 1) Problema, 2) Solução, 3) Por que agora (timing), 4) Tamanho de mercado (TAM/SAM/SOM), 5) Produto (demo), 6) Tração (métricas), 7) Modelo de negócio, 8) Competição e diferenciação, 9) Time (o mais importante para angels), 10) Pedido (quanto, para quê, valuation). Cada slide deve responder UMA pergunta crítica do investidor.' },
+        { title: '📋 Due Diligence: o que investidores verificam', body: 'Due diligence é a auditoria que o investidor faz antes de fechar o deal: dados financeiros auditados, contratos com clientes, situação legal e fiscal, propriedade intelectual, acordos com co-fundadores (vesting), e referências do time. Prepare um Virtual Data Room (VDR) com todos esses documentos organizados. Startups que chegam ao processo de DD bem preparadas fecham rounds 2-3x mais rápido.' },
+      ]
+    }
+  },
+  {
+    id: 6, icon: '⚙️', title: 'Operações & Escala',
+    desc: 'Construa processos robustos, cultura organizacional forte e prepare sua empresa para crescer.',
+    level: 'Avançado', color: '#a0522d',
+    duration: '3h 50min', lessons: 6,
+    lessons_list: [
+      { title: 'Equipes de Alta Performance', sub: 'Contratação, cultura, gestão e retenção de talentos', dur: '32min' },
+      { title: 'OKRs e Gestão por Objetivos', sub: 'Alinhando times em torno de metas ambiciosas', dur: '28min' },
+      { title: 'Processos e Automações', sub: 'Escalar sem escalar custos — ferramentas e sistemas', dur: '25min' },
+      { title: 'LGPD, Compliance e Governança', sub: 'Regulamentos e boas práticas de conformidade', dur: '30min' },
+      { title: 'Product Management', sub: 'Roadmap, backlog, priorização e metodologias ágeis', dur: '35min' },
+      { title: 'Tecnologia como Vantagem Competitiva', sub: 'Stack tecnológica, dados e inovação contínua', dur: '20min' },
+    ],
+    pdf: 'mentoria_startups/checklist_empreendedor.pdf',
+    content: {
+      intro: 'Chegar a R$1 milhão de receita é uma conquista incrível. Mas escalar para R$10, R$50 ou R$100 milhões exige processos, cultura e gestão completamente diferentes. O que funciona com 5 pessoas quebra com 50. O que funciona com 50 quebra com 500. Este módulo prepara você para as armadilhas do hipercrescimento.',
+      topics: [
+        { title: '👥 Contratando as Pessoas Certas — o ativo mais importante', body: 'Em uma startup, cada contratação impacta profundamente a cultura e o desempenho. Princípios: contrate para o papel que você precisa daqui a 18 meses (não para hoje); valorize "culture add" em vez de apenas "culture fit"; diversidade de backgrounds melhora a tomada de decisão; os primeiros 10 funcionários definem a cultura para os próximos 1.000. Use o método de entrevista comportamental (STAR) e não contrate amigos apenas por lealdade.' },
+        { title: '🎯 OKRs na Prática: alinhamento em toda a empresa', body: 'OKRs (Objectives & Key Results) é o sistema de gestão por objetivos usado por Google, Spotify, Airbnb e Twitter. Objective: o que você quer alcançar (qualitativo, inspirador). Key Results: como você vai medir o progresso (2-5 métricas quantitativas e ambiciosas). OKRs devem ser desafiadores — se você atinge 100% de todos os OKRs, eles são muito fáceis. 60-70% de atingimento é o ideal. Ciclo trimestral + review semanal.' },
+        { title: '🔒 LGPD: conformidade não é opcional', body: 'A Lei Geral de Proteção de Dados (Lei 13.709/2018) é obrigatória para qualquer empresa que trata dados de brasileiros — inclusive startups. Requisitos mínimos: nomear um DPO (Data Protection Officer); ter política de privacidade clara; mapear todos os dados coletados e sua finalidade; obter consentimento explícito; implementar o direito ao esquecimento. Multas podem chegar a 2% do faturamento, limitadas a R$50 milhões por infração.' },
+        { title: '📱 Product Management: do roadmap ao lançamento', body: 'O PM (Product Manager) é responsável por decidir O QUE construir e POR QUÊ — engenharia decide o COMO. Frameworks de priorização: RICE (Reach × Impact × Confidence ÷ Effort), ICE Score, MoSCoW. O roadmap deve ser orientado por outcomes (resultados para o usuário), não por outputs (features entregues). Metodologias ágeis (Scrum, Kanban, Shape Up) ajudam na execução consistente.' },
+      ]
+    }
+  },
+  {
+    id: 7, icon: '🌍', title: 'Expansão & Crescimento',
+    desc: 'Estratégias de internacionalização, parcerias estratégicas e próximos passos do seu negócio.',
+    level: 'Avançado', color: '#d4a843',
+    duration: '3h 30min', lessons: 6,
+    lessons_list: [
+      { title: 'Internacionalização de Startups', sub: 'Quando, como e para onde expandir', dur: '30min' },
+      { title: 'Parcerias Estratégicas e Canais', sub: 'Distribuição, co-marketing e integrações', dur: '25min' },
+      { title: 'M&A: Fusões e Aquisições', sub: 'Ser adquirido, adquirir ou fazer merger', dur: '28min' },
+      { title: 'IPO e Abertura de Capital', sub: 'O caminho para a bolsa de valores', dur: '35min' },
+      { title: 'Inovação Contínua', sub: 'Como não se tornar obsoleto em mercados dinâmicos', dur: '22min' },
+      { title: 'Seu Próximo Capítulo', sub: 'Exit, legado, serial entrepreneurship e novos começos', dur: '20min' },
+    ],
+    pdf: 'mentoria_startups/manual_do_aluno.pdf',
+    content: {
+      intro: 'Para startups que alcançaram Product-Market Fit e têm crescimento consistente, o próximo desafio é escalar além das fronteiras geográficas e construir um negócio verdadeiramente relevante. Este módulo cobre estratégias de expansão internacional, grandes eventos de liquidez e como manter a inovação em empresas em crescimento.',
+      topics: [
+        { title: '🌎 Internacionalização: expansão calculada', body: 'A Latinoamérica (México, Colômbia, Argentina, Chile) é o passo natural para startups brasileiras — mercados grandes, culturalmente próximos e com ecossistemas em desenvolvimento. Portugal é a porta de entrada para a Europa (mesma língua, acesso ao mercado da UE). EUA é o destino de quem busca capital global — Delaware é a estrutura legal padrão para receber investimento americano. Cada mercado exige adaptação de produto, precificação, modelo legal e time local.' },
+        { title: '🤝 Parcerias como Alavanca de Crescimento', body: 'Parcerias estratégicas podem acelerar o crescimento sem aumentar custos de aquisição. Modelos: OEM (seu produto embutido no produto de outro), white-label (seu produto com a marca do parceiro), integrações técnicas (conectar ao ecossistema de ferramentas dos clientes — como integrar ao Salesforce ou ao SAP), co-marketing (campanhas conjuntas), e canais de revenda (distribuidores, consultores, VARs).' },
+        { title: '🏦 Exit: o momento da colheita', body: 'Exit é quando os fundadores e investidores "liquidam" seu investimento. Principais modalidades: M&A (fusão ou aquisição por outra empresa — responde por 90% dos exits globais), IPO (abertura de capital na bolsa — requer governança robusta, histórico financeiro e tamanho mínimo ~R$1bi), e Secondary (venda de participação para outro fundo). Preparar a empresa para um exit desde o início — com governança, dados confiáveis e processos escaláveis — maximiza o valuation.' },
+        { title: '🔄 Inovação Contínua: sobrevivendo ao sucesso', body: 'O maior risco de uma startup de sucesso é tornar-se uma empresa incumbente — lenta, burocrática e incapaz de reinventar-se. Clayton Christensen chamou isso de "o dilema do inovador". Estratégias para manter a cultura de inovação em escala: equipes autônomas (squads), orçamento dedicado para exploração (20% rule), aquisição estratégica de startups menores, e programas de intraempreendedorismo.' },
+      ]
+    }
+  },
+];
+
+const resources = [
+  { icon: '📖', title: 'Glossário de Startups', desc: 'Mais de 150 termos essenciais: VC, term sheet, cap table, churn, runway, pivot, PMF e muito mais', type: 'PDF', file: 'mentoria_startups/glossario_startups.pdf' },
+  { icon: '📋', title: 'Manual do Aluno', desc: 'Guia completo com metodologia do programa, cronograma sugerido e orientações de estudo', type: 'PDF', file: 'mentoria_startups/manual_do_aluno.pdf' },
+  { icon: '🗂️', title: 'Business Model Canvas', desc: 'Template editável para modelar seu negócio — inclui Value Proposition Canvas e Lean Canvas', type: 'PDF', file: 'mentoria_startups/canvas_template.pdf' },
+  { icon: '💰', title: 'Planilha Financeira', desc: 'Modelo de fluxo de caixa, projeções financeiras, cálculo de CAC/LTV e burn rate para startups', type: 'PDF', file: 'mentoria_startups/planilha_financeira.pdf' },
+  { icon: '⚖️', title: 'Guia de Registro Legal', desc: 'Passo a passo para abrir sua empresa no Brasil — LTDA, S.A., Simples Nacional e LGPD', type: 'PDF', file: 'mentoria_startups/guia_registro_legal.pdf' },
+  { icon: '🎤', title: 'Pitch Deck Template', desc: 'Estrutura dos 10 slides que convencem investidores — com exemplos reais e dicas de apresentação', type: 'PDF', file: 'mentoria_startups/pitch_deck_template.pdf' },
+  { icon: '📈', title: 'Métricas de Startup', desc: 'Guia completo de CAC, LTV, Churn, MRR, ARR, NPS, Burn Rate e outros indicadores-chave', type: 'PDF', file: 'mentoria_startups/metricas_startups.pdf' },
+  { icon: '🎯', title: 'Checklist do Empreendedor', desc: 'Lista de verificação completa para cada etapa — ideação, registro, captação e escala', type: 'PDF', file: 'mentoria_startups/checklist_empreendedor.pdf' },
+];
+
+const quizData = [
+  { q: 'O que significa MVP em desenvolvimento de produto?', opts: ['Mais Valioso Produto', 'Mínimo Produto Viável', 'Máximo Produto Vendável', 'Modelo de Produto Virtual'], correct: 1, exp: 'MVP (Minimum Viable Product) é a versão mais simples do produto que testa a hipótese central do negócio com o menor esforço possível. É um experimento de aprendizado, não um produto incompleto.' },
+  { q: 'Qual tipo societário é mais indicado para uma startup que pretende captar investimentos no Brasil?', opts: ['MEI', 'EIRELI', 'LTDA / S.A.', 'Autônomo (PF)'], correct: 2, exp: 'A LTDA é comum no início por sua flexibilidade e simplicidade. A S.A. é preferida quando a startup precisa emitir ações para investidores e criar programas de stock options para colaboradores.' },
+  { q: 'O que é CAC (Custo de Aquisição de Cliente)?', opts: ['O lucro por cliente adquirido', 'O total gasto para adquirir um novo cliente', 'O valor do ciclo de vida do cliente', 'A taxa de cancelamento de clientes'], correct: 1, exp: 'CAC = (Investimento em Marketing + Vendas) / Número de Novos Clientes no período. Um CAC saudável deve ser significativamente menor que o LTV — a relação LTV/CAC ideal é maior que 3.' },
+  { q: 'O que é um "pivot" no contexto de startups?', opts: ['Contratar um novo CEO', 'Mudar de investidor', 'Mudança estrutural na estratégia do negócio com base em aprendizado', 'Lançar uma nova versão do produto'], correct: 2, exp: 'Pivot é uma mudança deliberada e estruturada na estratégia da startup após aprendizado com validação — pode envolver segmento de clientes, canal de distribuição, modelo de receita ou até o produto central.' },
+  { q: 'Qual o primeiro passo para validar uma ideia de startup?', opts: ['Contratar um time de desenvolvimento', 'Abrir a empresa e registrar o CNPJ', 'Identificar e entrevistar clientes potenciais', 'Criar o site e as redes sociais'], correct: 2, exp: 'Antes de construir qualquer coisa, você deve conversar com potenciais clientes para entender se o problema que quer resolver é real, frequente e prioritário para eles. Isso evita construir algo que ninguém quer.' },
+  { q: 'O que mede o "Churn Rate" de uma startup?', opts: ['O ritmo de crescimento mensal da receita', 'A taxa de cancelamento de clientes em um período', 'O custo de aquisição por canal de marketing', 'O número de novos usuários por mês'], correct: 1, exp: 'Churn Rate é o percentual de clientes que cancelaram ou deixaram de usar o produto em um período. Para SaaS, o ideal é abaixo de 2% ao mês (menos de 24% ao ano). Alto churn indica falta de Product-Market Fit.' },
+  { q: 'O que é "runway" no contexto de startups?', opts: ['A tração de crescimento mensal', 'O número de rodadas de investimento captadas', 'O tempo que a startup pode operar com o caixa atual', 'O retorno sobre o investimento dos sócios'], correct: 2, exp: 'Runway = Caixa disponível ÷ Burn Rate mensal. É quantos meses a startup pode operar antes de ficar sem dinheiro. A recomendação é sempre ter pelo menos 12-18 meses de runway e iniciar captação com 6+ meses de caixa.' },
+];
+
+let completedLessons = {};
+let quizAnswers = {};
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  const labels = { home: '🏠 Visão Geral', roadmap: '🗺️ Meu Roadmap', recursos: '📚 Recursos', quiz: '🧠 Quiz', certificado: '🏆 Certificado' };
+  document.getElementById('breadcrumb').innerHTML = '<span>' + (labels[id] || id) + '</span>';
+  if (id === 'roadmap') renderRoadmap();
+  if (id === 'recursos') renderResources();
+  if (id === 'quiz') renderQuiz();
+}
+
+function showModule(idx) {
+  const mod = modules[idx];
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('section-module').classList.add('active');
+  document.getElementById('breadcrumb').innerHTML = 'Módulos › <span>' + mod.title + '</span>';
+  const levelClass = { 'Iniciante': 'badge-iniciante', 'Intermediário': 'badge-intermediario', 'Avançado': 'badge-avancado' };
+
+  let lessonsHTML = mod.lessons_list.map((l, i) => {
+    const key = idx + '-' + i;
+    const done = completedLessons[key];
+    return '<div class="lesson-item ' + (done ? 'done' : '') + '" onclick="openLesson(' + idx + ', ' + i + ')">' +
+      '<div class="lesson-num">' + (done ? '✓' : i + 1) + '</div>' +
+      '<div class="lesson-info"><div class="lesson-title">' + l.title + '</div><div class="lesson-subtitle">' + l.sub + '</div></div>' +
+      '<div class="lesson-duration">⏱ ' + l.dur + '</div></div>';
+  }).join('');
+
+  let topicsHTML = mod.content.topics.map(t =>
+    '<h4>' + t.title + '</h4><p>' + t.body + '</p>'
+  ).join('');
+
+  document.getElementById('module-content').innerHTML =
+    '<div class="module-hero" style="background: linear-gradient(135deg,' + mod.color + '22 0%, var(--surface) 100%); border-color:' + mod.color + '44;">' +
+      '<span class="module-hero-icon">' + mod.icon + '</span>' +
+      '<h2>' + mod.title + '</h2>' +
+      '<p>' + mod.desc + '</p>' +
+      '<div class="module-meta-bar">' +
+        '<div class="meta-chip">⏱ ' + mod.duration + '</div>' +
+        '<div class="meta-chip">📚 ' + mod.lessons + ' aulas</div>' +
+        '<div class="meta-chip"><span class="' + levelClass[mod.level] + '">' + mod.level + '</span></div>' +
+      '</div>' +
+      '<button class="pdf-btn" onclick="openPDF(\'' + mod.pdf + '\')">📄 Abrir Material PDF do Módulo</button>' +
+    '</div>' +
+    '<div class="tabs">' +
+      '<div class="tab active" onclick="switchTab(this, \'tab-aulas-' + idx + '\')">Aulas</div>' +
+      '<div class="tab" onclick="switchTab(this, \'tab-conteudo-' + idx + '\')">Conteúdo</div>' +
+    '</div>' +
+    '<div id="tab-aulas-' + idx + '"><div class="lessons-list">' + lessonsHTML + '</div></div>' +
+    '<div id="tab-conteudo-' + idx + '" style="display:none;">' +
+      '<div class="content-viewer visible">' +
+        '<h3>' + mod.title + ' — Visão Geral Aprofundada</h3>' +
+        '<p>' + mod.content.intro + '</p>' +
+        topicsHTML +
+        '<div class="tip"><p>💡 <strong>Dica do Mentor:</strong> Não apenas leia — aplique cada conceito ao seu próprio contexto. Faça anotações, complete os exercícios práticos e use o PDF do módulo como material de apoio.</p></div>' +
+        '<button class="pdf-btn" onclick="openPDF(\'' + mod.pdf + '\')">📄 Abrir PDF de Apoio</button>' +
+      '</div>' +
+    '</div>' +
+    '<div id="lesson-viewer-' + idx + '" class="content-viewer"></div>';
+}
+
+function openPDF(filePath) {
+  // Tenta abrir o PDF relativo ao local do arquivo HTML
+  try {
+    window.open(filePath, '_blank');
+  } catch(e) {
+    alert('Não foi possível abrir o PDF automaticamente.\n\nCertifique-se de que o arquivo está em:\n' + filePath + '\n\nOs PDFs devem estar na pasta "mentoria_startups" no mesmo diretório deste programa HTML.');
+  }
+}
+
+function openLesson(modIdx, lessonIdx) {
+  const mod = modules[modIdx];
+  const lesson = mod.lessons_list[lessonIdx];
+  const viewer = document.getElementById('lesson-viewer-' + modIdx);
+  viewer.classList.add('visible');
+  viewer.innerHTML =
+    '<h3>' + lesson.title + '</h3>' +
+    '<p style="color:var(--accent3);font-size:12px;margin-bottom:16px;">📍 ' + mod.title + ' › Aula ' + (lessonIdx + 1) + '</p>' +
+    '<p>' + lesson.sub + ' — Esta aula aborda em profundidade os conceitos, ferramentas e aplicações práticas relacionados ao tema <strong>' + lesson.title + '</strong> dentro do contexto da construção da sua startup.</p>' +
+    '<div class="callout"><p>📌 <strong>Objetivo da Aula:</strong> Ao final desta aula, você será capaz de aplicar os conceitos de ' + lesson.title + ' no seu negócio com confiança e clareza estratégica.</p></div>' +
+    '<h4>📝 Checklist de Aprendizado</h4>' +
+    '<ul class="checklist">' +
+      '<li>Entendi os conceitos fundamentais desta aula</li>' +
+      '<li>Identifiquei como aplicar no meu negócio</li>' +
+      '<li>Pesquisei exemplos reais no mercado brasileiro</li>' +
+      '<li>Fiz anotações dos pontos mais relevantes</li>' +
+      '<li>Estou pronto para o próximo tema</li>' +
+    '</ul>' +
+    '<div class="content-nav">' +
+      '<button class="btn btn-ghost" onclick="document.getElementById(\'lesson-viewer-' + modIdx + '\').classList.remove(\'visible\')">← Fechar</button>' +
+      '<button class="btn btn-primary" onclick="completeLesson(' + modIdx + ', ' + lessonIdx + ')">✅ Marcar como Concluída</button>' +
+    '</div>';
+  viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function completeLesson(modIdx, lessonIdx) {
+  const key = modIdx + '-' + lessonIdx;
+  completedLessons[key] = true;
+  updateProgress();
+  showModule(modIdx);
+  setTimeout(() => {
+    const viewer = document.getElementById('lesson-viewer-' + modIdx);
+    if (viewer) {
+      viewer.innerHTML = '<div style="text-align:center;padding:32px;"><span style="font-size:48px;">✅</span><h3 style="margin-top:12px;color:var(--accent3)">Aula Concluída!</h3><p style="color:var(--muted);margin-top:8px;">Continue para a próxima aula do módulo.</p></div>';
+      viewer.classList.add('visible');
+    }
+  }, 200);
+}
+
+function updateProgress() {
+  const total = modules.reduce((a, m) => a + m.lessons, 0);
+  const done = Object.keys(completedLessons).length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function switchTab(el, tabId) {
+  const parent = el.closest('.section, #module-content');
+  parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const allTabs = parent.querySelectorAll('[id^="tab-"]');
+  allTabs.forEach(t => t.style.display = 'none');
+  const target = document.getElementById(tabId);
+  if (target) target.style.display = 'block';
+}
+
+function renderResources() {
+  document.getElementById('resources-grid').innerHTML = resources.map(r =>
+    '<div class="resource-card" onclick="openPDF(\'' + r.file + '\')">' +
+      '<span class="resource-icon">' + r.icon + '</span>' +
+      '<div class="resource-title">' + r.title + '</div>' +
+      '<div class="resource-desc">' + r.desc + '</div>' +
+      '<span class="resource-type">📄 ' + r.type + '</span>' +
+    '</div>'
+  ).join('');
+}
+
+function renderQuiz() {
+  let html = quizData.map((q, qi) =>
+    '<div class="quiz-card" id="qcard-' + qi + '">' +
+      '<div class="quiz-question">Questão ' + (qi + 1) + ': ' + q.q + '</div>' +
+      '<div class="quiz-options">' +
+        q.opts.map((o, oi) =>
+          '<div class="quiz-option" id="qopt-' + qi + '-' + oi + '" onclick="selectAnswer(' + qi + ', ' + oi + ')">' +
+            '<div class="option-dot">' + String.fromCharCode(65 + oi) + '</div>' + o +
+          '</div>'
+        ).join('') +
+      '</div>' +
+      '<div id="qexpl-' + qi + '" style="display:none;margin-top:12px;" class="tip"><p>' + q.exp + '</p></div>' +
+    '</div>'
+  ).join('');
+  html += '<button class="btn btn-primary" onclick="checkQuiz()" style="margin-top:8px;">Verificar Respostas</button>';
+  document.getElementById('quiz-content').innerHTML = html;
+}
+
+function selectAnswer(qi, oi) {
+  quizAnswers[qi] = oi;
+  for (let i = 0; i < quizData[qi].opts.length; i++) {
+    document.getElementById('qopt-' + qi + '-' + i).classList.remove('selected');
+  }
+  document.getElementById('qopt-' + qi + '-' + oi).classList.add('selected');
+}
+
+function checkQuiz() {
+  let score = 0;
+  quizData.forEach((q, qi) => {
+    const answered = quizAnswers[qi];
+    if (answered === undefined) return;
+    for (let oi = 0; oi < q.opts.length; oi++) {
+      const el = document.getElementById('qopt-' + qi + '-' + oi);
+      el.classList.remove('selected', 'correct', 'wrong');
+      if (oi === q.correct) el.classList.add('correct');
+      else if (oi === answered && answered !== q.correct) el.classList.add('wrong');
+    }
+    if (answered === q.correct) score++;
+    document.getElementById('qexpl-' + qi).style.display = 'block';
+  });
+  alert('🎉 Você acertou ' + score + ' de ' + quizData.length + ' questões!\n\n' + (score >= 5 ? '✅ Excelente desempenho! Você está dominando os conceitos.' : '📚 Continue estudando — revise os módulos dos temas que errou.'));
+}
+
+function renderRoadmap() {
+  const phases = [
+    { emoji: '🌱', title: 'Fase 1: Descoberta', mods: [0, 1], color: '#d4a843' },
+    { emoji: '🏗️', title: 'Fase 2: Construção', mods: [2, 3], color: '#c8821a' },
+    { emoji: '🚀', title: 'Fase 3: Tração', mods: [4, 5], color: '#a0522d' },
+    { emoji: '📈', title: 'Fase 4: Escala', mods: [6, 7], color: '#8b4513' },
+  ];
+  document.getElementById('roadmap-content').innerHTML = phases.map(p =>
+    '<div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;">' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">' +
+        '<span style="font-size:24px;">' + p.emoji + '</span>' +
+        '<h3 style="font-family:Syne,sans-serif;font-size:18px;font-weight:700;color:var(--text);">' + p.title + '</h3>' +
+      '</div>' +
+      '<div style="display:flex;gap:12px;flex-wrap:wrap;">' +
+        p.mods.map(mi =>
+          '<div onclick="showModule(' + mi + ')" style="flex:1;min-width:200px;background:var(--surface2);border:1px solid ' + p.color + '33;border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor=\'' + p.color + '\'" onmouseout="this.style.borderColor=\'' + p.color + '33\'">' +
+            '<div style="font-size:24px;margin-bottom:8px;">' + modules[mi].icon + '</div>' +
+            '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;color:var(--text);">' + modules[mi].title + '</div>' +
+            '<div style="font-size:12px;color:var(--muted);margin-top:4px;">' + modules[mi].duration + ' · ' + modules[mi].lessons + ' aulas</div>' +
+          '</div>'
+        ).join('') +
+      '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function renderHome() {
+  const levelClass = { 'Iniciante': 'badge-iniciante', 'Intermediário': 'badge-intermediario', 'Avançado': 'badge-avancado' };
+  document.getElementById('modules-grid').innerHTML = modules.map(m =>
+    '<div class="module-card" onclick="showModule(' + m.id + ')">' +
+      '<div class="card-top">' +
+        '<div class="card-icon" style="background:' + m.color + '22;color:' + m.color + '">' + m.icon + '</div>' +
+        '<span class="card-badge ' + levelClass[m.level] + '">' + m.level + '</span>' +
+      '</div>' +
+      '<div class="card-title">' + m.title + '</div>' +
+      '<div class="card-desc">' + m.desc + '</div>' +
+      '<div class="card-meta">' +
+        '<div class="card-meta-item">⏱ ' + m.duration + '</div>' +
+        '<div class="card-meta-item">📚 ' + m.lessons + ' aulas</div>' +
+      '</div>' +
+      '<div class="card-progress-bar"><div class="card-progress-fill" style="width:0%"></div></div>' +
+    '</div>'
+  ).join('');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+renderHome();
+</script>
+</body>
+</html>
