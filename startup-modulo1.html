@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 1 — Ideação & Validação | Mentoria das Startups</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#fdf8f0; --surface:#ffffff; --surface2:#fef6e8; --surface3:#fef0d4;
+  --border:#e8d9c0; --border2:#d4b896;
+  --accent:#b8720a; --accent2:#8b4a0a; --accent3:#d4920d; --accent4:#f0b429;
+  --text:#1a1008; --text2:#3d2a0e; --muted:#7a5c38; --muted2:#9a7a50;
+  --success:#2d7a4f; --info:#185fa5; --shadow:rgba(120,80,20,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* LOGIN */
+#login-overlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1a0e04,#2d1a08);display:flex;align-items:center;justify-content:center}
+.login-box{background:rgba(255,248,235,.07);border:1px solid rgba(212,168,67,.25);border-radius:24px;padding:48px 56px;text-align:center;max-width:400px;width:90%;backdrop-filter:blur(20px)}
+.login-icon{font-size:52px;display:block;margin-bottom:14px}
+.login-box h2{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#f5e6c8;margin-bottom:4px}
+.login-sub{font-size:13px;color:rgba(245,230,200,.6);margin-bottom:28px}
+.login-label{display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(212,168,67,.8);text-align:left;margin-bottom:7px}
+.login-input{width:100%;padding:13px 16px;background:rgba(255,248,235,.08);border:1.5px solid rgba(212,168,67,.25);border-radius:11px;color:#f5e6c8;font-size:16px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:14px;transition:border-color .2s}
+.login-input:focus{border-color:#d4a843}
+.login-input::placeholder{color:rgba(245,230,200,.3)}
+.login-err{font-size:13px;color:#f08080;margin-bottom:10px;display:none}
+.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#d4920d,#8b4a0a);color:#fff;border:none;border-radius:11px;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:all .2s}
+.login-btn:hover{opacity:.9;transform:translateY(-2px)}
+
+/* LAYOUT */
+.layout{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:270px;background:var(--surface);border-right:1.5px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;box-shadow:2px 0 16px var(--shadow);transition:transform .3s}
+.sidebar-logo{padding:24px 22px 18px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,#fef3e2,#fff9f0)}
+.logo-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--accent3),var(--accent2));padding:4px 12px;border-radius:20px;font-family:'Syne',sans-serif;font-weight:800;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#fff;margin-bottom:10px}
+.sidebar-title{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--text);margin-bottom:3px}
+.sidebar-sub{font-size:12px;color:var(--muted)}
+.sidebar-author{font-size:12px;color:var(--accent);margin-top:4px;font-style:italic;font-family:'Lora',serif}
+
+.nav-section{padding:4px 0}
+.nav-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);padding:12px 22px 5px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:10px 22px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+.nav-item:hover{color:var(--text);background:var(--surface2)}
+.nav-item.active{color:var(--accent);background:rgba(184,114,10,.08);border-left-color:var(--accent);font-weight:500}
+.nav-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;background:var(--surface2);border:1px solid var(--border)}
+.nav-item.active .nav-icon{background:rgba(184,114,10,.12);border-color:rgba(184,114,10,.25)}
+.nav-done{margin-left:auto;font-size:10px;color:var(--success);font-weight:600}
+
+.sidebar-footer{padding:16px 22px;border-top:1.5px solid var(--border);background:var(--surface2)}
+.prog-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px;font-weight:500}
+.prog-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));border-radius:3px;transition:width .5s}
+
+/* MAIN */
+.main{margin-left:270px;flex:1;background:var(--bg)}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(253,248,240,.95);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--border);padding:14px 36px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px var(--shadow)}
+.breadcrumb{font-size:13px;color:var(--muted)}
+.breadcrumb span{color:var(--text);font-weight:500}
+.topbar-actions{display:flex;gap:10px;align-items:center}
+.btn{padding:8px 16px;border-radius:9px;font-size:13px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-outline{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
+.btn-outline:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
+.btn-primary{background:linear-gradient(135deg,var(--accent3),var(--accent2));color:#fff}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+/* CONTENT */
+.content{padding:36px}
+
+/* MODULE HERO */
+.module-hero{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:40px;margin-bottom:28px;box-shadow:0 4px 18px var(--shadow);position:relative;overflow:hidden}
+.module-hero::after{content:'💡';position:absolute;right:40px;top:50%;transform:translateY(-50%);font-size:80px;opacity:.07}
+.module-hero-icon{font-size:48px;margin-bottom:14px;display:block}
+.module-hero h2{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;color:var(--text);margin-bottom:8px}
+.module-hero p{font-size:15px;color:var(--muted);line-height:1.7;max-width:620px}
+.module-meta{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.meta-chip{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1.5px solid var(--border);padding:6px 13px;border-radius:9px;font-size:13px;color:var(--muted);font-weight:500}
+.badge-iniciante{background:rgba(212,168,67,.15);color:#7a5500;border:1px solid rgba(212,168,67,.3);padding:4px 10px;border-radius:9px;font-size:11px;font-weight:600}
+
+/* LESSONS */
+.lesson-list{display:flex;flex-direction:column;gap:10px}
+.lesson-item{display:flex;align-items:center;gap:14px;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:17px 20px;cursor:pointer;transition:all .2s;box-shadow:0 1px 5px var(--shadow)}
+.lesson-item:hover{border-color:var(--accent3);background:var(--surface2)}
+.lesson-item.done{border-color:rgba(45,122,79,.3);background:rgba(45,122,79,.04)}
+.lesson-num{width:36px;height:36px;border-radius:9px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--muted);flex-shrink:0;border:1.5px solid var(--border)}
+.lesson-item.done .lesson-num{background:rgba(45,122,79,.1);color:var(--success);border-color:rgba(45,122,79,.3)}
+.lesson-info{flex:1}
+.lesson-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px}
+.lesson-sub{font-size:13px;color:var(--muted)}
+.lesson-dur{font-size:12px;color:var(--muted2);flex-shrink:0;font-weight:500}
+
+/* LESSON VIEWER */
+.lesson-viewer{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:44px;margin-top:22px;display:none;box-shadow:0 4px 18px var(--shadow)}
+.lesson-viewer.open{display:block}
+.lv-breadcrumb{font-size:13px;color:var(--muted);margin-bottom:18px;font-family:'Lora',serif;font-style:italic}
+.lv-breadcrumb span{color:var(--accent)}
+.lesson-viewer h3{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--text);margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+.lesson-viewer h4{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:var(--text2);margin:26px 0 11px}
+.lesson-viewer p{font-size:15px;color:var(--text2);line-height:1.85;margin-bottom:15px;font-family:'Lora',serif}
+.lesson-viewer ul,.lesson-viewer ol{margin:0 0 15px 22px}
+.lesson-viewer li{font-size:15px;color:var(--text2);line-height:1.85;margin-bottom:9px;font-family:'Lora',serif}
+.callout{background:rgba(184,114,10,.07);border-left:4px solid var(--accent);border-radius:0 11px 11px 0;padding:15px 20px;margin:18px 0}
+.callout p{color:var(--accent2);font-weight:500;margin:0;font-family:'DM Sans',sans-serif;font-size:14px}
+.tip{background:rgba(212,168,67,.08);border-left:4px solid var(--accent3);border-radius:0 11px 11px 0;padding:15px 20px;margin:18px 0}
+.tip p{color:#6b4a00;margin:0;font-size:14px;font-family:'DM Sans',sans-serif}
+.checklist{list-style:none;margin:0 0 15px}
+.checklist li{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:15px;color:var(--text2);font-family:'Lora',serif}
+.checklist li::before{content:'☐';color:var(--accent);flex-shrink:0;font-size:18px;line-height:1.4}
+.lesson-nav{display:flex;justify-content:space-between;align-items:center;margin-top:32px;padding-top:20px;border-top:1.5px solid var(--border)}
+.btn-complete{background:linear-gradient(135deg,var(--success),#1f5c38);color:#fff;padding:12px 24px;border-radius:11px;font-size:15px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-complete:hover{opacity:.9;transform:translateY(-1px)}
+
+/* PDF BTN */
+.pdf-btn{display:inline-flex;align-items:center;gap:7px;margin-top:14px;background:linear-gradient(135deg,var(--accent3),var(--accent2));color:#fff;padding:11px 22px;border-radius:11px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s}
+.pdf-btn:hover{opacity:.9;transform:translateY(-1px)}
+
+/* MIA PANEL */
+.mia-thinking{font-size:12px;color:var(--muted);font-style:italic;padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;width:fit-content}
+
+.mia-input-row{padding:12px 14px;border-top:1.5px solid var(--border);display:flex;gap:8px;background:var(--surface)}
+/* NAV MENU */
+.menu-nav{display:flex;gap:4px;margin-bottom:22px;background:var(--surface2);border:1.5px solid var(--border);border-radius:11px;padding:5px;width:fit-content}
+.menu-tab{padding:8px 20px;border-radius:8px;cursor:pointer;font-size:14px;color:var(--muted);transition:all .2s;font-weight:500}
+.menu-tab:hover{color:var(--text)}
+.menu-tab.active{background:var(--accent);color:#fff}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.content>*{animation:fadeUp .3s ease both}
+.content>*:nth-child(2){animation-delay:.06s}
+.content>*:nth-child(3){animation-delay:.12s}
+
+/* MOBILE */
+.mobile-toggle{display:none;position:fixed;top:14px;left:14px;z-index:200;width:42px;height:42px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:18px;align-items:center;justify-content:center;box-shadow:0 2px 8px var(--shadow)}
+@media(max-width:860px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.content{padding:18px;padding-top:68px}.mobile-toggle{display:flex}.topbar{padding:12px 18px 12px 64px}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-overlay">
+  <div class="login-box">
+    <span class="login-icon">💡</span>
+    <h2>Módulo 1 — Ideação & Validação</h2>
+    <div class="login-sub">Mentoria das Startups · Luiz de Castro</div>
+    <label class="login-label">Senha de acesso</label>
+    <input type="password" id="pw" class="login-input" placeholder="Digite sua senha..." onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-err" id="lerr">⚠ Senha incorreta.</div>
+    <button class="login-btn" onclick="doLogin()">🔐 Acessar Módulo</button>
+  </div>
+</div>
+
+<button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">💡 Módulo 1</div>
+    <div class="sidebar-title">Ideação & Validação</div>
+    <div class="sidebar-sub">Mentoria das Startups</div>
+    <div class="sidebar-author">Luiz de Castro — Mestre em Gestão</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Navegação</div>
+    <div class="nav-item active" onclick="showTab('aulas',this)"><span class="nav-icon">📚</span>Aulas do Módulo</div>
+    <div class="nav-item" onclick="showTab('sobre',this)"><span class="nav-icon">ℹ️</span>Sobre este Módulo</div>
+    <div class="nav-item" onclick="openPDF()"><span class="nav-icon">📄</span>Material PDF</div>
+    <div class="nav-label">Outros Módulos</div>
+    <div class="nav-item" onclick="goTo('startup-modulo2.html')"><span class="nav-icon">🏗️</span>Módulo 2 — Modelagem</div>
+    <div class="nav-item" onclick="goTo('startup-modulo3.html')"><span class="nav-icon">💰</span>Módulo 3 — Financeiro</div>
+    <div class="nav-item" onclick="goTo('startup-modulo4.html')"><span class="nav-icon">📈</span>Módulo 4 — Captação</div>
+    <div class="nav-item" onclick="goTo('startup-modulo5.html')"><span class="nav-icon">🌍</span>Módulo 5 — Expansão</div>
+    <div class="nav-label">Recursos</div>
+    <div class="nav-item" onclick="goTo('startup-pdfs.html')"><span class="nav-icon">📚</span>Central de PDFs</div>
+    <div class="nav-item" onclick="goTo('startup-avaliacao.html')"><span class="nav-icon">🏆</span>Avaliação Final</div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="prog-label"><span>Progresso Módulo 1</span><span id="progPct">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="breadcrumb">Mentoria das Startups › <span>Módulo 1 — Ideação & Validação</span></div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline" onclick="openPDF()">📄 PDF do Módulo</button>
+      
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- MODULE HERO -->
+    <div class="module-hero">
+      <span class="module-hero-icon">💡</span>
+      <h2>Ideação & Validação</h2>
+      <p>Aprenda a transformar uma ideia em oportunidade real de negócio — validada pelo mercado antes de você investir tempo e dinheiro. Este módulo é a fundação de toda a mentoria.</p>
+      <div class="module-meta">
+        <div class="meta-chip">⏱ 3h 20min</div>
+        <div class="meta-chip">📚 6 aulas</div>
+        <span class="badge-iniciante">Iniciante</span>
+      </div>
+      <button class="pdf-btn" onclick="openPDF()">📄 Abrir PDF — Módulo 1</button>
+    </div>
+
+    <!-- TABS -->
+    <div class="menu-nav">
+      <div class="menu-tab active" onclick="showTab('aulas',this)">Aulas</div>
+      <div class="menu-tab" onclick="showTab('sobre',this)">Sobre o Módulo</div>
+    </div>
+
+    <!-- TAB: AULAS -->
+    <div class="tab-content active" id="tab-aulas">
+      <div class="lesson-list" id="lesson-list"></div>
+      <div class="lesson-viewer" id="lesson-viewer"></div>
+    </div>
+
+    <!-- TAB: SOBRE -->
+    <div class="tab-content" id="tab-sobre">
+      <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:36px;box-shadow:0 4px 16px var(--shadow)">
+        <h3 style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--text);margin-bottom:16px">Sobre este Módulo</h3>
+        <p style="font-size:15px;color:var(--text2);line-height:1.8;font-family:Lora,serif;margin-bottom:14px">O módulo de Ideação & Validação é onde tudo começa. Antes de escrever uma linha de código, registrar uma empresa ou gastar qualquer dinheiro, você precisa saber se sua ideia resolve um problema real — e se as pessoas pagariam por essa solução.</p>
+        <p style="font-size:15px;color:var(--text2);line-height:1.8;font-family:Lora,serif;margin-bottom:14px">Utilizaremos as metodologias mais consagradas do ecossistema global de startups: Lean Startup (Eric Ries), Design Thinking (Stanford d.school), Customer Development (Steve Blank) e Jobs-to-be-Done (Clayton Christensen).</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px">
+          <div style="background:var(--surface2);border-radius:12px;padding:16px;border:1.5px solid var(--border)">
+            <div style="font-size:24px;margin-bottom:8px">🎯</div>
+            <div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;margin-bottom:4px">Objetivo</div>
+            <div style="font-size:13px;color:var(--muted)">Validar sua ideia com clientes reais antes de investir</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:12px;padding:16px;border:1.5px solid var(--border)">
+            <div style="font-size:24px;margin-bottom:8px">🛠️</div>
+            <div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;margin-bottom:4px">Ferramentas</div>
+            <div style="font-size:13px;color:var(--muted)">Design Thinking, MVP, Customer Discovery, Mom Test</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:12px;padding:16px;border:1.5px solid var(--border)">
+            <div style="font-size:24px;margin-bottom:8px">📊</div>
+            <div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;margin-bottom:4px">Resultado</div>
+            <div style="font-size:13px;color:var(--muted)">Hipótese validada e decisão consciente de pivotar ou perseverar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div>
+      <div class="mia-nm">MIA — Mentora IA</div>
+      <div class="mia-st">Online agora</div>
+    </div>
+    <button class="mia-close" onclick="toggleMIA()">✕</button>
+  </div>
+  <div class="mia-msgs" id="mia-msgs">
+    <div>
+      <div class="msg-sender-label">MIA</div>
+      <div class="msg-mia-bubble">Olá! Sou a <strong>MIA</strong>, sua Mentora Inteligente Artificial. Estou especializada em <strong>Ideação & Validação de Startups</strong>. Pode me fazer qualquer pergunta sobre as aulas, pedir exercícios práticos ou tirar dúvidas sobre como aplicar o conteúdo na sua startup! 🚀</div>
+    </div>
+  </div>
+  <div class="mia-sugs">
+    <div class="mia-sug-label">Sugestões:</div>
+    <div class="mia-sug" onclick="askMIA('Como saber se minha ideia de startup tem potencial real de mercado?')">Como validar minha ideia?</div>
+    <div class="mia-sug" onclick="askMIA('Quais são os erros mais comuns na fase de validação de startups?')">Erros mais comuns</div>
+    <div class="mia-sug" onclick="askMIA('Me dê um exercício prático de Design Thinking que posso fazer hoje.')">Exercício prático</div>
+    <div class="mia-sug" onclick="askMIA('Como construir um MVP eficiente com poucos recursos?')">Como fazer um MVP?</div>
+  </div>
+  <div class="mia-input-row">
+    <input class="mia-input" id="mia-input" placeholder="Pergunte à MIA sobre ideação e validação..." onkeydown="if(event.key==='Enter')sendMIA()">
+    <button class="mia-send" onclick="sendMIA()">
+      <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────
+const LESSONS = [
+  {
+    title: 'O que é uma Startup?',
+    sub: 'Definição, tipos e ecossistema empreendedor',
+    dur: '18min',
+    content: `
+      <h3>O que é uma Startup?</h3>
+      <p>Uma <strong>startup</strong> é muito mais do que uma empresa pequena ou recém-criada. É uma organização desenhada para encontrar um modelo de negócio repetível e escalável, geralmente em condições de extrema incerteza. Enquanto uma padaria executa um modelo já testado, a startup está em busca do seu — e essa é a diferença fundamental.</p>
+      <h4>🎯 Os 3 pilares que definem uma startup</h4>
+      <p><strong>1. Escalabilidade:</strong> a capacidade de crescer receita sem crescer custos na mesma proporção. Um software vendido para 10 ou 10.000 pessoas tem o mesmo custo de produção. Um restaurante que precisa contratar mais funcionários para cada mesa adicional não tem essa característica.</p>
+      <p><strong>2. Inovação:</strong> não necessariamente tecnológica. Pode ser inovação no modelo de negócio (como o Nubank que eliminou agências), na distribuição (iFood conectando restaurantes e clientes) ou na experiência do cliente. O que importa é resolver um problema de forma radicalmente melhor.</p>
+      <p><strong>3. Alto potencial de crescimento:</strong> startups são construídas para crescer rápido. Paul Graham, fundador da Y Combinator, define startups como "empresas criadas para crescer". Esse crescimento acelerado é o que atrai investidores de risco (VCs) que buscam retornos de 10x a 100x.</p>
+      <h4>🌎 O ecossistema brasileiro</h4>
+      <p>O Brasil é o maior ecossistema de startups da América Latina. Temos mais de 15 unicórnios (empresas avaliadas em mais de US$1 bilhão): Nubank, iFood, Loft, QuintoAndar, VTEX, Gympass/Wellhub e outros. São Paulo concentra mais de 60% das startups nacionais, seguida por Rio de Janeiro, Belo Horizonte e Florianópolis.</p>
+      <h4>🔍 Tipos de startup</h4>
+      <ul>
+        <li><strong>SaaS (Software as a Service):</strong> software por assinatura recorrente — RD Station, Conta Azul, Pipedrive.</li>
+        <li><strong>Marketplace:</strong> conecta compradores e vendedores — OLX, Airbnb, 99Freelas.</li>
+        <li><strong>Fintech:</strong> tecnologia financeira — Nubank, PicPay, Stone, Inter.</li>
+        <li><strong>Healthtech:</strong> saúde digital — Dr. Consulta, Alice, Saúde Simples.</li>
+        <li><strong>Edtech:</strong> educação — Duolingo, Descomplica, Alura, Hotmart.</li>
+        <li><strong>Deep Tech:</strong> pesquisa científica aplicada — biotecnologia, energia limpa, IA avançada.</li>
+      </ul>
+      <div class="callout"><p>📌 <strong>Conceito fundamental:</strong> Startups não são versões menores de grandes empresas. Elas operam em ambientes de incerteza extrema e seu principal trabalho é <em>encontrar</em> um modelo que funcione — não executar um modelo que já funciona.</p></div>
+      <div class="tip"><p>💡 <strong>Dica do Mentor:</strong> Ao escolher o tipo de startup, considere onde você tem conhecimento setorial profundo. Fundadores que entendem o problema que estão resolvendo têm muito mais chances de sucesso do que os que escolhem um segmento apenas pela tendência de mercado.</p></div>
+      <h4>📝 Checklist de Aprendizado</h4>
+      <ul class="checklist">
+        <li>Entendo a diferença entre startup e negócio tradicional</li>
+        <li>Conheço os 3 pilares: escalabilidade, inovação e crescimento</li>
+        <li>Sei identificar os principais tipos de startup</li>
+        <li>Tenho noção do ecossistema de startups no Brasil</li>
+      </ul>`
+  },
+  {
+    title: 'Design Thinking',
+    sub: 'Pensamento centrado no usuário e resolução criativa',
+    dur: '25min',
+    content: `
+      <h3>Design Thinking: Inovar com Empatia</h3>
+      <p>O Design Thinking é uma metodologia de resolução de problemas que coloca o ser humano no centro do processo criativo. Desenvolvida no Instituto de Design de Stanford (d.school) e popularizada pela consultoria IDEO, é usada hoje por startups, grandes corporações e governos ao redor do mundo.</p>
+      <h4>🔄 As 5 Etapas do Design Thinking</h4>
+      <p><strong>1. Empatia (Empathize):</strong> A etapa mais crítica e a mais negligenciada. O objetivo é entender profundamente as pessoas para quem você está criando — seus comportamentos, motivações, frustrações e aspirações. Ferramentas: entrevistas em profundidade, observação etnográfica, "shadowing" (acompanhar o usuário no cotidiano) e mapa de empatia.</p>
+      <p><strong>2. Definição (Define):</strong> Com base nas descobertas, você sintetiza o problema a ser resolvido. A ferramenta central é o <em>POV (Point of View)</em>: "Como poderíamos ajudar [perfil do usuário] a [necessidade], considerando que [insight revelador]?"</p>
+      <p><strong>3. Ideação (Ideate):</strong> Geração massiva de ideias sem julgamento. A regra de ouro é "quantidade antes de qualidade". Ferramentas: brainstorming, SCAMPER, mapas mentais, sessões de co-criação com usuários reais.</p>
+      <p><strong>4. Prototipação (Prototype):</strong> Criação rápida e barata de representações das soluções. Podem ser esboços em papel, mockups digitais ou storyboards. O objetivo é aprender, não impressionar.</p>
+      <p><strong>5. Teste (Test):</strong> Apresentação dos protótipos para usuários reais, coleta de feedback honesto e iteração. O objetivo é aprender o que funciona e o que não funciona.</p>
+      <div class="callout"><p>📌 <strong>Insight fundamental:</strong> O Design Thinking não é linear. Você vai e volta entre as etapas constantemente. É normal, por exemplo, descobrir na fase de teste que você definiu o problema errado na fase 2 e precisar recomeçar.</p></div>
+      <h4>🛠️ Ferramentas práticas</h4>
+      <p><strong>Mapa de Empatia:</strong> divide o que o usuário pensa, sente, vê, ouve, fala e faz — revelando contradições entre discurso e comportamento real.</p>
+      <p><strong>Jobs to Be Done (JTBD):</strong> criada por Clayton Christensen. As pessoas não compram produtos — elas "contratam" soluções para realizar um trabalho. O McDonald's descobriu que metade das vendas de milk-shake eram para pessoas que precisavam de algo para as mãos no trânsito matinal — não para matar a fome.</p>
+      <p><strong>Matriz CSD (Certezas, Suposições e Dúvidas):</strong> separa o que você sabe com certeza do que está assumindo sem evidências — e do que ainda precisa descobrir.</p>
+      <div class="tip"><p>💡 <strong>Exercício prático agora:</strong> Escolha um problema do cotidiano que você quer resolver. Passe 20 minutos observando alguém que enfrenta esse problema sem intervir. Depois, faça 3 perguntas abertas. Você vai se surpreender com o que descobre.</p></div>
+      <ul class="checklist">
+        <li>Entendo as 5 etapas do Design Thinking</li>
+        <li>Sei aplicar o Mapa de Empatia</li>
+        <li>Conheço a teoria Jobs to Be Done</li>
+        <li>Fiz pelo menos uma entrevista de empatia com usuário real</li>
+      </ul>`
+  },
+  {
+    title: 'Identificando Dores do Mercado',
+    sub: 'Pesquisa, etnografia e descoberta de problemas reais',
+    dur: '30min',
+    content: `
+      <h3>Identificando Dores Reais do Mercado</h3>
+      <p>O cemitério de startups está cheio de produtos tecnicamente excelentes que resolviam problemas que ninguém tinha. O CB Insights analisou mais de 300 startups que falharam e descobriu que <strong>42% fecharam por falta de demanda de mercado</strong> — construíram soluções sem verificar se havia um problema real e urgente a resolver.</p>
+      <h4>🎯 O que define uma dor de mercado válida?</h4>
+      <p>Nem todo incômodo é uma dor de mercado válida. Para construir uma startup em torno de um problema, ele precisa ter pelo menos 3 das 5 características:</p>
+      <ul>
+        <li><strong>Frequência:</strong> acontece regularmente (diário ou semanal), não raramente.</li>
+        <li><strong>Intensidade:</strong> causa frustração real, perda de dinheiro, tempo ou oportunidade.</li>
+        <li><strong>Mercado amplo:</strong> muitas pessoas ou empresas enfrentam o mesmo problema.</li>
+        <li><strong>Disposição para pagar:</strong> quem enfrenta o problema pagaria para resolvê-lo.</li>
+        <li><strong>Alternativas inadequadas:</strong> as soluções existentes são ruins, caras ou complexas.</li>
+      </ul>
+      <h4>🔍 Técnicas de Customer Discovery</h4>
+      <p><strong>Entrevistas de Problema (não de Solução):</strong> Steve Blank ensina a "sair do prédio" e conversar com potenciais clientes sem revelar o que você está construindo. Perguntas eficazes:</p>
+      <ul>
+        <li>"Me fale sobre a última vez que você enfrentou [problema X]."</li>
+        <li>"O que você faz hoje para resolver isso?"</li>
+        <li>"Quanto tempo e dinheiro você gasta com esse problema por mês?"</li>
+        <li>"O que seria a solução ideal para você?"</li>
+        <li>"Você já pagou por alguma solução? Quanto?"</li>
+      </ul>
+      <p><strong>Pesquisa secundária de mercado:</strong> relatórios do Sebrae, Google Trends, fóruns, grupos do LinkedIn, avaliações negativas de concorrentes no App Store e Google Play são minas de ouro de dores não resolvidas.</p>
+      <div class="callout"><p>📌 <strong>Regra de ouro:</strong> Conduza pelo menos 50 entrevistas antes de começar a construir qualquer coisa. A maioria dos empreendedores faz 5 e já "valida" a ideia. As entrevistas de 30 a 50 são onde os padrões reais emergem.</p></div>
+      <h4>📊 Documentando as descobertas</h4>
+      <p>Após cada entrevista, registre imediatamente: citações exatas impactantes, comportamentos observados (não opiniões), soluções alternativas que o entrevistado usa e o nível de urgência demonstrado. Use Notion, Miro ou post-its para agrupar padrões emergentes.</p>
+      <ul class="checklist">
+        <li>Identifiquei pelo menos 3 dores potenciais do meu mercado-alvo</li>
+        <li>Conduzi entrevistas de problema com pelo menos 10 pessoas</li>
+        <li>Analisei avaliações negativas de concorrentes existentes</li>
+        <li>Documentei padrões e insights das entrevistas</li>
+      </ul>`
+  },
+  {
+    title: 'MVP — Produto Mínimo Viável',
+    sub: 'Construir para aprender: experimentos de baixo custo',
+    dur: '28min',
+    content: `
+      <h3>MVP: Construir para Aprender, Não para Impressionar</h3>
+      <p>O conceito de MVP (Minimum Viable Product) foi popularizado por Eric Ries no livro "A Startup Enxuta" e é, possivelmente, o conceito mais mal compreendido do universo de startups. Um MVP <strong>não é</strong> a versão mais simples do seu produto final. É o experimento mais rápido e barato que testa sua hipótese mais crítica.</p>
+      <h4>🧪 O ciclo Construir–Medir–Aprender</h4>
+      <p>A metodologia Lean Startup é fundamentada em um ciclo de feedback acelerado. O objetivo é percorrer esse ciclo o mais rápido possível, com o menor custo, aprendendo o máximo de cada iteração.</p>
+      <p><strong>Construir:</strong> crie o menor artefato para testar sua hipótese. Não precisa ser tecnológico.</p>
+      <p><strong>Medir:</strong> coloque o artefato diante de usuários reais e colete dados — não opiniões. "Você usaria isso?" não é dado. "Você digitou seu e-mail?" é dado.</p>
+      <p><strong>Aprender:</strong> analise os dados e decida: persevere, pivote ou abandone.</p>
+      <h4>🎭 Tipos de MVP</h4>
+      <p><strong>Landing Page (Smoke Test):</strong> descreva o produto como se existisse e coloque um botão de "Comprar". Meça quantas pessoas clicam. O Dropbox lançou um vídeo explicativo antes de ter produto funcionando e recebeu 75.000 cadastros em uma noite.</p>
+      <p><strong>Concierge MVP:</strong> entregue o serviço manualmente, como se fosse o produto. O Zappos fotografava sapatos de lojas físicas e vendia online — só depois construiu estoque e logística. A Airbnb alugou o próprio apartamento dos fundadores com colchões de ar.</p>
+      <p><strong>Wizard of Oz:</strong> o usuário acha que está usando produto automatizado, mas há pessoas fazendo tudo manualmente nos bastidores. Ótimo para testar a proposta de valor antes de construir a tecnologia.</p>
+      <p><strong>Protótipo interativo (Figma/Marvel):</strong> crie um protótipo clicável sem nenhuma linha de código. Coloque diante de 5 usuários. Observe onde se confundem.</p>
+      <div class="callout"><p>📌 <strong>O teste mais poderoso:</strong> peça ao usuário para pagar antes do produto existir. Se alguém coloca dinheiro na mesa por algo não construído, você tem validação real de demanda. Pré-venda é o MVP definitivo.</p></div>
+      <h4>⚠️ Erros mais comuns com MVP</h4>
+      <ul>
+        <li>Construir um produto tão básico que não entrega valor nenhum</li>
+        <li>Não definir a hipótese antes de construir</li>
+        <li>Perguntar opiniões em vez de observar comportamentos</li>
+        <li>Usar apenas amigos e família como testadores</li>
+        <li>Construir o MVP perfeito demais e demorar meses</li>
+      </ul>
+      <ul class="checklist">
+        <li>Identifiquei minha hipótese mais arriscada</li>
+        <li>Escolhi o tipo de MVP mais adequado para testá-la</li>
+        <li>Defini métricas claras de sucesso para o experimento</li>
+        <li>Coloquei o MVP diante de usuários reais (não amigos ou família)</li>
+      </ul>`
+  },
+  {
+    title: 'Validação com Clientes Reais',
+    sub: 'Entrevistas estruturadas e testes de hipótese',
+    dur: '35min',
+    content: `
+      <h3>Validação Real: Dados que Provam, Não Opiniões que Convencem</h3>
+      <p>Validação não é quando seus amigos dizem que a ideia é incrível. Não é quando o professor aprova. Validação real é quando pessoas que não te conhecem, sem vínculo emocional, pagam pelo seu produto — ou demonstram inequivocamente que o fariam.</p>
+      <h4>📊 Tipos de validação</h4>
+      <p><strong>Validação de Problema:</strong> existe um problema real, frequente e doloroso? Ferramentas: 50+ entrevistas, pesquisa de mercado, análise de alternativas.</p>
+      <p><strong>Validação de Solução:</strong> sua solução resolve melhor que as alternativas? Ferramentas: protótipos, demos, pilotos pagos.</p>
+      <p><strong>Validação de Modelo de Negócio:</strong> as pessoas pagam? O CAC é sustentável? Existe retenção? Ferramentas: primeiros clientes pagantes, métricas de engajamento.</p>
+      <h4>🎤 O "Mom Test" — Entrevistas à prova de viés</h4>
+      <p>Rob Fitzpatrick, autor de "The Mom Test", criou regras práticas para entrevistas de validação. O título vem da ideia de que até sua mãe vai mentir para não te machucar — então você precisa fazer perguntas que nem ela consegue distorcer.</p>
+      <ul>
+        <li><strong>Fale sobre a vida deles, não sobre sua ideia.</strong> "Como você resolve X hoje?" é melhor que "Você usaria meu produto?"</li>
+        <li><strong>Pergunte sobre o passado, não sobre o futuro hipotético.</strong> "O que você fez da última vez?" em vez de "O que você faria se..."</li>
+        <li><strong>Busque comprometimento, não elogios.</strong> Se alguém diz "parece ótimo", peça: "Você estaria disposto a pagar R$99/mês e ser beta tester?" A resposta é o dado real.</li>
+      </ul>
+      <div class="callout"><p>📌 <strong>3 tipos de informação valiosa:</strong> (1) fatos sobre a vida e comportamento do cliente, (2) problemas específicos que enfrentam, (3) compromissos concretos (dinheiro, tempo, acesso). Qualquer outra coisa é ruído.</p></div>
+      <h4>📈 Métricas de validação</h4>
+      <p><strong>Taxa de conversão interesse → pré-venda:</strong> de 100 pessoas interessadas, quantas pagam antecipadamente? Acima de 5% é um sinal forte.</p>
+      <p><strong>NPS (Net Promoter Score):</strong> "De 0 a 10, qual a probabilidade de recomendar para um amigo?" NPS acima de 50 indica forte adequação produto-mercado.</p>
+      <p><strong>Retenção em 30 dias:</strong> quantos usuários voltam 30 dias após o primeiro uso? Para B2B SaaS, retenção acima de 80% é excelente.</p>
+      <ul class="checklist">
+        <li>Conduzi entrevistas segundo os princípios do "Mom Test"</li>
+        <li>Obtive pelo menos 5 compromissos concretos (pré-venda ou carta de intenção)</li>
+        <li>Calculei o NPS dos primeiros usuários</li>
+        <li>Tenho dados de retenção dos primeiros 30 dias</li>
+      </ul>`
+  },
+  {
+    title: 'Pivotando ou Perseverando',
+    sub: 'Como decidir quando mudar de direção',
+    dur: '24min',
+    content: `
+      <h3>Pivotar ou Perseverar: a Decisão Mais Difícil do Founder</h3>
+      <p>Um pivot é uma mudança estrutural na estratégia da startup com base em aprendizado validado — não em desespero, não em pressão de investidores, não em insegurança do fundador. Saber distinguir quando é hora de pivotar versus perseverar é uma das competências mais críticas de um empreendedor.</p>
+      <h4>🔄 Tipos de Pivot</h4>
+      <p><strong>Pivot de Problema:</strong> você mantém o segmento de clientes, mas descobre uma dor diferente e mais relevante. O Instagram começou como app de check-in (Burbn) com foto como feature secundária — pivotou para foto como core.</p>
+      <p><strong>Pivot de Segmento:</strong> o produto funciona, mas para um público diferente do esperado. Muitos CRMs B2B descobriram que pequenas empresas — não enterprise — eram seus melhores clientes iniciais.</p>
+      <p><strong>Pivot de Solução:</strong> o problema é real, mas a solução precisa mudar completamente. A Nintendo começou fabricando cartas de baralho antes dos videogames.</p>
+      <p><strong>Pivot de Canal:</strong> o produto é certo, o público é certo, mas o canal de distribuição precisa mudar. Venda direta → marketplace, B2C → B2B.</p>
+      <p><strong>Pivot de Modelo de Receita:</strong> transação → assinatura, freemium → pago, ou nova linha de negócio.</p>
+      <h4>🚨 Sinais de que é hora de pivotar</h4>
+      <ul>
+        <li>Crescimento estagnado por 3+ meses sem explicação contextual</li>
+        <li>CAC muito alto e sem tendência de queda com otimizações</li>
+        <li>Retenção abaixo de 40% em 30 dias sem melhora consistente</li>
+        <li>Clientes que adoram o produto mas não são quem você imaginava</li>
+      </ul>
+      <h4>✅ Sinais de que você deve perseverar</h4>
+      <ul>
+        <li>Crescimento lento mas consistente</li>
+        <li>Clientes que dependem do produto e pagam em dia</li>
+        <li>Equipe alinhada e energizada com a direção atual</li>
+        <li>Aprendizados recentes sugerem que ajustes pontuais podem funcionar</li>
+      </ul>
+      <div class="callout"><p>📌 <strong>A pergunta certa:</strong> Não é "estamos crescendo rápido?" mas "estamos aprendendo rápido?" Se você está aprendendo e os dados apontam progresso em direção ao Product-Market Fit, persevere. Se está repetindo os mesmos erros sem novos insights, considere pivotar.</p></div>
+      <ul class="checklist">
+        <li>Tenho métricas claras para avaliar a direção atual</li>
+        <li>Revisei as métricas dos últimos 3 meses e identifiquei tendências</li>
+        <li>Conversei com clientes que abandonaram o produto para entender o motivo</li>
+        <li>Documentei os aprendizados e decidi conscientemente: pivotar ou perseverar</li>
+      </ul>`
+  }
+];
+
+// ── STATE ─────────────────────────────────────────────
+const PASS = 'mentorstartup';
+let completed = JSON.parse(localStorage.getItem('m1_completed') || '{}');
+let currentLesson = null;
+
+// ── LOGIN ─────────────────────────────────────────────
+function doLogin() {
+  if (document.getElementById('pw').value === PASS) {
+    document.getElementById('login-overlay').style.display = 'none';
+    renderLessons();
+    updateProgress();
+  } else {
+    document.getElementById('lerr').style.display = 'block';
+    document.getElementById('pw').value = '';
+  }
+}
+
+// ── RENDER LESSONS ────────────────────────────────────
+function renderLessons() {
+  const list = document.getElementById('lesson-list');
+  list.innerHTML = LESSONS.map((l, i) => `
+    <div class="lesson-item ${completed[i] ? 'done' : ''}" onclick="openLesson(${i})">
+      <div class="lesson-num">${completed[i] ? '✓' : i+1}</div>
+      <div class="lesson-info">
+        <div class="lesson-title">${l.title}</div>
+        <div class="lesson-sub">${l.sub}</div>
+      </div>
+      <div class="lesson-dur">⏱ ${l.dur}</div>
+    </div>`).join('');
+}
+
+function openLesson(idx) {
+  currentLesson = idx;
+  const l = LESSONS[idx];
+  const viewer = document.getElementById('lesson-viewer');
+  viewer.classList.add('open');
+  viewer.innerHTML = `
+    <div class="lv-breadcrumb">Módulo 1 — Ideação & Validação › <span>Aula ${idx+1}: ${l.title}</span></div>
+    ${l.content}
+    <div class="lesson-nav">
+      <button class="btn btn-outline" onclick="closeLesson()">← Voltar às aulas</button>
+      <button class="btn-complete" onclick="completeLesson(${idx})">✅ Marcar como Concluída (+XP)</button>
+    </div>`;
+  viewer.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeLesson() {
+  document.getElementById('lesson-viewer').classList.remove('open');
+  document.getElementById('lesson-viewer').innerHTML = '';
+}
+
+function completeLesson(idx) {
+  completed[idx] = true;
+  localStorage.setItem('m1_completed', JSON.stringify(completed));
+  updateProgress();
+  renderLessons();
+  const viewer = document.getElementById('lesson-viewer');
+  viewer.innerHTML = `<div style="text-align:center;padding:40px"><div style="font-size:52px;margin-bottom:14px">✅</div><h3 style="font-family:Syne,sans-serif;font-size:22px;color:var(--success)">Aula Concluída!</h3><p style="color:var(--muted);margin-top:8px;font-size:15px">Ótimo trabalho! Continue para a próxima aula.</p><button class="btn btn-outline" onclick="closeLesson()" style="margin-top:16px">← Voltar às aulas</button></div>`;
+}
+
+function updateProgress() {
+  const done = Object.keys(completed).length;
+  const pct = Math.round((done / LESSONS.length) * 100);
+  document.getElementById('progPct').textContent = pct + '%';
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+// ── TABS ─────────────────────────────────────────────
+function showTab(id, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+// ── PDF ───────────────────────────────────────────────
+function openPDF() {
+  try { window.open('mentoria_startups/M1_ideacao_validacao.pdf', '_blank'); }
+  catch(e) { alert('Arquivo: mentoria_startups/M1_ideacao_validacao.pdf'); }
+}
+
+// ── NAVIGATION ────────────────────────────────────────
+function goTo(page) { window.location.href = page; }
+
+// ── MIA ───────────────────────────────────────────────
+// ── INIT ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderLessons();
+  updateProgress();
+});
+</script>
+<!-- Assistente MIA -->
+<div id="mia-wrapper" style="position:fixed;top:65px;left:-50px;width:420px;height:120px;z-index:9999;">
+  <iframe id="mia-frame" src="https://luizdecaxtro.github.io/mentoria-cadalunos/chatbot-mentoria.html"
+    style="width:100%;height:100%;border:none;background:transparent;display:block;"
+    allow="clipboard-write" title="Assistente MIA"></iframe>
+</div>
+<script>
+var isMobile = window.innerWidth <= 768;
+if (isMobile) { var w = document.getElementById("mia-wrapper"); w.style.width = "160px"; }
+window.addEventListener("message", function(e) {
+  var wrapper = document.getElementById("mia-wrapper");
+  if (!wrapper) return;
+  if (e.data === "mia-open") { wrapper.style.height="100vh"; wrapper.style.top="0"; wrapper.style.left="0"; wrapper.style.width="100%"; }
+  if (e.data === "mia-close") { wrapper.style.height="130px"; wrapper.style.top="65px"; wrapper.style.left="-50px"; wrapper.style.width=isMobile?"160px":"420px"; }
+});
+</script>
+</body>
+</html>

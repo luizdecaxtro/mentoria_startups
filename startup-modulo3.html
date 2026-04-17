@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 3 — Financeiro & Marketing | Mentoria das Startups</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fdf8f0;--surface:#fff;--surface2:#fef6e8;--border:#e8d9c0;--border2:#d4b896;--accent:#b8720a;--accent2:#8b4a0a;--accent3:#d4920d;--text:#1a1008;--text2:#3d2a0e;--muted:#7a5c38;--muted2:#9a7a50;--success:#2d7a4f;--shadow:rgba(120,80,20,.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+#login-overlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1a0e04,#2d1a08);display:flex;align-items:center;justify-content:center}
+.login-box{background:rgba(255,248,235,.07);border:1px solid rgba(212,168,67,.25);border-radius:24px;padding:48px 56px;text-align:center;max-width:400px;width:90%;backdrop-filter:blur(20px)}
+.login-icon{font-size:52px;display:block;margin-bottom:14px}
+.login-box h2{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#f5e6c8;margin-bottom:4px}
+.login-sub{font-size:13px;color:rgba(245,230,200,.6);margin-bottom:28px}
+.login-label{display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(212,168,67,.8);text-align:left;margin-bottom:7px}
+.login-input{width:100%;padding:13px 16px;background:rgba(255,248,235,.08);border:1.5px solid rgba(212,168,67,.25);border-radius:11px;color:#f5e6c8;font-size:16px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:14px;transition:border-color .2s}
+.login-input:focus{border-color:#d4a843}
+.login-input::placeholder{color:rgba(245,230,200,.3)}
+.login-err{font-size:13px;color:#f08080;margin-bottom:10px;display:none}
+.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#d4920d,#8b4a0a);color:#fff;border:none;border-radius:11px;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:all .2s}
+.login-btn:hover{opacity:.9;transform:translateY(-2px)}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:270px;background:var(--surface);border-right:1.5px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;box-shadow:2px 0 16px var(--shadow);transition:transform .3s}
+.sidebar-logo{padding:24px 22px 18px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,#fef3e2,#fff9f0)}
+.logo-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--accent3),var(--accent2));padding:4px 12px;border-radius:20px;font-family:'Syne',sans-serif;font-weight:800;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#fff;margin-bottom:10px}
+.sidebar-title{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--text);margin-bottom:3px}
+.sidebar-sub{font-size:12px;color:var(--muted)}
+.sidebar-author{font-size:12px;color:var(--accent);margin-top:4px;font-style:italic;font-family:'Lora',serif}
+.nav-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);padding:12px 22px 5px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:10px 22px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .2s;border-left:3px solid transparent;text-decoration:none}
+.nav-item:hover{color:var(--text);background:var(--surface2)}
+.nav-item.active{color:var(--accent);background:rgba(184,114,10,.08);border-left-color:var(--accent);font-weight:500}
+.nav-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;background:var(--surface2);border:1px solid var(--border)}
+.nav-item.active .nav-icon{background:rgba(184,114,10,.12);border-color:rgba(184,114,10,.25)}
+.sidebar-footer{padding:16px 22px;border-top:1.5px solid var(--border);background:var(--surface2)}
+.prog-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px;font-weight:500}
+.prog-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));border-radius:3px;transition:width .5s}
+.main{margin-left:270px;flex:1;background:var(--bg)}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(253,248,240,.95);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--border);padding:14px 36px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px var(--shadow)}
+.breadcrumb{font-size:13px;color:var(--muted)}
+.breadcrumb span{color:var(--text);font-weight:500}
+.topbar-actions{display:flex;gap:10px;align-items:center}
+.btn{padding:8px 16px;border-radius:9px;font-size:13px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-outline{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
+.btn-outline:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
+.content{padding:36px}
+.module-hero{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:40px;margin-bottom:28px;box-shadow:0 4px 18px var(--shadow);position:relative;overflow:hidden}
+.module-hero::after{content:'💰';position:absolute;right:40px;top:50%;transform:translateY(-50%);font-size:80px;opacity:.07}
+.module-hero h2{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;color:var(--text);margin-bottom:8px}
+.module-hero p{font-size:15px;color:var(--muted);line-height:1.7;max-width:620px}
+.module-meta{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.meta-chip{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1.5px solid var(--border);padding:6px 13px;border-radius:9px;font-size:13px;color:var(--muted);font-weight:500}
+.badge-inter{background:rgba(184,114,10,.12);color:var(--accent2);border:1px solid rgba(184,114,10,.25);padding:4px 10px;border-radius:9px;font-size:11px;font-weight:600}
+.section-tabs{display:flex;gap:4px;margin-bottom:22px;background:var(--surface2);border:1.5px solid var(--border);border-radius:11px;padding:5px;width:fit-content}
+.stab{padding:8px 20px;border-radius:8px;cursor:pointer;font-size:14px;color:var(--muted);transition:all .2s;font-weight:500}
+.stab:hover{color:var(--text)}
+.stab.active{background:var(--accent);color:#fff}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.topic-grid{display:flex;flex-direction:column;gap:10px}
+.topic-item{display:flex;align-items:center;gap:14px;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:17px 20px;cursor:pointer;transition:all .2s;box-shadow:0 1px 5px var(--shadow)}
+.topic-item:hover{border-color:var(--accent3);background:var(--surface2)}
+.topic-item.done{border-color:rgba(45,122,79,.3);background:rgba(45,122,79,.04)}
+.topic-num{width:36px;height:36px;border-radius:9px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--muted);flex-shrink:0;border:1.5px solid var(--border)}
+.topic-item.done .topic-num{background:rgba(45,122,79,.1);color:var(--success);border-color:rgba(45,122,79,.3)}
+.topic-info{flex:1}
+.topic-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px}
+.topic-sub{font-size:13px;color:var(--muted)}
+.topic-dur{font-size:12px;color:var(--muted2);flex-shrink:0;font-weight:500}
+.topic-section-label{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent2);margin:20px 0 10px;padding-left:4px;border-left:3px solid var(--accent3)}
+.lesson-viewer{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:44px;margin-top:22px;display:none;box-shadow:0 4px 18px var(--shadow)}
+.lesson-viewer.open{display:block}
+.lv-breadcrumb{font-size:13px;color:var(--muted);margin-bottom:18px;font-family:'Lora',serif;font-style:italic}
+.lv-breadcrumb span{color:var(--accent)}
+.lesson-viewer h3{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--text);margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+.lesson-viewer h4{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:var(--text2);margin:26px 0 11px}
+.lesson-viewer p{font-size:15px;color:var(--text2);line-height:1.85;margin-bottom:15px;font-family:'Lora',serif}
+.lesson-viewer ul,.lesson-viewer ol{margin:0 0 15px 22px}
+.lesson-viewer li{font-size:15px;color:var(--text2);line-height:1.85;margin-bottom:9px;font-family:'Lora',serif}
+.callout{background:rgba(184,114,10,.07);border-left:4px solid var(--accent);border-radius:0 11px 11px 0;padding:15px 20px;margin:18px 0}
+.callout p{color:var(--accent2);font-weight:500;margin:0;font-family:'DM Sans',sans-serif;font-size:14px}
+.tip{background:rgba(212,168,67,.08);border-left:4px solid var(--accent3);border-radius:0 11px 11px 0;padding:15px 20px;margin:18px 0}
+.tip p{color:#6b4a00;margin:0;font-size:14px;font-family:'DM Sans',sans-serif}
+.checklist{list-style:none;margin:0 0 15px}
+.checklist li{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:15px;color:var(--text2);font-family:'Lora',serif}
+.checklist li::before{content:'☐';color:var(--accent);flex-shrink:0;font-size:18px;line-height:1.4}
+.lesson-nav{display:flex;justify-content:space-between;align-items:center;margin-top:32px;padding-top:20px;border-top:1.5px solid var(--border)}
+.btn-complete{background:linear-gradient(135deg,var(--success),#1f5c38);color:#fff;padding:12px 24px;border-radius:11px;font-size:15px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-complete:hover{opacity:.9;transform:translateY(-1px)}
+.pdf-btn{display:inline-flex;align-items:center;gap:7px;margin-top:14px;background:linear-gradient(135deg,var(--accent3),var(--accent2));color:#fff;padding:11px 22px;border-radius:11px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s}
+.pdf-btn:hover{opacity:.9;transform:translateY(-1px)}
+.mia-input-row{padding:12px 14px;border-top:1.5px solid var(--border);display:flex;gap:8px;background:var(--surface)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.content>*{animation:fadeUp .3s ease both}
+.content>*:nth-child(2){animation-delay:.06s}
+.content>*:nth-child(3){animation-delay:.12s}
+.mobile-toggle{display:none;position:fixed;top:14px;left:14px;z-index:200;width:42px;height:42px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:18px;align-items:center;justify-content:center;box-shadow:0 2px 8px var(--shadow)}
+@media(max-width:860px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.content{padding:18px;padding-top:68px}.mobile-toggle{display:flex}.topbar{padding:12px 18px 12px 64px}}
+</style>
+</head>
+<body>
+<div id="login-overlay">
+  <div class="login-box">
+    <span class="login-icon">💰</span>
+    <h2>Módulo 3 — Financeiro & Marketing</h2>
+    <div class="login-sub">Mentoria das Startups · Luiz de Castro</div>
+    <label class="login-label">Senha de acesso</label>
+    <input type="password" id="pw" class="login-input" placeholder="Digite sua senha..." onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-err" id="lerr">⚠ Senha incorreta.</div>
+    <button class="login-btn" onclick="doLogin()">🔐 Acessar Módulo</button>
+  </div>
+</div>
+<button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">💰 Módulo 3</div>
+    <div class="sidebar-title">Financeiro & Marketing</div>
+    <div class="sidebar-sub">Mentoria das Startups</div>
+    <div class="sidebar-author">Luiz de Castro — Mestre em Gestão</div>
+  </div>
+  <div>
+    <div class="nav-label">Navegação</div>
+    <div class="nav-item active" onclick="switchTab('aulas',this)"><span class="nav-icon">📚</span>Aulas do Módulo</div>
+    <div class="nav-item" onclick="openPDF()"><span class="nav-icon">📄</span>Material PDF</div>
+    <div class="nav-label">Outros Módulos</div>
+    <div class="nav-item" onclick="goTo('startup-modulo1.html')"><span class="nav-icon">💡</span>Módulo 1 — Ideação</div>
+    <div class="nav-item" onclick="goTo('startup-modulo2.html')"><span class="nav-icon">🏗️</span>Módulo 2 — Modelagem</div>
+    <div class="nav-item" onclick="goTo('startup-modulo4.html')"><span class="nav-icon">📈</span>Módulo 4 — Captação</div>
+    <div class="nav-item" onclick="goTo('startup-modulo5.html')"><span class="nav-icon">🌍</span>Módulo 5 — Expansão</div>
+    <div class="nav-label">Recursos</div>
+    <div class="nav-item" onclick="goTo('startup-pdfs.html')"><span class="nav-icon">📚</span>Central de PDFs</div>
+    <div class="nav-item" onclick="goTo('startup-avaliacao.html')"><span class="nav-icon">🏆</span>Avaliação Final</div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="prog-label"><span>Progresso Módulo 3</span><span id="progPct">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+</nav>
+<main class="main">
+  <div class="topbar">
+    <div class="breadcrumb">Mentoria das Startups › <span>Módulo 3 — Financeiro & Marketing</span></div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline" onclick="openPDF()">📄 PDF do Módulo</button>
+      
+    </div>
+  </div>
+  <div class="content">
+    <div class="module-hero">
+      <span style="font-size:48px;margin-bottom:14px;display:block">💰</span>
+      <h2>Gestão Financeira & Marketing de Startups</h2>
+      <p>Domine as métricas financeiras, o controle de caixa e as estratégias de marketing que transformam uma startup em uma máquina de crescimento previsível e sustentável.</p>
+      <div class="module-meta">
+        <div class="meta-chip">⏱ 8h 30min</div>
+        <div class="meta-chip">📚 12 aulas</div>
+        <span class="badge-inter">Intermediário</span>
+      </div>
+      <button class="pdf-btn" onclick="openPDF()">📄 Abrir PDF — Módulo 3</button>
+    </div>
+    <div class="section-tabs">
+      <div class="stab active" onclick="switchTab('aulas',this)">Aulas</div>
+      <div class="stab" onclick="switchTab('sobre',this)">Sobre</div>
+    </div>
+    <div class="tab-pane active" id="tab-aulas">
+      <div class="topic-grid" id="topic-list"></div>
+      <div class="lesson-viewer" id="lesson-viewer"></div>
+    </div>
+    <div class="tab-pane" id="tab-sobre">
+      <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:36px;box-shadow:0 4px 16px var(--shadow)">
+        <h3 style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--text);margin-bottom:16px">Sobre este Módulo</h3>
+        <p style="font-size:15px;color:var(--text2);line-height:1.8;font-family:Lora,serif;margin-bottom:14px">Este módulo cobre dois pilares críticos: <strong>Gestão Financeira</strong> (controle de caixa, métricas essenciais, projeções e precificação) e <strong>Marketing & Vendas</strong> (go-to-market, growth hacking, funil de vendas e Customer Success).</p>
+        <p style="font-size:15px;color:var(--text2);line-height:1.8;font-family:Lora,serif">Após este módulo, você vai dominar CAC, LTV, churn, MRR, burn rate e runway — além de construir uma estratégia de aquisição previsível e escalável para sua startup.</p>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+const PASS='mentorstartup';
+let completed=JSON.parse(localStorage.getItem('m3_completed')||'{}');
+
+const SECTIONS=[
+  {
+    label:'Parte A — Gestão Financeira',
+    topics:[
+      {title:'Fundamentos de Contabilidade',sub:'DRE, Balanço Patrimonial e Fluxo de Caixa',dur:'35min',content:`<h3>Contabilidade para Founders: o Mínimo que Você Precisa Saber</h3><p>Você não precisa ser contador. Mas precisa entender os 3 relatórios financeiros fundamentais o suficiente para tomar decisões com dados reais, não com achismos.</p><h4>📊 DRE — Demonstração do Resultado do Exercício</h4><p>A DRE responde: a empresa foi lucrativa em um período? Estrutura: Receita Bruta → (-) Deduções (impostos, devoluções) → Receita Líquida → (-) CMV/CPV (custo do produto ou serviço) → Lucro Bruto → (-) Despesas Operacionais (pessoal, marketing, P&D, G&A) → EBITDA → (-) Depreciação → EBIT → (-) Resultado Financeiro → Lucro antes IR → (-) IR/CSLL → Lucro Líquido.</p><h4>🏦 Balanço Patrimonial</h4><p>Retrato da situação financeira em uma data específica. ATIVOS (caixa, contas a receber, equipamentos, IP) = PASSIVOS (fornecedores, empréstimos, impostos) + PATRIMÔNIO LÍQUIDO (o que pertence aos sócios). Os dois lados sempre se equilibram.</p><h4>💸 Fluxo de Caixa — o mais crítico para startups</h4><p>Lucro não é caixa. Uma empresa pode ser lucrativa no papel e falir por falta de caixa — quando clientes demoram a pagar, mas fornecedores exigem pagamento à vista. O DFC registra todas as entradas e saídas reais. Para startups, o fluxo de caixa semanal é obrigatório.</p><div class="callout"><p>📌 <strong>Regra fundamental:</strong> sempre distinga lucro de caixa. Uma venda a prazo aumenta o lucro mas não o caixa imediatamente. Um empréstimo aumenta o caixa mas não o lucro. Confundir os dois mata startups.</p></div><ul class="checklist"><li>Entendo a diferença entre DRE, Balanço e Fluxo de Caixa</li><li>Tenho sistema de controle financeiro atualizado semanalmente</li><li>Distingo claramente lucro de caixa nas decisões do dia a dia</li><li>Reviso os relatórios financeiros mensalmente com meu contador</li></ul>`},
+      {title:'Métricas Essenciais de Startup',sub:'CAC, LTV, Churn, MRR, ARR, Burn Rate',dur:'30min',content:`<h3>As Métricas que Definem o Destino da sua Startup</h3><p>Métricas não são números em um dashboard — são o idioma que startups falam com investidores e consigo mesmas. Dominar essas métricas significa entender onde a empresa está saudável e onde está sangrando.</p><h4>📊 Métricas de Crescimento</h4><p><strong>MRR (Monthly Recurring Revenue):</strong> receita recorrente mensal. Componentes: New MRR (novos clientes), Expansion MRR (upgrades), Churned MRR (cancelamentos), Reactivation MRR (retornos).</p><p><strong>ARR (Annual Recurring Revenue):</strong> MRR × 12. Métrica padrão para valuation de SaaS.</p><p><strong>Growth Rate:</strong> (MRR atual - MRR anterior) / MRR anterior × 100. Para chegar a unicórnio, o crescimento precisa ser ≥ 15-20% ao mês nos primeiros anos.</p><h4>💸 Métricas de Eficiência</h4><p><strong>CAC (Custo de Aquisição de Cliente):</strong> total gasto em Marketing + Vendas / Novos clientes no período. Para SaaS B2B, CAC de 3-6 meses de receita é aceitável. Acima de 12 meses é preocupante.</p><p><strong>LTV (Lifetime Value):</strong> ticket médio mensal / churn rate mensal. Relação LTV/CAC deve ser ≥ 3 para um negócio saudável.</p><h4>🔥 Métricas de Saúde</h4><p><strong>Churn Rate:</strong> % de clientes que cancelam em um mês. Alvo: ≤ 2% ao mês para SaaS B2B, ≤ 5% para B2C.</p><p><strong>Burn Rate:</strong> quanto a empresa gasta além do que recebe mensalmente. Burn Líquido = gastos - receita.</p><p><strong>Runway:</strong> caixa atual / burn rate = meses de sobrevivência. Sempre tenha ≥ 12 meses de runway.</p><div class="callout"><p>📌 Crie um dashboard com essas 8 métricas e revise toda segunda-feira. Compartilhe com o board e investidores mensalmente. Transparência cria confiança e acelera tomadas de decisão.</p></div><ul class="checklist"><li>Calculei todas as 8 métricas para minha startup</li><li>Tenho dashboard atualizado semanalmente</li><li>Sei interpretar o que cada métrica indica sobre a saúde do negócio</li><li>Compartilho as métricas regularmente com o time e investidores</li></ul>`},
+      {title:'Projeções Financeiras',sub:'Como construir um forecast realista',dur:'40min',content:`<h3>Projeções Financeiras: Construindo o Mapa do Futuro</h3><p>Uma projeção financeira não é adivinhação — é uma ferramenta de gestão que força você a tornar explícitas suas hipóteses sobre crescimento, para poder monitorar onde a realidade diverge do plano.</p><h4>🔢 Os 3 Cenários Obrigatórios</h4><p><strong>Pessimista:</strong> tudo dá errado — crescimento lento, churn alto, custos elevados. Garanta que esse cenário não mata a empresa.</p><p><strong>Realista:</strong> melhor estimativa baseada em dados reais. Use para tomar decisões operacionais.</p><p><strong>Otimista:</strong> tudo dá certo. Use para apresentar a investidores, mas seja honesto sobre as premissas.</p><h4>📈 Modelo Financeiro Simplificado para SaaS</h4><p>Variáveis principais: novos clientes por mês (leads × conversão), churn mensal, ticket médio, CAC e LTV. Com essas 5 variáveis, você projeta MRR, ARR, burn rate e runway para 18-24 meses com precisão razoável.</p><div class="callout"><p>📌 <strong>Regra de ouro:</strong> nunca use "crescimento de X%" como premissa sem justificar de onde vem esse crescimento. "Vamos crescer 20% ao mês" é uma hipótese. O plano especifica: de quais canais vêm os novos clientes, com qual investimento, e com qual taxa de conversão comprovada.</p></div><ul class="checklist"><li>Construí projeções para os próximos 18 meses nos 3 cenários</li><li>Identifiquei as principais premissas e como monitorá-las mensalmente</li><li>Calculei o runway atual em cada cenário</li><li>Compartilhei o modelo com mentor ou investidor para feedback</li></ul>`},
+      {title:'Gestão de Capital de Giro',sub:'Como não ficar sem dinheiro',dur:'28min',content:`<h3>Capital de Giro: Sobrevivendo ao Crescimento</h3><p>Paradoxalmente, crescer rápido pode matar uma startup. Quando você vende mais, precisa pagar mais fornecedores e funcionários — mas pode receber dos clientes depois. Esse descompasso drena o capital de giro e coloca empresas lucrativas em crise de caixa.</p><h4>⚡ O Ciclo Financeiro</h4><p>Prazo Médio de Recebimento (PMR) - Prazo Médio de Pagamento (PMP) = Necessidade de Capital de Giro. Se você recebe em 60 dias mas paga em 30, precisa de capital para cobrir o gap.</p><h4>💡 Estratégias de Otimização</h4><p>Incentive pagamento antecipado com desconto (ex: 5% à vista). Negocie prazos maiores com fornecedores. Para SaaS: cobrança anual adiantada é a melhor estratégia — você recebe 12 meses à frente, injetando caixa imediatamente e reduzindo churn (clientes anuais cancelam menos).</p><div class="callout"><p>📌 Se 80% dos clientes pagam mensalmente, faça campanha de migração para anuais com desconto de 15-20%. Isso injeta caixa imediatamente e melhora a retenção.</p></div><ul class="checklist"><li>Calculei o ciclo financeiro do meu negócio</li><li>Identifiquei estratégias para reduzir necessidade de capital de giro</li><li>Tenho reserva de capital equivalente a 3 meses de custos fixos</li><li>Ofereço incentivo para pagamento antecipado ou anual</li></ul>`},
+      {title:'Precificação Estratégica',sub:'A alavanca mais poderosa do negócio',dur:'25min',content:`<h3>Precificação: a Alavanca Mais Poderosa e Mais Negligenciada</h3><p>Um aumento de 10% no preço médio tipicamente aumenta o lucro operacional em 20-30%. Nenhuma iniciativa de redução de custo ou crescimento de volume tem impacto comparável. Ainda assim, a maioria das startups define preço por intuição, sem análise estratégica.</p><h4>💎 As 3 Abordagens</h4><p><strong>1. Baseada em custo:</strong> calcule todos os custos e adicione margem desejada. Simples, mas ignora o valor percebido — pode resultar em subprecificação grave.</p><p><strong>2. Baseada em valor:</strong> precifique com base no valor que o cliente recebe. Se seu software economiza R$50.000/ano, cobrar R$500/mês é barato. Pergunte: "Quanto você gasta com o problema que resolvemos hoje?"</p><p><strong>3. Baseada em concorrência:</strong> posicione-se em relação aos concorrentes. Preço mais baixo (liderança em custo), similar (parity pricing) ou mais alto (premium).</p><h4>📦 Estrutura de Planos para SaaS</h4><p>A estrutura de 3 planos (Basic, Pro, Enterprise) é estrategicamente superior a um único preço. O plano do meio concentra 60-70% das vendas — os outros dois servem para ancorar percepção de valor.</p><div class="callout"><p>📌 <strong>Teste agora:</strong> aumente o preço em 20% para novos clientes. Monitore por 30 dias. Se a conversão cair menos de 20%, o novo preço é melhor. A maioria das startups descobre que pode cobrar significativamente mais.</p></div><ul class="checklist"><li>Calculei o valor econômico que meu produto entrega ao cliente</li><li>Pesquisei os preços de todos os concorrentes diretos e indiretos</li><li>Defini estrutura de planos com pelo menos 3 opções</li><li>Testei pelo menos um aumento de preço e monitorei o impacto</li></ul>`},
+      {title:'Compliance Fiscal e Obrigações',sub:'Impostos, declarações e o que não pode errar',dur:'32min',content:`<h3>Compliance Fiscal: Evitando Problemas que Travam Startups</h3><p>Problemas fiscais são uma das principais razões pelas quais startups não conseguem fechar rodadas de investimento — o due diligence do VC revela débitos, passivos trabalhistas ou irregularidades que impossibilitam a transação. Compliance desde o início não é burocracia — é gestão de risco.</p><h4>📅 Obrigações Mensais (Simples Nacional)</h4><p>DAS (até o dia 20 de cada mês), eSocial (folha e eventos trabalhistas), EFD-Reinf (retenções na fonte), Nota Fiscal Eletrônica para cada serviço prestado.</p><h4>📋 Obrigações Anuais</h4><p>DEFIS (Declaração de Informações Socioeconômicas e Fiscais) — até 31 de março. DIRPF dos sócios com declaração da participação societária.</p><h4>⚠️ Red Flags que Travam Investimentos</h4><p>Débitos fiscais não regularizados, guias em atraso, divergências entre declarado e real, funcionários sem registro, pró-labore não declarado. Invista em contador especializado em startups — custa R$500-R$2.000/mês e vale muito mais.</p><div class="callout"><p>📌 Solicite trimestralmente ao seu contador uma certidão negativa de débitos federais, estaduais e municipais. Isso garante que você está em dia e cria o histórico necessário para futuras rodadas de investimento.</p></div><ul class="checklist"><li>Tenho contador ativo e responsivo acompanhando a empresa</li><li>Emito notas fiscais para todos os serviços prestados</li><li>Estou em dia com todas as obrigações mensais do Simples Nacional</li><li>Tenho certidão negativa de débitos emitida nos últimos 3 meses</li></ul>`}
+    ]
+  },
+  {
+    label:'Parte B — Marketing & Vendas',
+    topics:[
+      {title:'Go-to-Market Strategy',sub:'Como entrar no mercado com impacto',dur:'30min',content:`<h3>Go-to-Market: Sua Estratégia de Entrada no Mercado</h3><p>Um GTM é o plano que define como você vai alcançar seus clientes, comunicar sua proposta de valor e gerar as primeiras vendas — de forma sistemática e replicável. Sem GTM, você depende de sorte. Com GTM, você cria um sistema de crescimento.</p><h4>🎯 Os 4 Componentes do GTM</h4><p><strong>1. ICP e Personas:</strong> quem exatamente você vai atacar primeiro? O GTM eficiente começa ultra-focado — um segmento, um caso de uso, um canal. Depois expande.</p><p><strong>2. Mensagem e Posicionamento:</strong> como você se comunica com esse ICP? A mensagem deve ressoar imediatamente — se ele precisar de 3 explicações para entender o que você faz, a mensagem está errada.</p><p><strong>3. Canal de Aquisição:</strong> onde seu ICP está? Um canal dominante nos primeiros 6 meses — depois diversifique.</p><p><strong>4. Modelo de Vendas:</strong> self-service (compra sem contato humano), inside sales (por telefone/video), field sales (presencial). Definido pela complexidade e ticket do produto.</p><div class="callout"><p>📌 O GTM mais eficiente para early-stage: encontre 10 clientes manualmente, venda pessoalmente, entenda profundamente o processo de compra, e só então construa um processo replicável.</p></div><ul class="checklist"><li>Defini o ICP prioritário para os próximos 90 dias</li><li>Criei a mensagem de posicionamento e testei com 10 potenciais clientes</li><li>Escolhi 1 canal primário de aquisição</li><li>Realizei as primeiras 10 vendas pessoalmente antes de escalar</li></ul>`},
+      {title:'Marketing Digital para Startups',sub:'SEO, Ads, LinkedIn e Content Marketing',dur:'35min',content:`<h3>Marketing Digital: Crescendo com Recursos Limitados</h3><p>Startups não têm o budget das grandes corporações. Mas têm agilidade e capacidade de testar rapidamente. Marketing digital para startups não é sobre gastar mais — é sobre aprender mais rápido e concentrar recursos no que funciona.</p><h4>📱 Os Canais Digitais Principais</h4><p><strong>SEO:</strong> atrai clientes que já buscam pelo problema que você resolve. Demora 6-12 meses para gerar resultados, mas depois tem custo próximo de zero por clique.</p><p><strong>Google Ads:</strong> resultado imediato, mas pago. Ótimo para testar se há demanda antes de investir em SEO. CPCs variam de R$0,50 a R$50+ dependendo do setor.</p><p><strong>LinkedIn Ads:</strong> canal B2B por excelência. Segmentação por cargo, empresa, setor e senioridade. Custo por lead alto (R$50-R$300+), mas qualidade elevada.</p><p><strong>Content Marketing:</strong> blog, YouTube, podcast, webinars. Constrói autoridade ao longo do tempo. O conteúdo que responde dúvidas do ICP durante o processo de compra é o mais valioso.</p><p><strong>Email Marketing:</strong> ROI médio de R$38 por R$1 investido. Lista própria é ativo estratégico — nunca dependa apenas de redes sociais.</p><div class="callout"><p>📌 Regra dos primeiros 90 dias: 2 posts de blog por semana + 1 vídeo/semana + 1 cold email campaign/semana + 1 webinar/mês. Com consistência, em 90 dias você tem 24 artigos, 12 vídeos e lista crescendo.</p></div><ul class="checklist"><li>Defini 2 canais digitais primários para os próximos 90 dias</li><li>Criei calendário de conteúdo com 4 semanas de antecedência</li><li>Tenho rastreamento de conversão em todos os canais</li><li>Calculei o CAC de cada canal e estou otimizando o melhor</li></ul>`},
+      {title:'Funil de Vendas',sub:'Da descoberta à fidelização',dur:'28min',content:`<h3>Funil de Vendas: Construindo uma Máquina Previsível</h3><p>Um funil bem construído transforma marketing em receita de forma previsível. Quando você sabe que de cada 1.000 visitantes, 100 se tornam leads, 20 chegam a uma demo e 5 fecham, você pode prever a receita e investir com confiança.</p><h4>🔽 Estágios do Funil B2B</h4><p><strong>Topo (Awareness):</strong> o prospect descobre que tem um problema ou que você existe. Conteúdo educacional, SEO, ads, eventos, indicações.</p><p><strong>Meio (Consideration):</strong> considera você como solução. Demos, cases de sucesso, comparativos, trials, webinars técnicos.</p><p><strong>Fundo (Decision):</strong> decide comprar. Proposta comercial, negociação, ROI calculado, referências, termos contratuais.</p><p><strong>Retenção e Expansão:</strong> onboarding eficiente, Customer Success ativo, upsell/cross-sell, programa de indicação.</p><h4>📊 Métricas de Funil</h4><p>Taxa de conversão entre cada etapa, tempo médio de ciclo de vendas, valor médio do contrato (ACV), taxa de churn no primeiro ano. O monitoramento revela onde os leads "vazam" e onde focar esforços.</p><div class="callout"><p>📌 A maioria das startups perde oportunidades no meio do funil — quando o lead está interessado mas não há follow-up suficiente. Implemente um CRM (HubSpot free, Pipedrive) e defina sequências automáticas de follow-up.</p></div><ul class="checklist"><li>Mapeei todas as etapas do funil com taxas de conversão reais</li><li>Implementei um CRM para gerenciar o pipeline</li><li>Identifiquei o estágio com maior perda e criei ação específica</li><li>Tenho sequências de follow-up automatizadas para cada etapa</li></ul>`},
+      {title:'Growth Hacking',sub:'Crescimento acelerado com recursos limitados',dur:'32min',content:`<h3>Growth Hacking: Engenharia do Crescimento</h3><p>Growth Hacking não é truque. É a mentalidade de usar criatividade, dados e tecnologia para encontrar formas de crescer que a concorrência não descobriu. Sean Ellis, que cunhou o termo, define o growth hacker como alguém cujo "norte verdadeiro é o crescimento".</p><h4>🔄 Loops de Crescimento vs. Funis</h4><p>Funis são lineares — você investe, gera leads, converte. Loops são exponenciais — cada cliente traz mais clientes. Os mais poderosos: viral (cada usuário convida outros), paid (receita financia aquisição), content (conteúdo gera SEO que gera usuários).</p><h4>⚡ Táticas Comprovadas</h4><p><strong>Referral Programs:</strong> o Dropbox cresceu 3.900% em 15 meses com "Convide um amigo, ganhe 500MB".</p><p><strong>Product-Led Growth (PLG):</strong> o produto é o principal canal de aquisição. Freemium → pago. Slack, Notion, Figma.</p><p><strong>SEO Programático:</strong> use dados para criar milhares de páginas otimizadas automaticamente. O Airbnb criou uma página para cada cidade/vizinhança do mundo.</p><p><strong>Cold Email Qualificado:</strong> email personalizado para ICP específico com sequência de 4-6 toques. Ferramenta: Apollo, Lemlist, Instantly.</p><div class="callout"><p>📌 O processo: (1) defina a North Star Metric, (2) identifique o maior gargalo no AARRR, (3) gere 20+ hipóteses, (4) priorize por ICE Score (Impact × Confidence ÷ Effort), (5) teste as top 3 por semana, (6) dobre o que funciona.</p></div><ul class="checklist"><li>Defini minha North Star Metric</li><li>Identifiquei o maior gargalo no funil AARRR</li><li>Tenho pelo menos 10 hipóteses de growth para testar</li><li>Implementei um loop viral ou de referral</li></ul>`},
+      {title:'CRM e Gestão de Pipeline',sub:'Ferramentas, processos e automação de vendas',dur:'24min',content:`<h3>CRM: Transformando Relacionamentos em Receita Previsível</h3><p>CRM não é apenas software — é uma filosofia de gestão centrada no cliente. Bem implementado, transforma o processo de vendas de uma atividade caótica em um sistema escalável e previsível.</p><h4>🛠️ Escolhendo o CRM Certo</h4><p><strong>HubSpot CRM (gratuito):</strong> melhor para startups early-stage. Interface intuitiva, integra com Gmail/Outlook, automações básicas. O plano gratuito atende a maioria das startups até ~$5M ARR.</p><p><strong>Pipedrive:</strong> focado em gestão de pipeline visual. Ideal para equipes que gerenciam muitas oportunidades. A partir de $15/usuário/mês.</p><p><strong>Salesforce:</strong> padrão enterprise. Poderoso e flexível, mas caro e complexo. Para startups que vendem para grandes corporações.</p><h4>⚙️ Processos Essenciais</h4><p>Todo lead entra no CRM imediatamente. Cada interação é registrada. SLA de resposta definido (ex: leads quentes respondidos em 1 hora). Pipeline com estágios claros e critérios de avanço. Forecasting semanal de receita esperada.</p><div class="callout"><p>📌 O CRM só funciona se toda a equipe usa consistentemente. Comece simples — 5-6 estágios no pipeline, campos mínimos obrigatórios. Adoção é mais importante que sofisticação.</p></div><ul class="checklist"><li>Implementei um CRM e toda a equipe o usa consistentemente</li><li>Todos os leads e clientes estão cadastrados com histórico</li><li>Tenho estágios de pipeline com critérios de avanço claros</li><li>Gero relatório semanal de pipeline e forecast de receita</li></ul>`},
+      {title:'Customer Success e Retenção',sub:'NPS, health score e expansão de receita',dur:'31min',content:`<h3>Customer Success: Crescer Retendo, Não Apenas Adquirindo</h3><p>Um churn de 5% ao mês significa que em 12 meses você perdeu metade da base — e precisou gastar o dobro em aquisição apenas para ficar no mesmo lugar. Customer Success garante que seus clientes alcancem os resultados que os fizeram comprar.</p><h4>🎯 CS não é Suporte ao Cliente</h4><p>Suporte é reativo — resolve problemas quando aparecem. CS é proativo — antecipa problemas antes que ocorram e garante que o cliente progride em direção ao sucesso. Um CS ativo monitora engajamento, entra em contato quando um cliente para de usar o produto, e identifica oportunidades de expansão.</p><h4>📊 Métricas de Customer Success</h4><p><strong>NPS (Net Promoter Score):</strong> "De 0 a 10, qual a probabilidade de recomendar?" Detratores (0-6), Neutros (7-8), Promotores (9-10). NPS = % Promotores - % Detratores. Benchmark SaaS: > 40 é bom, > 60 é excelente.</p><p><strong>Health Score:</strong> índice que combina uso do produto, engajamento, satisfação e risco de churn. Permite priorizar ação proativa nos clientes mais em risco.</p><p><strong>Net Revenue Retention (NRR):</strong> (receita retida + expansão) / receita original. NRR > 100% significa que expansão supera churn — o negócio cresce sem novos clientes. Melhor indicador de saúde de longo prazo para SaaS.</p><div class="callout"><p>📌 O momento mais crítico é o onboarding. Clientes que atingem o "Aha Moment" nos primeiros 7 dias têm retenção 2-3x maior. Invista desproporcionalmente nos primeiros 30 dias de cada cliente.</p></div><ul class="checklist"><li>Tenho processo estruturado de onboarding para novos clientes</li><li>Monitoro NPS trimestralmente e ajo sobre os detratores</li><li>Implementei health scores para priorizar ação proativa</li><li>Calculo e monitoro Net Revenue Retention mensalmente</li></ul>`}
+    ]
+  }
+];
+
+function doLogin(){
+  if(document.getElementById('pw').value===PASS){
+    document.getElementById('login-overlay').style.display='none';
+    renderTopics();updateProgress();
+  }else{document.getElementById('lerr').style.display='block';document.getElementById('pw').value='';}
+}
+
+function renderTopics(){
+  const list=document.getElementById('topic-list');
+  let idx=0;let html='';
+  SECTIONS.forEach(sec=>{
+    html+=`<div class="topic-section-label">${sec.label}</div>`;
+    sec.topics.forEach(t=>{
+      const k=idx;
+      html+=`<div class="topic-item ${completed[k]?'done':''}" onclick="openLesson(${k})">
+        <div class="topic-num">${completed[k]?'✓':k+1}</div>
+        <div class="topic-info"><div class="topic-title">${t.title}</div><div class="topic-sub">${t.sub}</div></div>
+        <div class="topic-dur">⏱ ${t.dur}</div></div>`;
+      idx++;
+    });
+  });
+  list.innerHTML=html;
+}
+
+function getAllTopics(){const all=[];SECTIONS.forEach(s=>s.topics.forEach(t=>all.push(t)));return all;}
+
+function openLesson(idx){
+  const t=getAllTopics()[idx];
+  const v=document.getElementById('lesson-viewer');
+  v.classList.add('open');
+  v.innerHTML=`<div class="lv-breadcrumb">Módulo 3 — Financeiro & Marketing › <span>Aula ${idx+1}: ${t.title}</span></div>${t.content}
+    <div class="lesson-nav">
+      <button class="btn btn-outline" onclick="closeLesson()">← Voltar às aulas</button>
+      <button class="btn-complete" onclick="completeLesson(${idx})">✅ Marcar como Concluída</button>
+    </div>`;
+  v.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeLesson(){const v=document.getElementById('lesson-viewer');v.classList.remove('open');v.innerHTML='';}
+
+function completeLesson(idx){
+  completed[idx]=true;localStorage.setItem('m3_completed',JSON.stringify(completed));
+  updateProgress();renderTopics();
+  const v=document.getElementById('lesson-viewer');
+  v.innerHTML=`<div style="text-align:center;padding:40px"><div style="font-size:52px;margin-bottom:14px">✅</div><h3 style="font-family:Syne,sans-serif;font-size:22px;color:var(--success)">Aula Concluída!</h3><p style="color:var(--muted);margin-top:8px;font-size:15px">Continue para a próxima aula.</p><button class="btn btn-outline" onclick="closeLesson()" style="margin-top:16px">← Voltar às aulas</button></div>`;
+}
+
+function updateProgress(){
+  const total=getAllTopics().length;const done=Object.keys(completed).length;
+  const pct=Math.round((done/total)*100);
+  document.getElementById('progPct').textContent=pct+'%';
+  document.getElementById('progFill').style.width=pct+'%';
+}
+
+function switchTab(id,el){
+  document.querySelectorAll('.tab-pane').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+}
+
+function openPDF(){try{window.open('mentoria_startups/M3_financeiro_marketing.pdf','_blank');}catch(e){alert('Arquivo: mentoria_startups/M3_financeiro_marketing.pdf');}}
+function goTo(p){window.location.href=p;}
+document.addEventListener('DOMContentLoaded',()=>{renderTopics();updateProgress();});
+</script>
+<!-- Assistente MIA -->
+<div id="mia-wrapper" style="position:fixed;top:65px;left:-50px;width:420px;height:120px;z-index:9999;">
+  <iframe id="mia-frame" src="https://luizdecaxtro.github.io/mentoria-cadalunos/chatbot-mentoria.html"
+    style="width:100%;height:100%;border:none;background:transparent;display:block;"
+    allow="clipboard-write" title="Assistente MIA"></iframe>
+</div>
+<script>
+var isMobile = window.innerWidth <= 768;
+if (isMobile) { var w = document.getElementById("mia-wrapper"); w.style.width = "160px"; }
+window.addEventListener("message", function(e) {
+  var wrapper = document.getElementById("mia-wrapper");
+  if (!wrapper) return;
+  if (e.data === "mia-open") { wrapper.style.height="100vh"; wrapper.style.top="0"; wrapper.style.left="0"; wrapper.style.width="100%"; }
+  if (e.data === "mia-close") { wrapper.style.height="130px"; wrapper.style.top="65px"; wrapper.style.left="-50px"; wrapper.style.width=isMobile?"160px":"420px"; }
+});
+</script>
+</body>
+</html>

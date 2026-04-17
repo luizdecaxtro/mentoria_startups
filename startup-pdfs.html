@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central de PDFs | Mentoria das Startups</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fdf8f0;--surface:#fff;--surface2:#fef6e8;--border:#e8d9c0;--border2:#d4b896;--accent:#b8720a;--accent2:#8b4a0a;--accent3:#d4920d;--text:#1a1008;--text2:#3d2a0e;--muted:#7a5c38;--muted2:#9a7a50;--success:#2d7a4f;--shadow:rgba(120,80,20,.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6;min-height:100vh}
+#login-overlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1a0e04,#2d1a08);display:flex;align-items:center;justify-content:center}
+.login-box{background:rgba(255,248,235,.07);border:1px solid rgba(212,168,67,.25);border-radius:24px;padding:48px 56px;text-align:center;max-width:400px;width:90%;backdrop-filter:blur(20px)}
+.login-icon{font-size:52px;display:block;margin-bottom:14px}
+.login-box h2{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#f5e6c8;margin-bottom:4px}
+.login-sub{font-size:13px;color:rgba(245,230,200,.6);margin-bottom:28px}
+.login-label{display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(212,168,67,.8);text-align:left;margin-bottom:7px}
+.login-input{width:100%;padding:13px 16px;background:rgba(255,248,235,.08);border:1.5px solid rgba(212,168,67,.25);border-radius:11px;color:#f5e6c8;font-size:16px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:14px;transition:border-color .2s}
+.login-input:focus{border-color:#d4a843}
+.login-input::placeholder{color:rgba(245,230,200,.3)}
+.login-err{font-size:13px;color:#f08080;margin-bottom:10px;display:none}
+.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#d4920d,#8b4a0a);color:#fff;border:none;border-radius:11px;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:all .2s}
+.login-btn:hover{opacity:.9;transform:translateY(-2px)}
+.topbar{background:rgba(253,248,240,.95);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--border);padding:16px 36px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px var(--shadow);position:sticky;top:0;z-index:50}
+.topbar-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--text)}
+.topbar-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.topbar-actions{display:flex;gap:10px}
+.btn{padding:8px 16px;border-radius:9px;font-size:13px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-outline{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
+.btn-outline:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
+.page{max-width:960px;margin:0 auto;padding:36px 24px}
+.page-hero{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:40px;margin-bottom:32px;box-shadow:0 4px 18px var(--shadow);position:relative;overflow:hidden}
+.page-hero::after{content:'📚';position:absolute;right:40px;top:50%;transform:translateY(-50%);font-size:80px;opacity:.07}
+.page-hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--text);margin-bottom:8px}
+.page-hero p{font-size:15px;color:var(--muted);line-height:1.7;max-width:580px}
+.section-label{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--text);margin:28px 0 14px;display:flex;align-items:center;gap:10px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.pdfs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:10px}
+.pdf-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:22px;cursor:pointer;transition:all .2s;box-shadow:0 2px 10px var(--shadow);display:flex;flex-direction:column}
+.pdf-card:hover{border-color:var(--accent3);transform:translateY(-2px);box-shadow:0 6px 20px var(--shadow)}
+.pdf-icon{font-size:32px;margin-bottom:12px}
+.pdf-module{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);margin-bottom:6px}
+.pdf-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);margin-bottom:8px}
+.pdf-desc{font-size:13px;color:var(--muted);line-height:1.55;flex:1;margin-bottom:14px}
+.pdf-open-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--accent3),var(--accent2));color:#fff;padding:9px 16px;border-radius:9px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;border:none;cursor:pointer;transition:all .2s;width:100%;justify-content:center}
+.pdf-open-btn:hover{opacity:.9}
+.info-box{background:rgba(184,114,10,.06);border:1.5px solid rgba(184,114,10,.2);border-radius:14px;padding:20px 24px;margin-bottom:28px}
+.info-box p{font-size:14px;color:var(--accent2);line-height:1.6}
+.info-box strong{font-weight:600}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.page>*{animation:fadeUp .3s ease both}
+.page>*:nth-child(2){animation-delay:.06s}
+.page>*:nth-child(3){animation-delay:.12s}
+.page>*:nth-child(4){animation-delay:.18s}
+@media(max-width:640px){.page{padding:18px}.pdfs-grid{grid-template-columns:1fr}.topbar{padding:14px 18px}}
+</style>
+</head>
+<body>
+
+<div id="login-overlay">
+  <div class="login-box">
+    <span class="login-icon">📚</span>
+    <h2>Central de PDFs</h2>
+    <div class="login-sub">Mentoria das Startups · Luiz de Castro</div>
+    <label class="login-label">Senha de acesso</label>
+    <input type="password" id="pw" class="login-input" placeholder="Digite sua senha..." onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-err" id="lerr">⚠ Senha incorreta.</div>
+    <button class="login-btn" onclick="doLogin()">🔐 Acessar Materiais</button>
+  </div>
+</div>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-title">📚 Central de PDFs</div>
+    <div class="topbar-sub">Mentoria das Startups — Luiz de Castro</div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-outline" onclick="goTo('startup-modulo1.html')">← Voltar aos módulos</button>
+    <button class="btn btn-outline" onclick="goTo('startup-avaliacao.html')">🏆 Avaliação Final</button>
+  </div>
+</div>
+
+<div class="page" id="main-content" style="display:none">
+  <div class="page-hero">
+    <h1>Central de Materiais em PDF</h1>
+    <p>Todos os materiais de apoio da Mentoria das Startups organizados por módulo. Clique em qualquer PDF para abrir — os arquivos devem estar na pasta <code style="background:var(--surface2);padding:2px 6px;border-radius:5px;font-size:13px">mentoria_startups/</code> no mesmo diretório do sistema.</p>
+  </div>
+
+  <div class="info-box">
+    <p>📌 <strong>Como organizar os PDFs:</strong> Coloque todos os arquivos PDF na pasta <strong>mentoria_startups/</strong> no mesmo diretório onde estão os arquivos HTML do sistema. Os nomes dos arquivos devem ser exatamente como indicados abaixo em cada card.</p>
+  </div>
+
+  <div class="section-label">Materiais Gerais</div>
+  <div class="pdfs-grid">
+    <div class="pdf-card" onclick="openPDF('mentoria_startups/manual_do_aluno.pdf')">
+      <div class="pdf-icon">📋</div>
+      <div class="pdf-module">Material Geral</div>
+      <div class="pdf-title">Manual do Aluno</div>
+      <div class="pdf-desc">Guia completo com metodologia do programa, cronograma sugerido, como aproveitar melhor cada módulo e orientações de estudo.</div>
+      <button class="pdf-open-btn">📄 Abrir PDF</button>
+    </div>
+    <div class="pdf-card" onclick="openPDF('mentoria_startups/glossario_startups.pdf')">
+      <div class="pdf-icon">📖</div>
+      <div class="pdf-module">Material Geral</div>
+      <div class="pdf-title">Glossário de Startups</div>
+      <div class="pdf-desc">Mais de 150 termos essenciais do ecossistema: VC, term sheet, cap table, churn, runway, pivot, PMF, LTV, CAC e muito mais.</div>
+      <button class="pdf-open-btn">📄 Abrir PDF</button>
+    </div>
+  </div>
+
+  <div class="section-label">Módulo 1 — Ideação & Validação</div>
+  <div class="pdfs-grid">
+    <div class="pdf-card" onclick="openPDF('mentoria_startups/M1_ideacao_validacao.pdf')">
+      <div class="pdf-icon">💡</div>
+      <div class="pdf-module">Módulo 1</div>
+      <div class="pdf-title">Ideação & Validação</div>
+      <div class="pdf-desc">Metodologias de Design Thinking, templates de entrevista de validação, framework de MVP, checklist do Mom Test e guia de Customer Discovery.</div>
+      <button class="pdf-open-btn">📄 Abrir PDF do Módulo 1</button>
+    </div>
+  </div>
+
+  <div class="section-label">Módulo 2 — Modelagem & Registro</div>
+  <div class="pdfs-grid">
+    <div class="pdf-card" onclick="openPDF('mentoria_startups/M2_modelagem_registro.pdf')">
+      <div class="pdf-icon">🏗️</div>
+      <div class="pdf-module">Módulo 2</div>
+      <div class="pdf-title">Modelagem de Negócio & Registro</div>
+      <div class="pdf-desc">Template do Business Model Canvas, Value Proposition Canvas editável, guia de abertura de empresa no Gov.br e checklist de propriedade intelectual.</div>
+      <button class="pdf-open-btn">📄 Abrir PDF do Módulo 2</button>
+    </div>
+  </div>
+
+  <div class="section-label">Módulo 3 — Financeiro & Marketing</div>
+  <div class="pdfs-grid">
+    <div class="pdf-card" onclick="openPDF('mentoria_startups/M3_financeiro_marketing.pdf')">
+      <div class="pdf-icon">💰</div>
+      <div class="pdf-module">Módulo 3</div>
+      <div class="pdf-title">Financeiro & Marketing</div>
+      <div class="pdf-desc">Modelo de fluxo de caixa, planilha de métricas (CAC, LTV, MRR, churn), guia de go-to-market e framework AARRR de growth hacking.</div>
+      <button class="pdf-open-btn">📄 Abrir PDF do Módulo 3</button>
+    </div>
+  </div>
+
+  <div class="section-label">Módulo 4 — Captação & Operações</div>
+  <div class="pdfs-grid">
+    <div class="pdf-card" onclick="openPDF('mentoria_startups/M4_captacao_operacoes.pdf')">
+      <div class="pdf-icon">📈</div>
+      <div class="pdf-module">Módulo 4</div>
+      <div class="pdf-title">Captação & Operações</div>
+      <div class="pdf-desc">Template de pitch deck com os 10 slides, guia de valuation de startups, checklist de due diligence, framework de OKRs e requisitos de LGPD.</div>
+      <button class="pdf-open-btn">📄 Abrir PDF do Módulo 4</button>
+    </div>
+  </div>
+
+  <div class="section-label">Módulo 5 — Expansão & Crescimento</div>
+  <div class="pdfs-grid">
+    <div class="pdf-card" onclick="openPDF('mentoria_startups/M5_expansao_crescimento.pdf')">
+      <div class="pdf-icon">🌍</div>
+      <div class="pdf-module">Módulo 5</div>
+      <div class="pdf-title">Expansão & Crescimento</div>
+      <div class="pdf-desc">Guia de internacionalização para startups brasileiras, checklist de M&A, requisitos de IPO no Brasil e framework de inovação contínua.</div>
+      <button class="pdf-open-btn">📄 Abrir PDF do Módulo 5</button>
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:24px;margin-top:8px;text-align:center">
+    <div style="font-size:28px;margin-bottom:10px">🏆</div>
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--text);margin-bottom:8px">Pronto para a Avaliação Final?</div>
+    <div style="font-size:14px;color:var(--muted);margin-bottom:16px">Após revisar todos os materiais, faça a Avaliação Final para conquistar seu certificado oficial.</div>
+    <button class="pdf-open-btn" style="max-width:280px;margin:0 auto" onclick="goTo('startup-avaliacao.html')">🏆 Ir para Avaliação Final</button>
+  </div>
+</div>
+
+<script>
+function doLogin() {
+  if (document.getElementById('pw').value === 'mentorstartup') {
+    document.getElementById('login-overlay').style.display = 'none';
+    document.getElementById('main-content').style.display = 'block';
+  } else {
+    document.getElementById('lerr').style.display = 'block';
+    document.getElementById('pw').value = '';
+  }
+}
+function openPDF(path) {
+  try { window.open(path, '_blank'); }
+  catch(e) { alert('Arquivo: ' + path); }
+}
+function goTo(p) { window.location.href = p; }
+</script>
+<!-- Assistente MIA -->
+<div id="mia-wrapper" style="position:fixed;top:65px;left:-50px;width:420px;height:120px;z-index:9999;">
+  <iframe id="mia-frame" src="https://luizdecaxtro.github.io/mentoria-cadalunos/chatbot-mentoria.html"
+    style="width:100%;height:100%;border:none;background:transparent;display:block;"
+    allow="clipboard-write" title="Assistente MIA"></iframe>
+</div>
+<script>
+var isMobile = window.innerWidth <= 768;
+if (isMobile) { var w = document.getElementById("mia-wrapper"); w.style.width = "160px"; }
+window.addEventListener("message", function(e) {
+  var wrapper = document.getElementById("mia-wrapper");
+  if (!wrapper) return;
+  if (e.data === "mia-open") { wrapper.style.height="100vh"; wrapper.style.top="0"; wrapper.style.left="0"; wrapper.style.width="100%"; }
+  if (e.data === "mia-close") { wrapper.style.height="130px"; wrapper.style.top="65px"; wrapper.style.left="-50px"; wrapper.style.width=isMobile?"160px":"420px"; }
+});
+</script>
+</body>
+</html>

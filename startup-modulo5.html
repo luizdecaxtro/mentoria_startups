@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 5 — Expansão & Crescimento | Mentoria das Startups</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fdf8f0;--surface:#fff;--surface2:#fef6e8;--border:#e8d9c0;--border2:#d4b896;--accent:#b8720a;--accent2:#8b4a0a;--accent3:#d4920d;--text:#1a1008;--text2:#3d2a0e;--muted:#7a5c38;--muted2:#9a7a50;--success:#2d7a4f;--shadow:rgba(120,80,20,.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+#login-overlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1a0e04,#2d1a08);display:flex;align-items:center;justify-content:center}
+.login-box{background:rgba(255,248,235,.07);border:1px solid rgba(212,168,67,.25);border-radius:24px;padding:48px 56px;text-align:center;max-width:400px;width:90%;backdrop-filter:blur(20px)}
+.login-icon{font-size:52px;display:block;margin-bottom:14px}
+.login-box h2{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#f5e6c8;margin-bottom:4px}
+.login-sub{font-size:13px;color:rgba(245,230,200,.6);margin-bottom:28px}
+.login-label{display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(212,168,67,.8);text-align:left;margin-bottom:7px}
+.login-input{width:100%;padding:13px 16px;background:rgba(255,248,235,.08);border:1.5px solid rgba(212,168,67,.25);border-radius:11px;color:#f5e6c8;font-size:16px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:14px;transition:border-color .2s}
+.login-input:focus{border-color:#d4a843}
+.login-input::placeholder{color:rgba(245,230,200,.3)}
+.login-err{font-size:13px;color:#f08080;margin-bottom:10px;display:none}
+.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#d4920d,#8b4a0a);color:#fff;border:none;border-radius:11px;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:all .2s}
+.login-btn:hover{opacity:.9;transform:translateY(-2px)}
+.sidebar{width:270px;background:var(--surface);border-right:1.5px solid var(--border);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;box-shadow:2px 0 16px var(--shadow);transition:transform .3s}
+.sidebar-logo{padding:24px 22px 18px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,#fef3e2,#fff9f0)}
+.logo-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--accent3),var(--accent2));padding:4px 12px;border-radius:20px;font-family:'Syne',sans-serif;font-weight:800;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#fff;margin-bottom:10px}
+.sidebar-title{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--text);margin-bottom:3px}
+.sidebar-sub{font-size:12px;color:var(--muted)}
+.sidebar-author{font-size:12px;color:var(--accent);margin-top:4px;font-style:italic;font-family:'Lora',serif}
+.nav-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);padding:12px 22px 5px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:10px 22px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .2s;border-left:3px solid transparent}
+.nav-item:hover{color:var(--text);background:var(--surface2)}
+.nav-item.active{color:var(--accent);background:rgba(184,114,10,.08);border-left-color:var(--accent);font-weight:500}
+.nav-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;background:var(--surface2);border:1px solid var(--border)}
+.sidebar-footer{padding:16px 22px;border-top:1.5px solid var(--border);background:var(--surface2)}
+.prog-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px;font-weight:500}
+.prog-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));border-radius:3px;transition:width .5s}
+.main{margin-left:270px;background:var(--bg);min-height:100vh}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(253,248,240,.95);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--border);padding:14px 36px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px var(--shadow)}
+.breadcrumb{font-size:13px;color:var(--muted)}
+.breadcrumb span{color:var(--text);font-weight:500}
+.topbar-actions{display:flex;gap:10px}
+.btn{padding:8px 16px;border-radius:9px;font-size:13px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-outline{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
+.btn-outline:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
+.content{padding:36px}
+.module-hero{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:40px;margin-bottom:28px;box-shadow:0 4px 18px var(--shadow);position:relative;overflow:hidden}
+.module-hero::after{content:'🌍';position:absolute;right:40px;top:50%;transform:translateY(-50%);font-size:80px;opacity:.07}
+.module-hero h2{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;color:var(--text);margin-bottom:8px}
+.module-hero p{font-size:15px;color:var(--muted);line-height:1.7;max-width:620px}
+.module-meta{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.meta-chip{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1.5px solid var(--border);padding:6px 13px;border-radius:9px;font-size:13px;color:var(--muted);font-weight:500}
+.badge-avan{background:rgba(139,74,10,.12);color:var(--accent2);border:1px solid rgba(139,74,10,.25);padding:4px 10px;border-radius:9px;font-size:11px;font-weight:600}
+.pdf-btn{display:inline-flex;align-items:center;gap:7px;margin-top:14px;background:linear-gradient(135deg,var(--accent3),var(--accent2));color:#fff;padding:11px 22px;border-radius:11px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s}
+.pdf-btn:hover{opacity:.9;transform:translateY(-1px)}
+.topic-grid{display:flex;flex-direction:column;gap:10px}
+.topic-item{display:flex;align-items:center;gap:14px;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:17px 20px;cursor:pointer;transition:all .2s;box-shadow:0 1px 5px var(--shadow)}
+.topic-item:hover{border-color:var(--accent3);background:var(--surface2)}
+.topic-item.done{border-color:rgba(45,122,79,.3);background:rgba(45,122,79,.04)}
+.topic-num{width:36px;height:36px;border-radius:9px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--muted);flex-shrink:0;border:1.5px solid var(--border)}
+.topic-item.done .topic-num{background:rgba(45,122,79,.1);color:var(--success);border-color:rgba(45,122,79,.3)}
+.topic-info{flex:1}
+.topic-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px}
+.topic-sub{font-size:13px;color:var(--muted)}
+.topic-dur{font-size:12px;color:var(--muted2);flex-shrink:0;font-weight:500}
+.lv{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:44px;margin-top:22px;display:none;box-shadow:0 4px 18px var(--shadow)}
+.lv.open{display:block}
+.lv-bc{font-size:13px;color:var(--muted);margin-bottom:18px;font-family:'Lora',serif;font-style:italic}
+.lv-bc span{color:var(--accent)}
+.lv h3{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--text);margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+.lv h4{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:var(--text2);margin:26px 0 11px}
+.lv p{font-size:15px;color:var(--text2);line-height:1.85;margin-bottom:15px;font-family:'Lora',serif}
+.lv ul,.lv ol{margin:0 0 15px 22px}
+.lv li{font-size:15px;color:var(--text2);line-height:1.85;margin-bottom:9px;font-family:'Lora',serif}
+.callout{background:rgba(184,114,10,.07);border-left:4px solid var(--accent);border-radius:0 11px 11px 0;padding:15px 20px;margin:18px 0}
+.callout p{color:var(--accent2);font-weight:500;margin:0;font-family:'DM Sans',sans-serif;font-size:14px}
+.tip{background:rgba(212,168,67,.08);border-left:4px solid var(--accent3);border-radius:0 11px 11px 0;padding:15px 20px;margin:18px 0}
+.tip p{color:#6b4a00;margin:0;font-size:14px;font-family:'DM Sans',sans-serif}
+.cl{list-style:none;margin:0 0 15px}
+.cl li{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:15px;color:var(--text2);font-family:'Lora',serif}
+.cl li::before{content:'☐';color:var(--accent);flex-shrink:0;font-size:18px;line-height:1.4}
+.lv-nav{display:flex;justify-content:space-between;align-items:center;margin-top:32px;padding-top:20px;border-top:1.5px solid var(--border)}
+.btn-ok{background:linear-gradient(135deg,var(--success),#1f5c38);color:#fff;padding:12px 24px;border-radius:11px;font-size:15px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-ok:hover{opacity:.9;transform:translateY(-1px)}
+.final-card{background:linear-gradient(135deg,#fff8ec,#fef3e2);border:2px solid rgba(184,114,10,.3);border-radius:20px;padding:48px;margin-top:32px;text-align:center;box-shadow:0 8px 32px var(--shadow)}
+.final-card h2{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--accent2);margin-bottom:12px}
+.final-card p{font-size:15px;color:var(--muted);line-height:1.7;max-width:560px;margin:0 auto 24px}
+.btn-avaliacao{background:linear-gradient(135deg,var(--accent3),var(--accent2));color:#fff;padding:16px 36px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;border:none;font-family:'Syne',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:10px}
+.btn-avaliacao:hover{opacity:.9;transform:translateY(-2px)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.content>*{animation:fadeUp .3s ease both}
+.content>*:nth-child(2){animation-delay:.06s}
+.content>*:nth-child(3){animation-delay:.12s}
+.mobile-toggle{display:none;position:fixed;top:14px;left:14px;z-index:200;width:42px;height:42px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:18px;align-items:center;justify-content:center;box-shadow:0 2px 8px var(--shadow)}
+@media(max-width:860px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.content{padding:18px;padding-top:68px}.mobile-toggle{display:flex}.topbar{padding:12px 18px 12px 64px}}
+</style>
+</head>
+<body>
+
+<div id="login-overlay">
+  <div class="login-box">
+    <span class="login-icon">🌍</span>
+    <h2>Módulo 5 — Expansão & Crescimento</h2>
+    <div class="login-sub">Mentoria das Startups · Luiz de Castro</div>
+    <label class="login-label">Senha de acesso</label>
+    <input type="password" id="pw" class="login-input" placeholder="Digite sua senha..." onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-err" id="lerr">⚠ Senha incorreta.</div>
+    <button class="login-btn" onclick="doLogin()">🔐 Acessar Módulo Final</button>
+  </div>
+</div>
+
+<button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">🌍 Módulo 5</div>
+    <div class="sidebar-title">Expansão & Crescimento</div>
+    <div class="sidebar-sub">Mentoria das Startups</div>
+    <div class="sidebar-author">Luiz de Castro — Mestre em Gestão</div>
+  </div>
+  <div>
+    <div class="nav-label">Navegação</div>
+    <div class="nav-item active"><span class="nav-icon">📚</span>Aulas do Módulo</div>
+    <div class="nav-item" onclick="openPDF()"><span class="nav-icon">📄</span>Material PDF</div>
+    <div class="nav-label">Outros Módulos</div>
+    <div class="nav-item" onclick="goTo('startup-modulo1.html')"><span class="nav-icon">💡</span>Módulo 1 — Ideação</div>
+    <div class="nav-item" onclick="goTo('startup-modulo2.html')"><span class="nav-icon">🏗️</span>Módulo 2 — Modelagem</div>
+    <div class="nav-item" onclick="goTo('startup-modulo3.html')"><span class="nav-icon">💰</span>Módulo 3 — Financeiro</div>
+    <div class="nav-item" onclick="goTo('startup-modulo4.html')"><span class="nav-icon">📈</span>Módulo 4 — Captação</div>
+    <div class="nav-label">Recursos</div>
+    <div class="nav-item" onclick="goTo('startup-pdfs.html')"><span class="nav-icon">📚</span>Central de PDFs</div>
+    <div class="nav-item" onclick="goTo('startup-avaliacao.html')"><span class="nav-icon">🏆</span>Avaliação Final</div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="prog-label"><span>Progresso Módulo 5</span><span id="progPct">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+</nav>
+
+<main class="main">
+  <div class="topbar">
+    <div class="breadcrumb">Mentoria das Startups › <span>Módulo 5 — Expansão & Crescimento</span></div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline" onclick="openPDF()">📄 PDF do Módulo</button>
+      
+    </div>
+  </div>
+  <div class="content">
+    <div class="module-hero">
+      <span style="font-size:48px;margin-bottom:14px;display:block">🌍</span>
+      <h2>Expansão & Crescimento</h2>
+      <p>O módulo final da Mentoria das Startups. Internacionalização, parcerias estratégicas, M&A, IPO, inovação contínua e o legado do empreendedor. A visão de longo prazo de quem quer construir algo grande.</p>
+      <div class="module-meta">
+        <div class="meta-chip">⏱ 3h 30min</div>
+        <div class="meta-chip">📚 6 aulas</div>
+        <span class="badge-avan">Avançado</span>
+      </div>
+      <button class="pdf-btn" onclick="openPDF()">📄 Abrir PDF — Módulo 5</button>
+    </div>
+    <div class="topic-grid" id="topic-list"></div>
+    <div class="lv" id="lesson-viewer"></div>
+    <div class="final-card" id="final-card" style="display:none">
+      <div style="font-size:64px;margin-bottom:16px">🎓</div>
+      <h2>Parabéns! Você concluiu todos os 5 Módulos!</h2>
+      <p>Você percorreu toda a jornada da Mentoria das Startups — de Ideação & Validação até Expansão & Crescimento. Agora é hora de provar seu conhecimento na Avaliação Final e conquistar seu certificado oficial.</p>
+      <button class="btn-avaliacao" onclick="goTo('startup-avaliacao.html')">🏆 Ir para Avaliação Final</button>
+    </div>
+  </div>
+</main>
+
+<script>
+const PASS = 'mentorstartup';
+let completed = JSON.parse(localStorage.getItem('m5_completed') || '{}');
+
+const TOPICS = [
+  {
+    title: 'Internacionalização de Startups',
+    sub: 'Quando, como e para onde expandir',
+    dur: '30min',
+    content: `<h3>Internacionalização: Expandindo Além das Fronteiras</h3>
+    <p>O Brasil representa menos de 3% do PIB global. Para startups com ambições globais, a internacionalização não é uma opção — é uma necessidade para atingir o tamanho de mercado que justifica valuations de unicórnio. Mas expandir cedo demais pode matar a empresa. O momento certo é depois do PMF consolidado no mercado doméstico.</p>
+    <h4>🌎 Mercados Prioritários para Startups Brasileiras</h4>
+    <p><strong>América Latina:</strong> México (2ª maior economia da LATAM), Colômbia (ecossistema em aceleração), Argentina (mercado sofisticado apesar da instabilidade), Chile e Peru. Vantagens: cultura similar, fuso compatível, idioma próximo. Desafio: regulação e condições econômicas muito diferentes em cada país.</p>
+    <p><strong>Portugal:</strong> porta de entrada para a União Europeia. Idioma comum, acesso ao mercado de 450 milhões de consumidores com regulatory framework unificado (GDPR). Startups com operação em Portugal têm credibilidade muito maior com investidores europeus.</p>
+    <p><strong>Estados Unidos:</strong> o maior mercado de tecnologia do mundo. Exige estrutura legal em Delaware (C-Corp), time local experiente e compreensão profunda do go-to-market americano. Muitas startups brasileiras de sucesso (Gympass/Wellhub, VTEX, Loft) foram para os EUA após consolidar tração doméstica.</p>
+    <h4>📋 O "Flip" — Estrutura Legal para Internacionalização</h4>
+    <p>Para captar investimento americano ou europeu, a estrutura mais comum é o "Flip" — criação de uma holding estrangeira (C-Corp em Delaware para EUA, BV holandesa ou Limited irlandesa para Europa) que passa a controlar a operação brasileira. Processo: 2-4 meses, USD 5.000-15.000 com advogado especializado.</p>
+    <div class="callout"><p>📌 <strong>Regra de ouro:</strong> internacionalize o produto antes de internacionalizar a operação. Tenha o produto traduzido, suporte no idioma local e ao menos 2-3 cases de sucesso no mercado-alvo antes de montar escritório ou contratar equipe local.</p></div>
+    <div class="tip"><p>💡 <strong>Primeiro passo prático:</strong> selecione 1 mercado prioritário, valide a demanda com 10 clientes remotamente (sem montar operação), e só depois decida se faz sentido instalar presença local.</p></div>
+    <ul class="cl">
+      <li>Identifiquei os 2-3 mercados internacionais mais atrativos para minha startup</li>
+      <li>Avaliei os requisitos legais, tributários e regulatórios de cada mercado</li>
+      <li>Calculei custo de expansão vs. TAM adicional de cada mercado</li>
+      <li>Tenho o produto localizado (idioma, moeda, regulação) para o mercado-alvo</li>
+    </ul>`
+  },
+  {
+    title: 'Parcerias Estratégicas e Canais',
+    sub: 'Distribuição, co-marketing e integrações',
+    dur: '25min',
+    content: `<h3>Parcerias Estratégicas: Crescendo nos Ombros de Gigantes</h3>
+    <p>As parcerias certas podem multiplicar o crescimento de uma startup sem multiplicar os custos. Ao se conectar com empresas que já têm acesso ao seu cliente ideal, você ganha distribuição, credibilidade e receita sem construir esses canais do zero.</p>
+    <h4>🤝 Tipos de Parceria de Alto Impacto</h4>
+    <p><strong>Channel Partnership (Distribuição):</strong> empresas que revendem ou indicam seu produto para suas bases de clientes. Ex: uma startup de software de RH que parceria com escritórios de contabilidade que atendem as mesmas PMEs.</p>
+    <p><strong>Integração Técnica:</strong> integre seu produto ao ecossistema de ferramentas que seu cliente já usa. Estar na Salesforce AppExchange, no marketplace do Slack ou no hub de integrações do HubSpot coloca você diante de milhões de usuários qualificados sem investimento em marketing.</p>
+    <p><strong>Co-marketing:</strong> produza conteúdo, eventos ou campanhas com empresas complementares que atendem o mesmo público. Custos compartilhados, audiências dobradas.</p>
+    <p><strong>White-label:</strong> licencie sua tecnologia para que parceiros a vendam com sua própria marca. Escalável, mas cede controle da experiência do cliente e dificulta o branding próprio.</p>
+    <h4>📊 Como Estruturar e Manter Parcerias</h4>
+    <p>Defina antes de assinar: o que cada parte oferece, o que cada parte recebe, as métricas de sucesso da parceria (leads gerados, receita atribuída), os recursos necessários de ambos os lados, e as condições de saída. Um MOU (Memorando de Entendimento) antes do contrato formal alinha expectativas e evita conflitos.</p>
+    <div class="callout"><p>📌 <strong>O maior erro em parcerias:</strong> acreditar que o parceiro vai "vender por você" sem investimento de sua parte. Parcerias de canal requerem enablement contínuo — treinamento, materiais de vendas, suporte técnico e incentivos financeiros. Sem isso, o parceiro vende o que conhece melhor — os próprios produtos.</p></div>
+    <ul class="cl">
+      <li>Identifiquei 5-10 potenciais parceiros estratégicos alinhados ao meu ICP</li>
+      <li>Avancei em negociação com pelo menos 2 parceiros</li>
+      <li>Tenho programa de enablement para equipe de parceiros</li>
+      <li>Monitoro métricas de performance de cada parceria trimestralmente</li>
+    </ul>`
+  },
+  {
+    title: 'M&A: Fusões e Aquisições',
+    sub: 'Ser adquirido, adquirir ou fazer merger',
+    dur: '28min',
+    content: `<h3>M&A: Quando Crescer Através de Aquisições</h3>
+    <p>Fusões e Aquisições respondem por mais de 90% dos exits de startups globalmente. Entender como funciona esse processo — seja você o comprador ou o vendido — é conhecimento essencial para qualquer fundador com ambição de construir algo grande.</p>
+    <h4>💼 Tipos de M&A para Startups</h4>
+    <p><strong>Acqui-hire:</strong> a empresa compradora quer principalmente o time, não o produto. Comum quando a startup não teve tração mas tem engenheiros ou especialistas excepcionais. Valores típicos: USD 1-3M por engenheiro sênior.</p>
+    <p><strong>Aquisição estratégica:</strong> a compradora quer o produto, a tecnologia, a base de dados ou os clientes para complementar seu portfólio ou eliminar um concorrente. Múltiplos variam de 3x a 20x ARR dependendo do crescimento e da importância estratégica para o comprador.</p>
+    <p><strong>Fusão de iguais:</strong> duas empresas de tamanho similar se combinam para criar algo maior. Mais rara por questões de cultura e ego entre os fundadores, mas poderosa para consolidar mercados fragmentados.</p>
+    <h4>📋 Preparando a Empresa para ser Adquirida</h4>
+    <p>As startups mais fáceis de adquirir — e que recebem as melhores ofertas — têm: código limpo e bem documentado, contratos de clientes transferíveis sem necessidade de re-aprovação, IP claramente titulado na empresa (não nos fundadores), finanças auditadas e sem surpresas fiscais, e toda a equipe com vesting e contratos formais claros.</p>
+    <div class="callout"><p>📌 <strong>Timing é tudo:</strong> a melhor hora para negociar uma venda é quando você NÃO precisa vender. Founders em posição de fraqueza financeira (runway curto, crescimento estagnado) recebem propostas muito abaixo do valor justo. Construa o negócio como se nunca fosse vender, e esteja sempre pronto para vender.</p></div>
+    <ul class="cl">
+      <li>Conheço os potenciais compradores estratégicos do meu setor</li>
+      <li>Tenho Virtual Data Room organizado com todos os documentos de due diligence</li>
+      <li>Meu IP está claramente titulado na empresa e documentado</li>
+      <li>Entendo os termos típicos de M&A e quando engajar um banker</li>
+    </ul>`
+  },
+  {
+    title: 'IPO e Abertura de Capital',
+    sub: 'O caminho para a bolsa de valores',
+    dur: '35min',
+    content: `<h3>IPO: o Evento de Liquidez Máximo</h3>
+    <p>Um IPO (Initial Public Offering) é a oferta inicial de ações ao público — o momento em que a startup deixa de ser privada e passa a ser negociada em bolsa. É o maior evento de liquidez possível, mas também o mais complexo, longo e regulado. No Brasil, envolve a B3 (Bolsa Brasil Balcão) e é regulado pela CVM (Comissão de Valores Mobiliários).</p>
+    <h4>📋 Requisitos Práticos para um IPO no Brasil</h4>
+    <p>Não há requisitos mínimos formais de faturamento, mas o mercado espera informalmente empresas com receita acima de R$500M-R$1B, crescimento consistente por pelo menos 3 anos, margens em melhoria e previsibilidade de resultados. Governança: conselho de administração com membros independentes, comitê de auditoria, políticas claras de related parties, programa de compliance robusto, e auditoria por Big Four nos últimos 3 exercícios.</p>
+    <h4>🔄 O Processo de IPO — do Planejamento à Estreia</h4>
+    <p>Duração típica: 12-24 meses de preparação intensa. Etapas principais: (1) Contratação do banco coordenador líder (BTG Pactual, XP, Itaú BBA, Goldman Sachs, JP Morgan); (2) Preparação do prospecto definitivo — documento de centenas de páginas com toda a informação da empresa; (3) Road show — apresentação para investidores institucionais em São Paulo, Rio, Nova York e Londres; (4) Bookbuilding — formação do preço com base na demanda dos investidores; (5) Estreia em bolsa; (6) Lock-up period — fundadores e acionistas pré-IPO geralmente não podem vender por 180 dias após a oferta.</p>
+    <div class="callout"><p>📌 Para a maioria das startups brasileiras hoje, M&A é um exit muito mais provável e acessível do que IPO. Construa para a excelência do negócio — se você chegar ao IPO, ótimo. Se não, terá construído algo valioso que será adquirido por um preço justo.</p></div>
+    <ul class="cl">
+      <li>Entendo os requisitos básicos para um IPO no Brasil (governança, auditoria, CVM)</li>
+      <li>Avaliei objetivamente se IPO ou M&A é o caminho mais realista para minha empresa</li>
+      <li>Tenho governança corporativa básica já implementada</li>
+      <li>Conheço os principais bancos de investimento que fazem IPOs no Brasil</li>
+    </ul>`
+  },
+  {
+    title: 'Inovação Contínua',
+    sub: 'Como não se tornar obsoleto em mercados dinâmicos',
+    dur: '22min',
+    content: `<h3>Inovação Contínua: Sobrevivendo ao Próprio Sucesso</h3>
+    <p>Clayton Christensen chamou de "O Dilema do Inovador" o fenômeno onde empresas bem-sucedidas são destruídas por inovações disruptivas — não por incompetência, mas por fazerem exatamente o que devem fazer: ouvir seus melhores clientes, investir nas inovações mais rentáveis e focar em margens maiores. O resultado? Ignoram os mercados emergentes onde as disrupções nascem.</p>
+    <h4>🔄 Estruturas para Manter a Inovação em Escala</h4>
+    <p><strong>Squads Autônomos (Spotify Model):</strong> times pequenos e cross-funcionais (5-7 pessoas) com missão clara, OKRs próprios e autonomia para decidir como atingir seus objetivos. Permite escalar a inovação sem perder agilidade.</p>
+    <p><strong>20% Rule:</strong> inspirado no Google, permite que colaboradores usem 20% do tempo em projetos de sua escolha relacionados ao negócio. Gmail, AdSense e Google Maps nasceram de projetos de 20%.</p>
+    <p><strong>Venture Studio Interno:</strong> equipe dedicada a explorar novas oportunidades de negócio adjacentes ao core. Funciona como uma aceleradora interna, com orçamento próprio e liberdade para experimentar.</p>
+    <p><strong>Open Innovation:</strong> parcerias com startups, universidades e centros de pesquisa para acessar inovações externas. Mais rápido e mais barato do que desenvolver tudo internamente.</p>
+    <div class="callout"><p>📌 A maior ameaça ao crescimento de uma startup de sucesso não é a concorrência externa — é a complacência interna. Mantenha um "Red Team" que questiona regularmente: "O que nos destruiria em 5 anos? Quem está construindo esse produto agora?"</p></div>
+    <ul class="cl">
+      <li>Tenho estrutura organizacional que preserva agilidade mesmo com crescimento do time</li>
+      <li>Aloco recurso explícito (tempo + budget) para exploração de novas oportunidades</li>
+      <li>Monitoro startups emergentes no meu espaço que podem ser ameaças ou aquisições</li>
+      <li>Faço retrospectiva semestral de onde a empresa perdeu oportunidades de inovar</li>
+    </ul>`
+  },
+  {
+    title: 'Seu Próximo Capítulo',
+    sub: 'Exit, legado e novos começos',
+    dur: '20min',
+    content: `<h3>O Próximo Capítulo: Exit, Legado e Recomeços</h3>
+    <p>Toda jornada empreendedora tem um próximo capítulo. Seja um exit bem-sucedido, a decisão de continuar construindo para o longo prazo, ou o começo de uma nova jornada — o que você aprendeu construindo sua startup é um dos ativos mais valiosos que existe. E pertence a você para sempre.</p>
+    <h4>💼 Tipos de Exit e o que Cada Um Significa para o Founder</h4>
+    <p><strong>Aquisição estratégica:</strong> sua empresa é comprada por uma maior. Você pode permanecer por 2-3 anos de earnout (bônus condicionado a metas pós-aquisição) ou sair imediatamente. É o exit mais comum e pode ser muito satisfatório financeiramente e em termos de legado.</p>
+    <p><strong>IPO:</strong> sua empresa continua existindo e crescendo, agora como empresa pública. Você permanece como fundador mas com novas responsabilidades para acionistas, reguladores e mercado. Menos liberdade operacional, mas potencial de maior escala e liquidez gradual.</p>
+    <p><strong>Secondary:</strong> você vende parte de sua participação para outro fundo sem sair da empresa. Permite liquidez pessoal enquanto a empresa continua crescendo. Cada vez mais comum em startups de crescimento acelerado antes do IPO ou M&A.</p>
+    <p><strong>Succession:</strong> você contrata um CEO profissional para assumir a operação e assume o papel de Chairman ou afasta-se gradualmente. Permite que a empresa continue crescendo mesmo que você queira novos projetos ou mais tempo pessoal.</p>
+    <h4>🌱 O Legado do Empreendedor Brasileiro</h4>
+    <p>Além do retorno financeiro, o que você construiu criou empregos, resolveu problemas reais para milhares de pessoas, desenvolveu talentos, e mostrou para outros que é possível. Alumni de startups de sucesso tornam-se mentores, investidores-anjo ou fundadores de novos negócios — perpetuando um ciclo virtuoso no ecossistema brasileiro.</p>
+    <div class="callout"><p>📌 Uma coisa é certa: qualquer que seja o desfecho da sua startup atual, a experiência que você acumulou — os erros que cometeu, as crises que superou, as pessoas que desenvolveu — é transferível para qualquer projeto futuro. Empreendedores em série têm taxas de sucesso muito maiores do que os de primeira viagem.</p></div>
+    <div class="tip"><p>💡 <strong>Mensagem final:</strong> Você completou a Mentoria das Startups. Agora vá fazer acontecer. O conhecimento sem execução é apenas potencial. O mercado espera por sua solução. 🚀</p></div>
+    <ul class="cl">
+      <li>Defini qual tipo de exit faz mais sentido para meus objetivos pessoais e profissionais</li>
+      <li>Tenho visão clara do legado que quero deixar com essa empresa</li>
+      <li>Planejo como vou contribuir para o ecossistema de startups após o exit</li>
+      <li>Estou construindo como se nunca fosse vender, mas pronto para vender a qualquer momento</li>
+    </ul>`
+  }
+];
+
+function doLogin() {
+  if (document.getElementById('pw').value === PASS) {
+    document.getElementById('login-overlay').style.display = 'none';
+    renderTopics(); updateProgress();
+  } else {
+    document.getElementById('lerr').style.display = 'block';
+    document.getElementById('pw').value = '';
+  }
+}
+
+function renderTopics() {
+  document.getElementById('topic-list').innerHTML = TOPICS.map((t, i) =>
+    `<div class="topic-item ${completed[i] ? 'done' : ''}" onclick="openLesson(${i})">
+      <div class="topic-num">${completed[i] ? '✓' : i + 1}</div>
+      <div class="topic-info">
+        <div class="topic-title">${t.title}</div>
+        <div class="topic-sub">${t.sub}</div>
+      </div>
+      <div class="topic-dur">⏱ ${t.dur}</div>
+    </div>`).join('');
+  const allDone = Object.keys(completed).length >= TOPICS.length;
+  document.getElementById('final-card').style.display = allDone ? 'block' : 'none';
+}
+
+function openLesson(idx) {
+  const t = TOPICS[idx];
+  const v = document.getElementById('lesson-viewer');
+  v.classList.add('open');
+  v.innerHTML = `
+    <div class="lv-bc">Módulo 5 — Expansão & Crescimento › <span>Aula ${idx + 1}: ${t.title}</span></div>
+    ${t.content}
+    <div class="lv-nav">
+      <button class="btn btn-outline" onclick="closeLesson()">← Voltar às aulas</button>
+      <button class="btn-ok" onclick="completeLesson(${idx})">✅ Marcar como Concluída</button>
+    </div>`;
+  v.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closeLesson() {
+  const v = document.getElementById('lesson-viewer');
+  v.classList.remove('open'); v.innerHTML = '';
+}
+
+function completeLesson(idx) {
+  completed[idx] = true;
+  localStorage.setItem('m5_completed', JSON.stringify(completed));
+  updateProgress(); renderTopics();
+  const v = document.getElementById('lesson-viewer');
+  const allDone = Object.keys(completed).length >= TOPICS.length;
+  v.innerHTML = `<div style="text-align:center;padding:40px">
+    <div style="font-size:52px;margin-bottom:14px">${allDone ? '🎓' : '✅'}</div>
+    <h3 style="font-family:Syne,sans-serif;font-size:22px;color:var(--success)">${allDone ? 'Módulo 5 Concluído!' : 'Aula Concluída!'}</h3>
+    <p style="color:var(--muted);margin-top:8px;font-size:15px">${allDone ? 'Você completou todos os módulos! Role abaixo para ir à Avaliação Final.' : 'Continue para a próxima aula.'}</p>
+    <button class="btn btn-outline" onclick="closeLesson()" style="margin-top:16px">← Voltar às aulas</button>
+  </div>`;
+}
+
+function updateProgress() {
+  const done = Object.keys(completed).length;
+  const pct = Math.round((done / TOPICS.length) * 100);
+  document.getElementById('progPct').textContent = pct + '%';
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+function openPDF() {
+  try { window.open('mentoria_startups/M5_expansao_crescimento.pdf', '_blank'); }
+  catch(e) { alert('Arquivo: mentoria_startups/M5_expansao_crescimento.pdf'); }
+}
+function goTo(p) { window.location.href = p; }
+document.addEventListener('DOMContentLoaded', () => { renderTopics(); updateProgress(); });
+</script>
+<!-- Assistente MIA -->
+<div id="mia-wrapper" style="position:fixed;top:65px;left:-50px;width:420px;height:120px;z-index:9999;">
+  <iframe id="mia-frame" src="https://luizdecaxtro.github.io/mentoria-cadalunos/chatbot-mentoria.html"
+    style="width:100%;height:100%;border:none;background:transparent;display:block;"
+    allow="clipboard-write" title="Assistente MIA"></iframe>
+</div>
+<script>
+var isMobile = window.innerWidth <= 768;
+if (isMobile) { var w = document.getElementById("mia-wrapper"); w.style.width = "160px"; }
+window.addEventListener("message", function(e) {
+  var wrapper = document.getElementById("mia-wrapper");
+  if (!wrapper) return;
+  if (e.data === "mia-open") { wrapper.style.height="100vh"; wrapper.style.top="0"; wrapper.style.left="0"; wrapper.style.width="100%"; }
+  if (e.data === "mia-close") { wrapper.style.height="130px"; wrapper.style.top="65px"; wrapper.style.left="-50px"; wrapper.style.width=isMobile?"160px":"420px"; }
+});
+</script>
+</body>
+</html>
