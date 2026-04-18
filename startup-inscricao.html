@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscrição — Mentoria das Startups | Luiz de Castro</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fdf8f0; --surface:#fff; --surface2:#fef6e8; --surface3:#fff9f0;
+  --border:#e8d9c0; --border2:#d4b896;
+  --accent:#b8720a; --accent2:#8b4a0a; --accent3:#d4920d; --accent4:#f0b429;
+  --text:#1a1008; --text2:#3d2a0e; --muted:#7a5c38; --muted2:#9a7a50;
+  --success:#2d7a4f; --danger:#c05050;
+  --shadow:rgba(120,80,20,.1); --shadow2:rgba(120,80,20,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6;min-height:100vh}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* ── NAV ── */
+.nav{
+  background:rgba(253,248,240,.97);backdrop-filter:blur(14px);
+  border-bottom:1.5px solid var(--border);
+  padding:16px 40px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 16px var(--shadow);
+}
+.nav-brand{display:flex;align-items:center;gap:12px}
+.nav-logo{width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent3),var(--accent2));
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.nav-name{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:var(--text)}
+.nav-sub{font-size:11px;color:var(--muted)}
+.nav-cta{
+  background:linear-gradient(135deg,var(--accent3),var(--accent2));
+  color:#fff;padding:10px 22px;border-radius:10px;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:14px;
+  text-decoration:none;transition:all .2s;display:flex;align-items:center;gap:6px;
+}
+.nav-cta:hover{opacity:.9;transform:translateY(-1px)}
+
+/* ── HERO ── */
+.hero{
+  background:linear-gradient(150deg,#fff8ec 0%,#fef3e2 40%,#fff9f0 100%);
+  border-bottom:1.5px solid var(--border);
+  padding:72px 40px 80px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(212,168,67,.15),transparent);
+  pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(184,114,10,.1);border:1.5px solid rgba(184,114,10,.25);
+  color:var(--accent);font-size:13px;font-weight:600;
+  padding:6px 16px;border-radius:20px;margin-bottom:20px;
+}
+.hero h1{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:52px;line-height:1.08;
+  color:var(--text);margin-bottom:12px;
+}
+.hero h1 span{color:var(--accent)}
+.hero-sub{font-size:18px;color:var(--muted);max-width:580px;margin:0 auto 18px;line-height:1.65}
+.hero-author{font-size:14px;color:var(--accent);font-family:'Lora',serif;font-style:italic;margin-bottom:36px}
+.hero-stats{
+  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;
+}
+.hero-stat{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:12px;padding:14px 20px;text-align:center;
+  min-width:110px;box-shadow:0 2px 10px var(--shadow);
+}
+.hero-stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--accent)}
+.hero-stat-label{font-size:12px;color:var(--muted);margin-top:2px}
+.hero-scroll{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--accent3),var(--accent2));
+  color:#fff;padding:15px 36px;border-radius:12px;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:16px;
+  text-decoration:none;cursor:pointer;border:none;
+  transition:all .25s;box-shadow:0 4px 20px rgba(184,114,10,.35);
+}
+.hero-scroll:hover{opacity:.93;transform:translateY(-2px);box-shadow:0 8px 28px rgba(184,114,10,.4)}
+
+/* ── SECTIONS ── */
+.section{padding:72px 40px;max-width:1060px;margin:0 auto}
+.section-tag{
+  display:inline-block;font-size:11px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);background:rgba(184,114,10,.1);
+  border:1px solid rgba(184,114,10,.2);padding:4px 12px;
+  border-radius:20px;margin-bottom:14px;
+}
+.section h2{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:34px;
+  color:var(--text);margin-bottom:10px;line-height:1.2;
+}
+.section p.lead{font-size:16px;color:var(--muted);max-width:600px;line-height:1.75;margin-bottom:32px}
+
+/* ── MODULES GRID ── */
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin-bottom:12px}
+.mod-card{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:16px;padding:24px;transition:all .2s;
+  box-shadow:0 2px 10px var(--shadow);
+}
+.mod-card:hover{border-color:var(--accent3);transform:translateY(-2px);box-shadow:0 6px 22px var(--shadow2)}
+.mod-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.mod-icon{width:44px;height:44px;border-radius:11px;
+  background:rgba(184,114,10,.1);border:1.5px solid rgba(184,114,10,.2);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.mod-num{font-size:10px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.1em}
+.mod-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text)}
+.mod-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.mod-meta{display:flex;gap:8px;font-size:11px;color:var(--muted2);flex-wrap:wrap}
+.mod-chip{background:var(--surface2);border:1px solid var(--border);padding:3px 9px;border-radius:7px;font-weight:500}
+
+/* ── FEATURES ── */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:24px;box-shadow:0 2px 10px var(--shadow)}
+.feat-icon{font-size:28px;margin-bottom:12px;display:block}
+.feat-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);margin-bottom:7px}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ── FORM SECTION ── */
+.form-section{
+  background:linear-gradient(135deg,#fff8ec,#fef3e2);
+  border-top:1.5px solid var(--border);
+  border-bottom:1.5px solid var(--border);
+  padding:72px 40px;
+}
+.form-wrap{max-width:720px;margin:0 auto}
+.form-hero{text-align:center;margin-bottom:40px}
+.form-hero h2{font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--text2);margin-bottom:8px}
+.form-hero p{font-size:15px;color:var(--muted);line-height:1.7}
+
+.form-card{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:20px;padding:44px;box-shadow:0 6px 28px var(--shadow2);
+}
+.form-step{display:none}
+.form-step.active{display:block}
+.step-indicator{
+  display:flex;align-items:center;gap:6px;
+  margin-bottom:32px;justify-content:center;
+}
+.step-dot{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;
+  border:2px solid var(--border);color:var(--muted);
+  background:var(--surface2);transition:all .3s;
+  font-family:'Syne',sans-serif;
+}
+.step-dot.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.step-dot.done{background:var(--success);border-color:var(--success);color:#fff}
+.step-line{flex:1;height:2px;background:var(--border);max-width:60px;transition:background .3s}
+.step-line.done{background:var(--success)}
+
+.form-title{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin-bottom:6px}
+.form-sub{font-size:14px;color:var(--muted);margin-bottom:28px}
+
+.form-group{margin-bottom:18px}
+.form-group label{
+  display:block;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent3);margin-bottom:7px;
+}
+.form-group label span{color:var(--danger);margin-left:2px}
+.form-control{
+  width:100%;padding:13px 16px;
+  background:var(--surface2);border:1.5px solid var(--border);
+  border-radius:11px;color:var(--text);
+  font-size:15px;font-family:'DM Sans',sans-serif;
+  outline:none;transition:all .2s;
+}
+.form-control:focus{border-color:var(--accent3);background:var(--surface);box-shadow:0 0 0 3px rgba(212,146,13,.1)}
+.form-control::placeholder{color:var(--muted2)}
+.form-control.error{border-color:var(--danger);background:#fff5f5}
+select.form-control{appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a7a50' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field-err{font-size:12px;color:var(--danger);margin-top:5px;display:none}
+
+.form-btn{
+  width:100%;padding:15px;
+  background:linear-gradient(135deg,var(--accent3),var(--accent2));
+  color:#fff;border:none;border-radius:12px;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:16px;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-top:8px;
+}
+.form-btn:hover{opacity:.92;transform:translateY(-1px)}
+.form-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.form-btn-outline{
+  background:transparent;color:var(--muted);border:1.5px solid var(--border);
+  padding:13px;border-radius:12px;font-family:'DM Sans',sans-serif;
+  font-weight:500;font-size:14px;cursor:pointer;transition:all .2s;width:100%;margin-top:8px;
+}
+.form-btn-outline:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
+
+/* Acceptance checkbox */
+.acceptance{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--surface2);border:1.5px solid var(--border);
+  border-radius:11px;padding:14px 16px;margin-bottom:18px;cursor:pointer;
+}
+.acceptance input[type=checkbox]{
+  width:18px;height:18px;flex-shrink:0;cursor:pointer;
+  accent-color:var(--accent);margin-top:2px;
+}
+.acceptance-text{font-size:13px;color:var(--text2);line-height:1.6}
+.acceptance-text strong{color:var(--accent);cursor:pointer}
+
+/* Senha reveal */
+.pw-wrap{position:relative}
+.pw-toggle{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);
+  transition:color .15s;
+}
+.pw-toggle:hover{color:var(--accent)}
+
+/* ── SUCCESS SCREEN ── */
+.success-screen{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:20px;padding:52px;text-align:center;
+  box-shadow:0 6px 28px var(--shadow2);display:none;
+}
+.success-icon{font-size:72px;display:block;margin-bottom:20px}
+.success-screen h2{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:28px;
+  color:var(--success);margin-bottom:10px;
+}
+.success-screen p{font-size:15px;color:var(--muted);line-height:1.75;max-width:500px;margin:0 auto 24px}
+.success-code{
+  display:inline-block;background:var(--surface2);
+  border:1.5px solid var(--border);border-radius:11px;
+  padding:12px 24px;font-family:'Courier New',monospace;
+  font-size:18px;font-weight:700;color:var(--accent2);
+  letter-spacing:.1em;margin-bottom:28px;
+}
+.success-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.success-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:13px 26px;border-radius:11px;font-size:14px;font-weight:600;
+  cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s;text-decoration:none;
+}
+.success-btn-primary{background:linear-gradient(135deg,var(--accent3),var(--accent2));color:#fff}
+.success-btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+.success-btn-outline{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
+.success-btn-outline:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
+
+/* ── ERROR / INFO ── */
+.alert{border-radius:11px;padding:13px 16px;margin-bottom:16px;font-size:14px;line-height:1.5;display:none}
+.alert-err{background:#fff5f5;border:1.5px solid rgba(192,80,80,.25);color:var(--danger)}
+.alert-info{background:rgba(45,122,79,.07);border:1.5px solid rgba(45,122,79,.2);color:var(--success)}
+
+/* ── SPINNER ── */
+.spinner{
+  display:inline-block;width:22px;height:22px;
+  border:3px solid rgba(255,255,255,.35);border-top-color:#fff;
+  border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── FAQ ── */
+.faq-item{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:14px;margin-bottom:10px;overflow:hidden;
+  box-shadow:0 1px 6px var(--shadow);transition:border-color .2s;
+}
+.faq-item:hover{border-color:var(--accent3)}
+.faq-q{
+  padding:18px 22px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+  font-size:15px;font-weight:600;color:var(--text);
+  font-family:'Syne',sans-serif;gap:12px;
+}
+.faq-arrow{flex-shrink:0;font-size:14px;color:var(--muted);transition:transform .25s}
+.faq-item.open .faq-arrow{transform:rotate(180deg)}
+.faq-a{
+  max-height:0;overflow:hidden;transition:max-height .3s ease;
+  font-size:14px;color:var(--muted);line-height:1.7;
+  padding:0 22px;
+}
+.faq-item.open .faq-a{max-height:300px;padding:0 22px 18px}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--surface);color:var(--text);
+  padding:12px 22px;border-radius:10px;font-size:13px;
+  border:1.5px solid var(--border);border-left:4px solid var(--accent);
+  box-shadow:0 8px 28px rgba(0,0,0,.18);
+  opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.success{border-left-color:var(--success)}
+#toast.error{border-left-color:var(--danger)}
+
+/* ── FOOTER ── */
+.footer{background:var(--text);color:rgba(255,255,255,.5);text-align:center;padding:32px 20px;font-size:13px}
+.footer strong{color:rgba(255,255,255,.85)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .nav{padding:14px 20px}
+  .hero{padding:48px 20px 56px}
+  .hero h1{font-size:34px}
+  .hero-sub{font-size:15px}
+  .section{padding:48px 20px}
+  .section h2{font-size:26px}
+  .form-section{padding:48px 20px}
+  .form-card{padding:28px 22px}
+  .features-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .hero-stats{gap:8px}
+  .hero-stat{padding:10px 14px;min-width:90px}
+  .hero-stat-num{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">🚀</div>
+    <div>
+      <div class="nav-name">Mentoria das Startups</div>
+      <div class="nav-sub">Luiz de Castro — Mestre em Gestão</div>
+    </div>
+  </div>
+  <a class="nav-cta" href="#inscricao">📝 Inscrever-se agora</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🚀 Programa completo · Online e assíncrono</div>
+  <h1>Transforme sua ideia em<br><span>uma startup de sucesso</span></h1>
+  <p class="hero-sub">Do zero ao sucesso empreendedor — ideação, modelagem, financeiro, captação de investimento e expansão global.</p>
+  <div class="hero-author">Mentoria por Luiz de Castro — Mestre em Gestão | Mentor de Startups</div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">5</div><div class="hero-stat-label">Módulos</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">48</div><div class="hero-stat-label">Aulas</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">+32h</div><div class="hero-stat-label">Conteúdo</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">7</div><div class="hero-stat-label">PDFs</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">MIA</div><div class="hero-stat-label">IA co-mentora</div></div>
+  </div>
+  <button class="hero-scroll" onclick="document.getElementById('inscricao').scrollIntoView({behavior:'smooth'})">
+    📝 Fazer Inscrição Gratuita →
+  </button>
+</section>
+
+<!-- MODULES -->
+<section class="section">
+  <div class="section-tag">Conteúdo do Programa</div>
+  <h2>5 Módulos do Zero ao Sucesso</h2>
+  <p class="lead">Uma jornada completa e progressiva, cobrindo tudo que um empreendedor precisa saber para construir uma startup sólida no Brasil.</p>
+  <div class="modules-grid">
+    <div class="mod-card">
+      <div class="mod-top">
+        <div class="mod-icon">💡</div>
+        <div><div class="mod-num">Módulo 1</div><div class="mod-title">Ideação & Validação</div></div>
+      </div>
+      <div class="mod-desc">Design Thinking, MVP, Customer Discovery, Mom Test, pivot vs. perseverar. Valide sua ideia antes de investir tempo e dinheiro.</div>
+      <div class="mod-meta"><span class="mod-chip">6 aulas</span><span class="mod-chip">3h 20min</span><span class="mod-chip">Iniciante</span></div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-top">
+        <div class="mod-icon">🏗️</div>
+        <div><div class="mod-num">Módulo 2</div><div class="mod-title">Modelagem & Registro</div></div>
+      </div>
+      <div class="mod-desc">Business Model Canvas, proposta de valor, ICP, tipos societários (LTDA vs S.A.), tributação e propriedade intelectual.</div>
+      <div class="mod-meta"><span class="mod-chip">12 aulas</span><span class="mod-chip">7h 55min</span><span class="mod-chip">Iniciante</span></div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-top">
+        <div class="mod-icon">💰</div>
+        <div><div class="mod-num">Módulo 3</div><div class="mod-title">Financeiro & Marketing</div></div>
+      </div>
+      <div class="mod-desc">CAC, LTV, MRR, churn, burn rate, runway, projeções financeiras, growth hacking AARRR, funil de vendas e Customer Success.</div>
+      <div class="mod-meta"><span class="mod-chip">12 aulas</span><span class="mod-chip">8h 30min</span><span class="mod-chip">Intermediário</span></div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-top">
+        <div class="mod-icon">📈</div>
+        <div><div class="mod-num">Módulo 4</div><div class="mod-title">Captação & Operações</div></div>
+      </div>
+      <div class="mod-desc">Ecossistema de VCs, pitch deck dos 10 slides, valuation, term sheet, OKRs, LGPD e como construir times de alta performance.</div>
+      <div class="mod-meta"><span class="mod-chip">12 aulas</span><span class="mod-chip">9h 05min</span><span class="mod-chip">Avançado</span></div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-top">
+        <div class="mod-icon">🌍</div>
+        <div><div class="mod-num">Módulo 5</div><div class="mod-title">Expansão & Crescimento</div></div>
+      </div>
+      <div class="mod-desc">Internacionalização, parcerias estratégicas, M&A, IPO, inovação contínua e o legado do empreendedor.</div>
+      <div class="mod-meta"><span class="mod-chip">6 aulas</span><span class="mod-chip">3h 30min</span><span class="mod-chip">Avançado</span></div>
+    </div>
+    <div class="mod-card" style="background:linear-gradient(135deg,rgba(184,114,10,.08),rgba(212,168,67,.05));border-color:rgba(184,114,10,.25)">
+      <div class="mod-top">
+        <div class="mod-icon" style="background:rgba(184,114,10,.15)">🏆</div>
+        <div><div class="mod-num">Conclusão</div><div class="mod-title">Avaliação & Certificado</div></div>
+      </div>
+      <div class="mod-desc">Avaliação final com 30 questões. Nota mínima 7,0. Certificado gerado automaticamente ao ser aprovado.</div>
+      <div class="mod-meta"><span class="mod-chip">30 questões</span><span class="mod-chip">60 min</span><span class="mod-chip">3 tentativas</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" style="padding-top:0">
+  <div class="section-tag">Recursos Exclusivos</div>
+  <h2>O que está incluído</h2>
+  <p class="lead">Além do conteúdo em vídeo/texto, você tem acesso a recursos que aceleram seu aprendizado.</p>
+  <div class="features-grid">
+    <div class="feat-card">
+      <span class="feat-icon">🤖</span>
+      <div class="feat-title">MIA — IA co-mentora 24h</div>
+      <div class="feat-desc">Assistente inteligente disponível em todos os módulos para tirar dúvidas, aprofundar conceitos e criar exercícios práticos sob medida.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">📄</span>
+      <div class="feat-title">7 PDFs com conteúdo profundo</div>
+      <div class="feat-desc">Material de apoio para cada módulo, glossário com +80 termos e manual do aluno completo. Excelente para revisão antes da avaliação.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">🏆</span>
+      <div class="feat-title">Certificado oficial automático</div>
+      <div class="feat-desc">Ao atingir nota 7,0 na avaliação final, seu certificado em formato A4 é gerado automaticamente com nome, data e código de validação.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">⏱️</span>
+      <div class="feat-title">Aprenda no seu ritmo</div>
+      <div class="feat-desc">100% assíncrono e online. Sem horário fixo, sem turmas. Acesse quando quiser, pelo computador ou celular.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">✅</span>
+      <div class="feat-title">Checklists práticos</div>
+      <div class="feat-desc">Cada aula termina com um checklist de ações concretas para aplicar imediatamente na sua startup ou ideia de negócio.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">📊</span>
+      <div class="feat-title">Tabelas e frameworks</div>
+      <div class="feat-desc">Business Model Canvas, AARRR, comparativos de regimes tributários, tabelas de métricas de startup e muito mais.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="inscricao">
+  <div class="form-wrap">
+    <div class="form-hero">
+      <div class="section-tag" style="margin:0 auto 14px">Inscrição Gratuita</div>
+      <h2>Faça sua inscrição agora</h2>
+      <p>Preencha o formulário abaixo para criar seu acesso à Mentoria das Startups. O processo leva menos de 2 minutos.</p>
+    </div>
+
+    <div class="form-card" id="form-card">
+      <!-- STEP INDICATOR -->
+      <div class="step-indicator">
+        <div class="step-dot active" id="sd-1">1</div>
+        <div class="step-line" id="sl-1"></div>
+        <div class="step-dot" id="sd-2">2</div>
+        <div class="step-line" id="sl-2"></div>
+        <div class="step-dot" id="sd-3">3</div>
+      </div>
+
+      <!-- STEP 1: DADOS PESSOAIS -->
+      <div class="form-step active" id="step-1">
+        <div class="form-title">📋 Dados Pessoais</div>
+        <div class="form-sub">Passo 1 de 3 — Como você se identifica?</div>
+        <div class="alert alert-err" id="err-1"></div>
+
+        <div class="form-group">
+          <label>Nome Completo <span>*</span></label>
+          <input type="text" id="f-nome" class="form-control" placeholder="Seu nome completo" autocomplete="name">
+          <div class="field-err" id="e-nome">Informe seu nome completo.</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Data de Nascimento <span>*</span></label>
+            <input type="date" id="f-nasc" class="form-control" max="2010-01-01">
+            <div class="field-err" id="e-nasc">Informe sua data de nascimento.</div>
+          </div>
+          <div class="form-group">
+            <label>Sexo</label>
+            <select id="f-sexo" class="form-control">
+              <option value="">Selecione</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+              <option value="O">Prefiro não informar</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Celular / WhatsApp <span>*</span></label>
+            <input type="tel" id="f-cel" class="form-control" placeholder="(00) 00000-0000" oninput="maskPhone(this)" maxlength="15">
+            <div class="field-err" id="e-cel">Informe um celular válido.</div>
+          </div>
+          <div class="form-group">
+            <label>Estado (UF) <span>*</span></label>
+            <select id="f-uf" class="form-control">
+              <option value="">Selecione</option>
+              <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+              <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+              <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+              <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+              <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+              <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+              <option>SP</option><option>SE</option><option>TO</option>
+            </select>
+            <div class="field-err" id="e-uf">Selecione seu estado.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Grau de Instrução <span>*</span></label>
+          <select id="f-inst" class="form-control">
+            <option value="">Selecione</option>
+            <option>Ensino Médio</option>
+            <option>Técnico / Tecnólogo</option>
+            <option>Superior Incompleto</option>
+            <option>Superior Completo</option>
+            <option>Pós-Graduação / MBA</option>
+            <option>Mestrado</option>
+            <option>Doutorado</option>
+          </select>
+          <div class="field-err" id="e-inst">Selecione seu grau de instrução.</div>
+        </div>
+
+        <button class="form-btn" onclick="goStep2()">Continuar — Passo 2 →</button>
+      </div>
+
+      <!-- STEP 2: PERFIL EMPREENDEDOR -->
+      <div class="form-step" id="step-2">
+        <div class="form-title">🚀 Seu Perfil Empreendedor</div>
+        <div class="form-sub">Passo 2 de 3 — Para personalizar sua experiência na mentoria.</div>
+        <div class="alert alert-err" id="err-2"></div>
+
+        <div class="form-group">
+          <label>Qual é o seu estágio atual? <span>*</span></label>
+          <select id="f-estagio" class="form-control">
+            <option value="">Selecione</option>
+            <option value="ideia">Tenho uma ideia, ainda não comecei</option>
+            <option value="validando">Estou validando minha ideia com clientes</option>
+            <option value="mvp">Tenho um MVP ou protótipo funcionando</option>
+            <option value="clientes">Tenho clientes pagantes e faturamento</option>
+            <option value="crescendo">Estou crescendo e buscando escalar</option>
+            <option value="estudo">Estou estudando empreendedorismo</option>
+          </select>
+          <div class="field-err" id="e-estagio">Selecione seu estágio atual.</div>
+        </div>
+        <div class="form-group">
+          <label>Qual área da sua startup / ideia? <span>*</span></label>
+          <select id="f-setor" class="form-control">
+            <option value="">Selecione</option>
+            <option>SaaS / Software</option>
+            <option>Marketplace</option>
+            <option>Fintech</option>
+            <option>Healthtech / Saúde</option>
+            <option>Edtech / Educação</option>
+            <option>E-commerce</option>
+            <option>Logística / Supply Chain</option>
+            <option>Agritech / Agronegócio</option>
+            <option>Cleantech / Sustentabilidade</option>
+            <option>Serviços profissionais</option>
+            <option>Outro / Ainda não definido</option>
+          </select>
+          <div class="field-err" id="e-setor">Selecione a área da sua startup.</div>
+        </div>
+        <div class="form-group">
+          <label>Qual o seu maior desafio hoje?</label>
+          <select id="f-desafio" class="form-control">
+            <option value="">Selecione (opcional)</option>
+            <option>Validar a ideia com clientes reais</option>
+            <option>Construir o produto / MVP</option>
+            <option>Conseguir os primeiros clientes pagantes</option>
+            <option>Estruturar o modelo de negócio</option>
+            <option>Controlar as finanças da empresa</option>
+            <option>Captar investimento</option>
+            <option>Contratar e gerir equipe</option>
+            <option>Escalar o negócio</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Como ficou sabendo da mentoria?</label>
+          <select id="f-origem" class="form-control">
+            <option value="">Selecione (opcional)</option>
+            <option>Indicação de amigo ou colega</option>
+            <option>Redes sociais (Instagram, LinkedIn)</option>
+            <option>Site lojasdecastro.com.br</option>
+            <option>Google / busca orgânica</option>
+            <option>E-mail marketing</option>
+            <option>Evento ou palestra</option>
+            <option>Outro</option>
+          </select>
+        </div>
+
+        <div style="display:flex;gap:10px">
+          <button class="form-btn-outline" style="flex:0 0 auto;width:auto;padding:13px 20px" onclick="goStep(1)">← Voltar</button>
+          <button class="form-btn" style="flex:1" onclick="goStep3()">Continuar — Passo 3 →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: ACESSO -->
+      <div class="form-step" id="step-3">
+        <div class="form-title">🔐 Criar Acesso</div>
+        <div class="form-sub">Passo 3 de 3 — Defina o e-mail e confirme seus dados.</div>
+        <div class="alert alert-err" id="err-3"></div>
+
+        <div class="form-group">
+          <label>E-mail <span>*</span></label>
+          <input type="email" id="f-email" class="form-control" placeholder="seu@email.com" autocomplete="email">
+          <div class="field-err" id="e-email">Informe um e-mail válido.</div>
+        </div>
+        <div class="form-group">
+          <label>Confirmar E-mail <span>*</span></label>
+          <input type="email" id="f-email2" class="form-control" placeholder="Repita seu e-mail">
+          <div class="field-err" id="e-email2">Os e-mails não coincidem.</div>
+        </div>
+
+        <!-- Info box: senha padrão -->
+        <div style="background:rgba(184,114,10,.07);border:1.5px solid rgba(184,114,10,.2);border-radius:11px;padding:14px 16px;margin-bottom:18px">
+          <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">🔑 Sobre o acesso</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.6">
+            Após a inscrição, você receberá a senha de acesso aos módulos por e-mail.
+            A senha padrão para todos os módulos é: <strong style="color:var(--accent2)">mentorstartup</strong>
+          </div>
+        </div>
+
+        <label class="acceptance" id="accept-label">
+          <input type="checkbox" id="f-aceite">
+          <div class="acceptance-text">
+            Li e aceito os <strong onclick="event.stopPropagation()">Termos de Uso</strong> e a 
+            <strong onclick="event.stopPropagation()">Política de Privacidade</strong> da Mentoria das Startups.
+            Concordo em receber comunicações por e-mail e WhatsApp relacionadas ao programa.
+          </div>
+        </label>
+        <div class="field-err" id="e-aceite" style="margin-top:-10px;margin-bottom:12px">Você precisa aceitar os termos para continuar.</div>
+
+        <div style="display:flex;gap:10px">
+          <button class="form-btn-outline" style="flex:0 0 auto;width:auto;padding:13px 20px" onclick="goStep(2)">← Voltar</button>
+          <button class="form-btn" id="btn-submit" style="flex:1" onclick="submitForm()">
+            ✅ Confirmar Inscrição
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="success-screen">
+      <span class="success-icon">🎉</span>
+      <h2>Inscrição realizada!</h2>
+      <p>Bem-vindo(a) à <strong>Mentoria das Startups</strong>! Sua inscrição foi confirmada com sucesso. Guarde o código abaixo:</p>
+      <div class="success-code" id="success-code">MS-2025-0001</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:24px">Use a senha <strong style="color:var(--accent2)">mentorstartup</strong> para acessar todos os módulos.</p>
+      <div class="success-btns">
+        <a class="success-btn success-btn-primary" href="startup-modulo1.html">🚀 Acessar Módulo 1</a>
+        <a class="success-btn success-btn-outline" href="startup-pdfs.html">📚 Ver PDFs</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="section-tag">Dúvidas Frequentes</div>
+  <h2>Perguntas Frequentes</h2>
+  <p class="lead">Tudo que você precisa saber antes de se inscrever.</p>
+  <div id="faq-list">
+    <div class="faq-item" onclick="toggleFAQ(this)">
+      <div class="faq-q">A mentoria é gratuita? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">A inscrição é gratuita. Após o cadastro, você recebe acesso imediato a todos os 5 módulos, PDFs e à avaliação final com certificado.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFAQ(this)">
+      <div class="faq-q">Como funciona o certificado? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Após completar os 5 módulos, você faz a Avaliação Final com 30 questões. Atingindo nota 7,0 (21 de 30 corretas), o certificado em formato A4 é gerado automaticamente com seu nome, data e código de validação. Você tem 3 tentativas — se não atingir a nota, tem mais 30 dias para revisar e tentar mais uma vez.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFAQ(this)">
+      <div class="faq-q">Qual é o tempo estimado para concluir? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">O cronograma sugerido é de 10 semanas dedicando cerca de 3-4 horas por semana. No total são mais de 32 horas de conteúdo aplicado. Mas como é 100% assíncrono, você pode concluir mais rápido ou mais devagar, no seu ritmo.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFAQ(this)">
+      <div class="faq-q">Precisa ter uma startup para participar? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Não! A mentoria é ideal tanto para quem tem apenas uma ideia quanto para quem já tem uma startup em andamento. O conteúdo foi estruturado de forma progressiva para atender todos os estágios — de quem está começando do zero até quem busca escalar e captar investimento.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFAQ(this)">
+      <div class="faq-q">O que é a MIA? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">A MIA (Mentora Inteligente Artificial) é uma IA co-mentora disponível em todos os módulos, 24 horas por dia. Você pode fazer perguntas sobre o conteúdo das aulas, pedir exercícios práticos, aprofundar conceitos ou adaptar o que aprendeu à realidade da sua startup.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFAQ(this)">
+      <div class="faq-q">Como acessar os módulos após a inscrição? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Após a inscrição, você acessa diretamente pelos links: startup-modulo1.html, startup-modulo2.html, etc. A senha de acesso é <strong>mentorstartup</strong>. Você também pode salvar os links nos favoritos do navegador para acesso rápido.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <strong>Mentoria das Startups</strong> · <strong>Luiz de Castro — Mestre em Gestão</strong><br>
+  <span style="margin-top:6px;display:block">Todos os direitos reservados · <a href="https://lojasdecastro.com.br" style="color:rgba(255,255,255,.6);text-decoration:none">lojasdecastro.com.br</a></span>
+</footer>
+
+<div id="toast"></div>
+
+<!-- Assistente MIA -->
+<div id="mia-wrapper" style="position:fixed;top:65px;left:-50px;width:420px;height:120px;z-index:9999;">
+  <iframe id="mia-frame" src="https://luizdecaxtro.github.io/mentoria-cadalunos/chatbot-mentoria.html"
+    style="width:100%;height:100%;border:none;background:transparent;display:block;"
+    allow="clipboard-write" title="Assistente MIA"></iframe>
+</div>
+<script>
+var isMobile = window.innerWidth <= 768;
+if (isMobile) { var w = document.getElementById("mia-wrapper"); w.style.width = "160px"; }
+window.addEventListener("message", function(e) {
+  var wrapper = document.getElementById("mia-wrapper");
+  if (!wrapper) return;
+  if (e.data === "mia-open") { wrapper.style.height="100vh"; wrapper.style.top="0"; wrapper.style.left="0"; wrapper.style.width="100%"; }
+  if (e.data === "mia-close") { wrapper.style.height="130px"; wrapper.style.top="65px"; wrapper.style.left="-50px"; wrapper.style.width=isMobile?"160px":"420px"; }
+});
+</script>
+
+<script>
+// ── GITHUB CONFIG ────────────────────────────────────────────
+const REPO = 'luizdecaxtro/mentoria_startups';
+const FILE = 'alunos.json';
+const MENTORIA = 'Mentoria das Startups';
+
+// ── STEP NAVIGATION ──────────────────────────────────────────
+let currentStep = 1;
+
+function goStep(n) {
+  document.getElementById('step-' + currentStep).classList.remove('active');
+  // Update dots
+  const sd = document.getElementById('sd-' + currentStep);
+  if (n > currentStep) {
+    sd.classList.remove('active');
+    sd.classList.add('done');
+    sd.textContent = '✓';
+    if (currentStep < 3) {
+      document.getElementById('sl-' + currentStep).classList.add('done');
+    }
+  } else {
+    sd.classList.remove('done', 'active');
+    sd.textContent = currentStep;
+    if (currentStep <= 2) {
+      document.getElementById('sl-' + (currentStep - 1 || 1))?.classList.remove('done');
+    }
+  }
+  currentStep = n;
+  document.getElementById('step-' + n).classList.add('active');
+  document.getElementById('sd-' + n).classList.remove('done');
+  document.getElementById('sd-' + n).classList.add('active');
+  document.getElementById('form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function goStep2() {
+  clearErrors();
+  const nome = document.getElementById('f-nome').value.trim();
+  const nasc = document.getElementById('f-nasc').value;
+  const cel = document.getElementById('f-cel').value.trim();
+  const uf = document.getElementById('f-uf').value;
+  const inst = document.getElementById('f-inst').value;
+  let ok = true;
+  if (!nome || nome.split(' ').length < 2) { showErr('e-nome', 'f-nome'); ok = false; }
+  if (!nasc) { showErr('e-nasc', 'f-nasc'); ok = false; }
+  if (!cel || cel.replace(/\D/g,'').length < 10) { showErr('e-cel', 'f-cel'); ok = false; }
+  if (!uf) { showErr('e-uf', 'f-uf'); ok = false; }
+  if (!inst) { showErr('e-inst', 'f-inst'); ok = false; }
+  if (!ok) { document.getElementById('err-1').textContent = 'Preencha todos os campos obrigatórios.'; document.getElementById('err-1').style.display='block'; return; }
+  goStep(2);
+}
+
+function goStep3() {
+  clearErrors();
+  const estagio = document.getElementById('f-estagio').value;
+  const setor = document.getElementById('f-setor').value;
+  let ok = true;
+  if (!estagio) { showErr('e-estagio', 'f-estagio'); ok = false; }
+  if (!setor) { showErr('e-setor', 'f-setor'); ok = false; }
+  if (!ok) { document.getElementById('err-2').textContent = 'Preencha os campos obrigatórios.'; document.getElementById('err-2').style.display='block'; return; }
+  goStep(3);
+}
+
+function showErr(errId, fieldId) {
+  document.getElementById(errId).style.display = 'block';
+  const el = document.getElementById(fieldId);
+  if (el) el.classList.add('error');
+}
+
+function clearErrors() {
+  document.querySelectorAll('.field-err').forEach(e => e.style.display = 'none');
+  document.querySelectorAll('.alert').forEach(e => e.style.display = 'none');
+  document.querySelectorAll('.form-control').forEach(e => e.classList.remove('error'));
+}
+
+// ── MASK ────────────────────────────────────────────────────
+function maskPhone(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,11);
+  if (v.length > 6) v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+  else if (v.length > 2) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+  el.value = v;
+}
+
+// ── GITHUB ──────────────────────────────────────────────────
+async function getAlunos() {
+  // No token needed for read if public repo — try unauthenticated
+  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}`, {
+    headers: { 'Accept': 'application/vnd.github+json' }
+  });
+  if (res.status === 404) return { alunos: [], sha: null };
+  const data = await res.json();
+  const decoded = decodeURIComponent(
+    atob(data.content.replace(/\n/g, ''))
+      .split('').map(c => '%' + c.charCodeAt(0).toString(16).padStart(2,'0')).join('')
+  );
+  return { alunos: JSON.parse(decoded), sha: data.sha };
+}
+
+function gerarCodigo(alunos) {
+  const ano = new Date().getFullYear();
+  const prefixo = 'MS-' + ano + '-';
+  let max = 0;
+  alunos.forEach(a => {
+    if (a.codigo?.startsWith(prefixo)) {
+      const n = parseInt(a.codigo.replace(prefixo, '')) || 0;
+      if (n > max) max = n;
+    }
+  });
+  return prefixo + String(max + 1).padStart(4, '0');
+}
+
+// ── SUBMIT ──────────────────────────────────────────────────
+async function submitForm() {
+  clearErrors();
+  const email = document.getElementById('f-email').value.trim().toLowerCase();
+  const email2 = document.getElementById('f-email2').value.trim().toLowerCase();
+  const aceite = document.getElementById('f-aceite').checked;
+  let ok = true;
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRe.test(email)) { showErr('e-email', 'f-email'); ok = false; }
+  if (email !== email2) { showErr('e-email2', 'f-email2'); ok = false; }
+  if (!aceite) { document.getElementById('e-aceite').style.display = 'block'; ok = false; }
+  if (!ok) { document.getElementById('err-3').textContent = 'Verifique os campos acima.'; document.getElementById('err-3').style.display = 'block'; return; }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Processando...';
+
+  try {
+    // Try to save to GitHub (requires token in admin panel first)
+    // Attempt without token (public repo can read but not write)
+    // We'll try with any token stored, or just save locally and show success
+    const token = localStorage.getItem('_ms_token') || '';
+    
+    let codigo = 'MS-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-4);
+    
+    if (token) {
+      try {
+        const { alunos, sha } = await getAlunos();
+        
+        // Check for duplicate email
+        const dup = alunos.find(a => 
+          a.email?.toLowerCase() === email && 
+          (!a.mentoria || a.mentoria === MENTORIA)
+        );
+        if (dup) {
+          btn.disabled = false;
+          btn.innerHTML = '✅ Confirmar Inscrição';
+          document.getElementById('err-3').textContent = 'Este e-mail já está cadastrado na mentoria.';
+          document.getElementById('err-3').style.display = 'block';
+          document.getElementById('f-email').classList.add('error');
+          return;
+        }
+
+        codigo = gerarCodigo(alunos);
+        const novoAluno = {
+          id: 'id_' + Date.now(),
+          codigo, mentoria: MENTORIA,
+          nome: document.getElementById('f-nome').value.trim(),
+          email,
+          celular: document.getElementById('f-cel').value,
+          sexo: document.getElementById('f-sexo').value,
+          dataNasc: document.getElementById('f-nasc').value,
+          uf: document.getElementById('f-uf').value,
+          instrucao: document.getElementById('f-inst').value,
+          estagio: document.getElementById('f-estagio').value,
+          setor: document.getElementById('f-setor').value,
+          desafio: document.getElementById('f-desafio').value,
+          origem: document.getElementById('f-origem').value,
+          aprovado: false, tentativas: 0, notaFinal: null,
+          criadoEm: new Date().toISOString()
+        };
+
+        alunos.push(novoAluno);
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(alunos, null, 2))));
+        const body = { message: 'Nova inscrição: ' + novoAluno.nome, content };
+        if (sha) body.sha = sha;
+
+        const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github+json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        if (!res.ok) throw new Error('Erro ao salvar no GitHub.');
+      } catch(e) {
+        console.warn('GitHub save failed:', e.message);
+        // Continue anyway — show success to user
+      }
+    }
+
+    // Save locally as fallback
+    const inscricao = {
+      codigo, nome: document.getElementById('f-nome').value.trim(),
+      email, data: new Date().toLocaleDateString('pt-BR')
+    };
+    localStorage.setItem('ms_inscricao', JSON.stringify(inscricao));
+
+    // Show success
+    document.getElementById('form-card').style.display = 'none';
+    document.getElementById('success-code').textContent = codigo;
+    document.getElementById('success-screen').style.display = 'block';
+    document.getElementById('inscricao').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    toast('Inscrição realizada com sucesso!', 'success');
+
+  } catch(err) {
+    btn.disabled = false;
+    btn.innerHTML = '✅ Confirmar Inscrição';
+    document.getElementById('err-3').textContent = 'Erro inesperado. Tente novamente em instantes.';
+    document.getElementById('err-3').style.display = 'block';
+    console.error(err);
+  }
+}
+
+// ── FAQ ─────────────────────────────────────────────────────
+function toggleFAQ(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+// ── TOAST ────────────────────────────────────────────────────
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'show ' + type;
+  clearTimeout(el._t); el._t = setTimeout(() => el.className = '', 4000);
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+// If already enrolled, show info
+window.addEventListener('DOMContentLoaded', () => {
+  const inscricao = JSON.parse(localStorage.getItem('ms_inscricao') || 'null');
+  if (inscricao) {
+    const info = document.createElement('div');
+    info.style.cssText = 'background:rgba(45,122,79,.08);border:1.5px solid rgba(45,122,79,.25);border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:14px;color:#1a4a2e;text-align:center';
+    info.innerHTML = `✅ Você já está inscrito(a) com o código <strong>${inscricao.codigo}</strong>. 
+      <a href="startup-modulo1.html" style="color:var(--success);font-weight:600;margin-left:6px">Acessar Módulo 1 →</a>`;
+    document.getElementById('form-card').prepend(info);
+  }
+});
+</script>
+</body>
+</html>
