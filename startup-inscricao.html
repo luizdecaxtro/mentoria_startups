@@ -673,11 +673,12 @@ function toast(msg,type=''){
 
 window.addEventListener('DOMContentLoaded',()=>{
   const inscricao=JSON.parse(localStorage.getItem('ms_inscricao')||'null');
-  if(inscricao){
+  // Só exibe o aviso se o pagamento já foi confirmado (não pendente)
+  if(inscricao && inscricao.pagamento === 'confirmado'){
     const info=document.createElement('div');
     info.style.cssText='background:rgba(45,122,79,.08);border:1.5px solid rgba(45,122,79,.25);border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:14px;color:#1a4a2e;text-align:center';
-    info.innerHTML=`✅ Você já possui uma inscrição com o código <strong>${inscricao.codigo}</strong>. 
-      <a href="${CHECKOUT_URL}" style="color:var(--success);font-weight:600;margin-left:6px">Concluir pagamento →</a>`;
+    info.innerHTML=`✅ Você já possui acesso ativo com o código <strong>${inscricao.codigo}</strong>. 
+      <a href="startup-modulo1.html" style="color:var(--success);font-weight:600;margin-left:6px">Acessar Módulo 1 →</a>`;
     document.getElementById('form-card').prepend(info);
   }
 });
