@@ -12,5 +12,25 @@
     "aprovado": false,
     "tentativas": 0,
     "notaFinal": null
+  },
+  {
+    "id": "id_1779917349367",
+    "codigo": "MS-2026-0002",
+    "mentoria": "Mentoria das Startups",
+    "nome": "Carlos Augusto de Castro",
+    "email": "lojasdecastro@gmail.com",
+    "celular": "(98) 98419-3807",
+    "sexo": "M",
+    "dataNasc": "1960-02-06",
+    "uf": "MT",
+    "instrucao": "Mestrado",
+    "estagio": "validando",
+    "setor": "Marketplace",
+    "desafio": "Contratar e gerir equipe",
+    "origem": "Evento ou palestra",
+    "aprovado": false,
+    "tentativas": 0,
+    "notaFinal": null,
+    "criadoEm": "2026-05-27T21:29:09.367Z"
   }
 ]
